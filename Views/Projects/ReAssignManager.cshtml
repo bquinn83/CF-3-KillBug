@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "ReAssignManager";
+}
+
+@using (Html.BeginForm("ReAssignManager", "Projects"))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6 col-lg-4">
+                    @Html.Label("Developers", new { @class = "form-control-label" })
+                    @Html.ListBox("UserIds", null, new { @class = "form-control" })
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    @Html.Label("Projects", new { @class = "form-control-label" })
+                    @Html.ListBox("ProjectIds", null, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-primary" value="Assign Developers" />
+            </div>
+        </div>
+    </div>
+}

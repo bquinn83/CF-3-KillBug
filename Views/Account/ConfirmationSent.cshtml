@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = "Confirmation Sent";
+}
+
+<h2>@ViewBag.Title!</h2>
+<div>
+    <h4>Please check your email.</h4>
+    <p>
+        If you haven't recieved it, lets @Html.ActionLink("Try Again", "ResendEmailConfirmation", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }).
+    </p>
+</div>

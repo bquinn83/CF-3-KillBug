@@ -1,0 +1,52 @@
+﻿@using KillBug.ViewModels
+@model IEnumerable<CustomUserViewModel>
+@{
+    ViewBag.Title = "Manage Roles";
+}
+
+@using (Html.BeginForm("ManageRoles", "Admin"))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6 col-lg-4">
+                    @Html.ListBox("UserIds", null, new { @class = "form-control" })
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    @Html.DropDownList("RoleName", null, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-primary" value="Modify Roles" />
+            </div>
+        </div>
+    </div>
+}
+
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.LastName)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+        <th>@Html.DisplayNameFor(model => model.Email)</th>
+        <th>@Html.DisplayNameFor(model => model.Role)</th>
+    </tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(model => user.LastName) </td>
+            <td>@Html.DisplayFor(model => user.FirstName) </td>
+            <td>@Html.DisplayFor(model => user.Email) </td>
+            <td>@Html.DisplayFor(model => user.Role) </td>
+        </tr>
+    }
+</table>
+
+@section Scripts{
+    <script>
+        $('.active').removeClass("active")
+        $('#AdminManageRoles').addClass("active")
+    </script>
+}

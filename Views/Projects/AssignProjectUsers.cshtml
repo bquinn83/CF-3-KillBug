@@ -1,0 +1,59 @@
+﻿@using KillBug.ViewModels
+@model IEnumerable<DeveloperAssignmentsViewModel>
+@{
+    ViewBag.Title = "Assign Team";
+}
+
+@using (Html.BeginForm("AssignProjectUsers", "Projects"))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6 col-lg-4">
+                    @Html.Label("Developers", new { @class = "form-control-label" })
+                    @Html.ListBox("UserIds", null, new { @class = "form-control" })
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    @Html.Label("Projects", new { @class = "form-control-label" })
+                    @Html.ListBox("ProjectIds", null, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-primary" value="Assign Developers" />
+            </div>
+        </div>
+    </div>
+}
+
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayName("Developer")</th>
+        <th>@Html.DisplayNameFor(model => model.Email)</th>
+        <th>@Html.DisplayNameFor(model => model.Projects)</th>
+    </tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(model => user.Name) </td>
+            <td>@Html.DisplayFor(model => user.Email) </td>
+            <td>
+                @foreach (var proj in user.Projects)
+                {
+                    @proj<br />
+                }
+            </td>
+        </tr>
+    }
+</table>
+
+@section Scripts {
+    <script>
+        $('.active').removeClass("active")
+        $('#ProjectsMenu').removeClass("collapsed")
+        $('#ProjectsDropdown').addClass("show")
+        $('#ProjectsAssign').addClass("active")
+    </script>
+}

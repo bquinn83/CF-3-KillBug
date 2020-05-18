@@ -1,0 +1,126 @@
+﻿@using KillBug.ViewModels
+@model DashboardViewModel
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+<section class="no-padding-top no-padding-bottom">
+    <div class="container-fluid">
+        <!-- FIRST ROW TEAM DATA -->
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                <div class="statistic-block block">
+                    <div class="progress-details d-flex align-items-end justify-content-between">
+                        <div class="title">
+                            <div class="icon"><i class="icon-user-1"></i></div><strong>Team</strong>
+                        </div>
+                        <div class="number dashtext-1">@Model.TeamCount</div>
+                    </div>
+                    <hr />
+                    <div class="progress-details d-flex align-items-end justify-content-between">
+                        <div class="title">
+                            <div class="icon"><i class="icon-windows"></i></div><strong>Project Managers</strong>
+                        </div>
+                        <div class="number dashtext-2">@Model.PMCount</div>
+                    </div>
+                    <div class="progress progress-template">
+                        <div role="progressbar" style="width: @((Model.PMCount / Model.TeamCount) * 100)%" aria-valuenow="@Model.PMCount" aria-valuemin="0" aria-valuemax="@Model.TeamCount" class="progress-bar progress-bar-template dashbg-3"></div>
+                    </div>
+                    <div class="progress-details d-flex align-items-end justify-content-between">
+                        <div class="title">
+                            <div class="icon"><i class="icon-list-1"></i></div><strong>Developers</strong>
+                        </div>
+                        <div class="number dashtext-3">@Model.DevCount</div>
+                    </div>
+                    <div class="progress progress-template">
+                        <div role="progressbar" style="width: @((Model.DevCount / Model.TeamCount) * 100)%" aria-valuenow="@Model.DevCount" aria-valuemin="0" aria-valuemax="@Model.TeamCount" class="progress-bar progress-bar-template dashbg-3"></div>
+                    </div>
+                    <div class="progress-details d-flex align-items-end justify-content-between">
+                        <div class="title">
+                            <div class="icon"><i class="icon-list-1"></i></div><strong>Submitters</strong>
+                        </div>
+                        <div class="number dashtext-4">@Model.SubCount</div>
+                    </div>
+                    <div class="progress progress-template">
+                        <div role="progressbar" style="width: @((Model.SubCount / Model.TeamCount) * 100)%" aria-valuenow="@Model.SubCount" aria-valuemin="0" aria-valuemax="@Model.TeamCount" class="progress-bar progress-bar-template dashbg-3"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="statistic-block block">
+                    <div class="progress-details d-flex align-items-end justify-content-between">
+                        <div class="title">
+                            <div class="icon"><i class="icon-windows"></i></div><strong>Project Managers</strong>
+                        </div>
+                        <div class="number dashtext-2">@Model.PMCount</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="statistic-block block">
+                    <div class="progress-details d-flex align-items-end justify-content-between">
+                        <div class="title">
+                            <div class="icon"><i class="icon-list-1"></i></div><strong>Developers</strong>
+                        </div>
+                        <div class="number dashtext-3">@Model.DevCount</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="statistic-block block">
+                    <div class="progress-details d-flex align-items-end justify-content-between">
+                        <div class="title">
+                            <div class="icon"><i class="icon-list-1"></i></div><strong>Submitters</strong>
+                        </div>
+                        <div class="number dashtext-4">@Model.SubCount</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEXT ROW -->
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                <div class="statistic-block block">
+                    <div class="progress-details d-flex align-items-end justify-content-between">
+                        <div class="title">
+                            <div class="icon"><i class="icon-windows"></i></div><strong>Projects</strong>
+                        </div>
+                        <div class="number dashtext-2">@Model.ProjectsCount</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="statistic-block block">
+                    <div class="progress-details d-flex align-items-end justify-content-between">
+                        <div class="title">
+                            <div class="icon"><i class="icon-list-1"></i></div><strong>New Tickets</strong>
+                        </div>
+                        <div class="number dashtext-3">@Model.NewTicketsCount</div>
+                    </div>
+                    <div class="progress progress-template">
+                        <div role="progressbar" style="width: @Model.NewTicketsCount%" aria-valuenow="@Model.NewTicketsCount" aria-valuemin="0" aria-valuemax="@Model.TicketsCount" class="progress-bar progress-bar-template dashbg-3"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="statistic-block block">
+                    <div class="progress-details d-flex align-items-end justify-content-between">
+                        <div class="title">
+                            <div class="icon"><i class="icon-list-1"></i></div><strong>All Tickets</strong>
+                        </div>
+                        <div class="number dashtext-4">@Model.TicketsCount</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+    <script>
+        $('.active').removeClass("active")
+        $('#DashboardMenu').addClass("active")
+    </script>
+}

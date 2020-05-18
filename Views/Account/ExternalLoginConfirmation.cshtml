@@ -1,0 +1,31 @@
+﻿@model KillBug.Models.ExternalLoginConfirmationViewModel
+@{
+    ViewBag.Title = "Register";
+}
+<h2>@ViewBag.Title.</h2>
+<h4>Associate your @ViewBag.LoginProvider account.</h4>
+
+@using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "mb-4", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control input-material" })
+        @Html.LabelFor(m => m.FirstName, new { @class="label-material"})
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(m => m.LastName, new { @class="form-control input-material"})
+        @Html.LabelFor(m => m.LastName, new { @class="label-material"} )
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control input-material" })
+        @Html.LabelFor(m => m.Email, new { @class = "label-material" })
+    </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Register" />
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,68 @@
+﻿@{
+    Random rand = new Random();
+
+    var quotes = new List<string>();
+    quotes.Add("Before this tale of bloody [DeBugging] reaches its climax, I'm going to ask you some questions.");
+    quotes.Add("We have unfinished business.");
+    quotes.Add("Those of you lucky enough to still have their lives? Take them with you! However, leave the [Methods] you've lost. They belong to me now.");
+    quotes.Add("When I arrive at my destination, I am gonna Kill [Bug].");
+    quotes.Add("That [Programmer] deserves her revenge. And [Bugs] deserve to die.");
+
+    ViewBag.Slogan = quotes[rand.Next(0, quotes.Count)];
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewBag.Title - Kill Bug</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+
+    @Styles.Render("~/Content/css")
+
+    <!-- Google fonts - Muli-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,700">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+</head>
+<body>
+    <div class="login-page">
+        <div class="container d-flex align-items-center">
+            <div class="form-holder has-shadow">
+                <div class="row">
+                    <!-- Logo & Information Panel-->
+                    <div class="col-lg-6">
+                        <div class="info d-flex align-items-center">
+                            <div class="content">
+                                <div class="logo">
+                                    <h1>Kill Bug</h1>
+                                </div>
+                                <p>@ViewBag.Slogan</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Form Panel    -->
+                    <div class="col-lg-6">
+                        <div class="form d-flex align-items-center">
+                            <div class="content">
+                                @RenderBody()
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--   Core JS Files   -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/front.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

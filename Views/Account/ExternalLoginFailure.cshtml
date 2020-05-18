@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = "Login Failure";
+}
+
+    <h1>@ViewBag.Title.</h1>
+    <h4 class="text-danger">Unsuccessful login with external service.</h4>
+<div>
+    <p>
+        Please @Html.ActionLink("try again", "Login", "Account", null, new { @class="signup"}).
+    </p>
+</div>

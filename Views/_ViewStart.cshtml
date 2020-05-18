@@ -1,0 +1,14 @@
+﻿@{
+    string CurrentController = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"]);
+
+    switch (CurrentController)
+    {
+        case "Account":
+            //Login, Register, Confirm Email, Forgot Email
+            Layout = "~/Views/Shared/_Account.cshtml";
+            break;
+        default:
+            Layout = "~/Views/Shared/_Layout.cshtml";
+            break;
+    }
+}

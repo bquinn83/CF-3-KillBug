@@ -1,0 +1,66 @@
+/* your styles go here */
+
+.page-content section {
+    margin-bottom: 20px;
+}
+
+nav#sidebar.shrinked .sidebar-header .avatar {
+    margin-right: 0px;
+}
+
+div.form-horizontal .form-group .row {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+div.form-horizontal .form-group.row {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+.dataTables_wrapper .dataTables_length {
+    color: #979a9f;
+}
+
+    .dataTables_wrapper .dataTables_length label select {
+        height: calc(2.4rem + 2px);
+        border: 1px solid #444951;
+        background: transparent;
+        border-radius: 0;
+        color: #979a9f;
+        padding: 0.45rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+.dataTables_wrapper .dataTables_filter {
+    color: #979a9f;
+}
+.dataTables_wrapper .dataTables_filter label input {
+    height: calc(2.4rem + 2px);
+    border: 1px solid #444951;
+    background: transparent;
+    border-radius: 0;
+    color: #979a9f;
+    padding: 0.45rem 0.75rem;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+table.dataTable tbody tr {
+    background: transparent;
+}
+
+.dataTables_wrapper .dataTables_info {
+    color: #979a9f;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button, .ellipsis {
+    color: #979a9f !important;
+}

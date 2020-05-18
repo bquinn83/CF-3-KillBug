@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNet.Identity
+@model KillBug.Models.Project
+@{
+    ViewBag.Title = "Create Project";
+}
+
+@using (Html.BeginForm("Create", "Projects"))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "form-control-label" })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "form-control-label" })
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="form-group">
+                <div class="col-md-8">
+                    @Html.Label("Project Manager", new { @class = "form-control-label" })
+                    @Html.DropDownList("ProjectManagerId", null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ProjectManagerId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        else
+        {
+            @Html.Hidden("ProjectManagerId", User.Identity.GetUserId())
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+        <script>
+        $('.active').removeClass("active")
+        $('#ProjectsMenu').removeClass("collapsed")
+        $('#ProjectsDropdown').addClass("show")
+        $('#ProjectsCreate').addClass("active")
+        </script>
+    }
