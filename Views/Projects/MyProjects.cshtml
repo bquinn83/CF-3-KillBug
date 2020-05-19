@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<KillBug.Models.Project>
 
 @{
-    ViewBag.Title = "Projects";
+    ViewBag.Title = "My Projects";
 }
 
 <table class="table table-striped">
@@ -20,8 +20,8 @@
                 @Html.DisplayNameFor(model => model.Created)
             </th>
             @*<th>
-                @Html.DisplayNameFor(model => model.IsArchived)
-            </th>*@
+                    @Html.DisplayNameFor(model => model.IsArchived)
+                </th>*@
             <th></th>
         </tr>
     </thead>
@@ -42,12 +42,12 @@
                     @Html.DisplayFor(modelItem => item.Created)
                 </td>
                 @*<td>
-                    @Html.DisplayFor(modelItem => item.IsArchived)
-                </td>*@
+                        @Html.DisplayFor(modelItem => item.IsArchived)
+                    </td>*@
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.Id })
                 </td>
             </tr>
         }
@@ -59,7 +59,7 @@
         $('.active').removeClass("active")
         $('#ProjectsMenu').removeClass("collapsed")
         $('#ProjectsDropdown').addClass("show")
-        $('#ProjectsIndex').addClass("active")
+        $('#MyProjects').addClass("active")
 
         $('.table').DataTable();
     </script>
