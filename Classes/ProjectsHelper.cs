@@ -66,6 +66,16 @@ namespace KillBug.Classes
             return db.Users.Find(projectManagerId);
         }
 
+        public void AssignProjectManager(int projectId, string managerId)
+        {
+            Project proj = db.Projects.Find(projectId);
+            if (proj != null)
+            {
+                proj.ProjectManagerId = managerId;
+                db.Entry(proj).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
 
     }
 }

@@ -14,31 +14,33 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace KillBug.Controllers
 {
-    [Authorize(Roles = "Admin, Project Manager")]
     public class ProjectsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private UserRolesHelper rolesHelper = new UserRolesHelper();
         private ProjectsHelper projHelper = new ProjectsHelper();
 
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult AssignProjectUsers()
         {
             var users = rolesHelper.UsersInRole("Developer");
             var submitters = rolesHelper.UsersInRole("Submitter");
-            
+
             //users.Concat(submitters);
-            foreach(var sub in submitters)
+            foreach (var sub in submitters)
             {
                 users.Add(sub);
             }
-            
+
             var viewData = new List<DeveloperAssignmentsViewModel>();
 
             foreach (var user in users)
             {
                 viewData.Add(new DeveloperAssignmentsViewModel
                 {
+                    MenuDrop = $"{user.LastName}-{user.FirstName}",
                     Name = user.FullName,
+                    AvatarPath = user.AvatarPath,
                     Email = user.Email,
                     Projects = projHelper.ListUserProjects(user.Id).Select(p => p.Name).ToList()
                 });
@@ -49,6 +51,7 @@ namespace KillBug.Controllers
             return View(viewData);
         }
 
+        [Authorize(Roles = "Admin, Project Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AssignProjectUsers(List<string> userIds, List<int> projectIds)
@@ -65,14 +68,72 @@ namespace KillBug.Controllers
             }
             return RedirectToAction("AssignProjectUsers");
         }
+        
+        [Authorize(Roles = "Admin, Project Manager")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RemoveProjectUsers(List<string> userIds, List<int> projectIds)
+        {
+            if (userIds != null && projectIds != null)
+            {
+                foreach (var userId in userIds)
+                {
+                    foreach (var projectId in projectIds)
+                    {
+                        projHelper.RemoveUserFromProject(userId, projectId);
+                    }
+                }
+            }
+            return RedirectToAction("AssignProjectUsers");
+        }
+        [Authorize(Roles = "Admin")]
+        public ActionResult ReAssignManager()
+        {
+            ViewBag.Projects = new MultiSelectList(db.Projects.ToList(), "Id", "Name");
+            ViewBag.ProjectManagers = new SelectList(rolesHelper.UsersInRole("Project Manager"), "Id", "FullName");
+            return View();
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReAssignManager(List<int> projects, string projectManagers)
+        {
+            if (projects != null)
+            {
+                foreach (var proj in projects)
+                {
+                    projHelper.AssignProjectManager(proj, projectManagers);
+                }
+            }
+            ViewBag.ProjectManagers = new SelectList(rolesHelper.UsersInRole("Project Manager"), "Id", "FullName");
+            ViewBag.Projects = new MultiSelectList(db.Projects.ToList(), "Id", "Name");
+            return View();
+        }
 
         // GET: Projects
-        public ActionResult Index()
+        [Authorize(Roles = "Admin, Project Manager")]
+        public ActionResult AllProjects()
         {
             return View(db.Projects.ToList());
         }
 
+        [Authorize(Roles = "Admin, Project Manager, Submitter, Developer")]
+        // GET: Projects
+        public ActionResult MyProjects()
+        {
+            var userId = User.Identity.GetUserId();
+            if (User.IsInRole("Project Manager"))
+            {
+                return View(db.Projects.Where(p => p.ProjectManagerId == userId).ToList());
+            }
+            else
+            {
+                return View(db.Users.Find(userId).Projects.ToList());
+            }
+        }
+
         // GET: Projects/Details/5
+        [Authorize(Roles = "Admin, Project Manager, Submitter, Developer")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -88,6 +149,7 @@ namespace KillBug.Controllers
         }
 
         // GET: Projects/Create
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Create()
         {
             if (User.IsInRole("Admin"))
@@ -100,6 +162,7 @@ namespace KillBug.Controllers
         // POST: Projects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Project Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,Description,ProjectManagerId,")] Project project)
@@ -111,13 +174,14 @@ namespace KillBug.Controllers
                 project.IsArchived = false;
                 db.Projects.Add(project);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("MyProjects", "Projects");
             }
 
             return View(project);
         }
 
         // GET: Projects/Edit/5
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -129,26 +193,37 @@ namespace KillBug.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.ProjectManagerId = new SelectList(rolesHelper.UsersInRole("Project Manager"), "Id", "FullName", project.ProjectManagerId);
             return View(project);
         }
 
         // POST: Projects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Project Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,ProjectManagerId,Created,Updated,IsArchived")] Project project)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,Created,ProjectManagerId,IsArchived")] Project project)
         {
             if (ModelState.IsValid)
             {
+                project.Updated = DateTime.Now;
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                if (User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("AllProjects");
+                }
+                else
+                {
+                    return RedirectToAction("MyProjects");
+                }
             }
             return View(project);
         }
 
         // GET: Projects/Delete/5
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -164,6 +239,7 @@ namespace KillBug.Controllers
         }
 
         // POST: Projects/Delete/5
+        [Authorize(Roles = "Admin, Project Manager")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
