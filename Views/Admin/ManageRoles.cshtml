@@ -27,26 +27,33 @@
 }
 
 <table class="table table-striped">
-    <tr>
-        <th>@Html.DisplayNameFor(model => model.LastName)</th>
-        <th>@Html.DisplayNameFor(model => model.FirstName)</th>
-        <th>@Html.DisplayNameFor(model => model.Email)</th>
-        <th>@Html.DisplayNameFor(model => model.Role)</th>
-    </tr>
-    @foreach (var user in Model)
-    {
+    <thead>
         <tr>
-            <td>@Html.DisplayFor(model => user.LastName) </td>
-            <td>@Html.DisplayFor(model => user.FirstName) </td>
-            <td>@Html.DisplayFor(model => user.Email) </td>
-            <td>@Html.DisplayFor(model => user.Role) </td>
+            <th>@Html.DisplayNameFor(model => model.LastName)</th>
+            <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+            <th>@Html.DisplayNameFor(model => model.Email)</th>
+            <th>@Html.DisplayNameFor(model => model.Role)</th>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(model => user.LastName) </td>
+                <td>@Html.DisplayFor(model => user.FirstName) </td>
+                <td>@Html.DisplayFor(model => user.Email) </td>
+                <td>@Html.DisplayFor(model => user.Role) </td>
+            </tr>
+        }
+    </tbody>
+
 </table>
 
 @section Scripts{
     <script>
         $('.active').removeClass("active")
         $('#AdminManageRoles').addClass("active")
+
+        $('.table').DataTable();
     </script>
 }
