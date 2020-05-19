@@ -11,6 +11,7 @@
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.Created)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -27,14 +28,18 @@
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ProjectManagerId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ProjectManagerId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ProjectManagerId, "", new { @class = "text-danger" })
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.ProjectManager.FullName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("ProjectManagerId", null, new { @class = "form-control" })
+                </div>
             </div>
-        </div>
+        } else
+        {
+            @Html.HiddenFor(model => model.ProjectManagerId)
+        }
 
         <div class="form-group">
             @Html.LabelFor(model => model.IsArchived, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -60,10 +65,10 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-        <script>
+    <script>
         $('.active').removeClass("active")
         $('#ProjectsMenu').removeClass("collapsed")
         $('#ProjectsDropdown').addClass("show")
         $('#ProjectsEdit').addClass("active")
-        </script>
-    }
+    </script>
+}
