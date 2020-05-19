@@ -171,6 +171,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Classes\ProjectsHelper.cs" />
+    <Compile Include="Classes\TicketsHelper.cs" />
     <Compile Include="Classes\UserRolesHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Models\TicketType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\AdminViewModels.cs" />
     <Compile Include="ViewModels\CustomUserViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModels.cs" />
     <Compile Include="ViewModels\ProjectsViewModels.cs" />
@@ -211,6 +213,19 @@
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\datatables.css" />
     <Content Include="Content\css\datatables.min.css" />
+    <Content Include="Content\Images\Stock\avatar-0.jpg" />
+    <Content Include="Content\Images\Stock\avatar-1.jpg" />
+    <Content Include="Content\Images\Stock\avatar-10.jpg" />
+    <Content Include="Content\Images\Stock\avatar-11.jpg" />
+    <Content Include="Content\Images\Stock\avatar-2.jpg" />
+    <Content Include="Content\Images\Stock\avatar-3.jpg" />
+    <Content Include="Content\Images\Stock\avatar-4.jpg" />
+    <Content Include="Content\Images\Stock\avatar-5.jpg" />
+    <Content Include="Content\Images\Stock\avatar-6.jpg" />
+    <Content Include="Content\Images\Stock\avatar-7.jpg" />
+    <Content Include="Content\Images\Stock\avatar-8.jpg" />
+    <Content Include="Content\Images\Stock\avatar-9.jpg" />
+    <Content Include="Content\Images\Stock\odin.jpg" />
     <Content Include="Recycle Bin\Chart.css" />
     <Content Include="Recycle Bin\Chart.min.css" />
     <Content Include="Content\css\custom.css" />
@@ -534,6 +549,7 @@
     <Content Include="Recycle Bin\plugins\bootstrap-notify.js" />
     <Content Include="Recycle Bin\plugins\chartist.min.js" />
     <Content Include="Recycle Bin\plugins\perfect-scrollbar.jquery.min.js" />
+    <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\datatables.js" />
     <Content Include="Scripts\datatables.min.js" />
@@ -581,7 +597,7 @@
     <Content Include="Views\Projects\Delete.cshtml" />
     <Content Include="Views\Projects\Details.cshtml" />
     <Content Include="Views\Projects\Edit.cshtml" />
-    <Content Include="Views\Projects\Index.cshtml" />
+    <Content Include="Views\Projects\AllProjects.cshtml" />
     <Content Include="Views\TicketAttachments\Create.cshtml" />
     <Content Include="Views\TicketAttachments\Delete.cshtml" />
     <Content Include="Views\TicketAttachments\Details.cshtml" />
@@ -614,6 +630,8 @@
     <Content Include="Views\TicketStatus\Edit.cshtml" />
     <Content Include="Views\TicketStatus\Index.cshtml" />
     <Content Include="Views\Projects\ReAssignManager.cshtml" />
+    <Content Include="Views\Projects\MyProjects.cshtml" />
+    <Content Include="Views\Tickets\MyTickets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
