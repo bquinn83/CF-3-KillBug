@@ -80,7 +80,8 @@ namespace KillBug.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    //LOCK OUT USERS WHO HAVE NOT CONFIRMED AN EMAIL
+                    return RedirectToAction("Dashboard", "Home");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -186,7 +187,7 @@ namespace KillBug.Controllers
                         await Task.FromResult(0);
                     }
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);
             }
