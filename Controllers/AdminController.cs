@@ -21,11 +21,11 @@ namespace KillBug.Controllers
         public ActionResult ManageRoles()
         {
             var users = db.Users.ToList();
-            var viewData = new List<CustomUserViewModel>();
+            var viewData = new List<UserRoleViewModel>();
 
             foreach (var user in users)
             {
-                viewData.Add(new CustomUserViewModel
+                viewData.Add(new UserRoleViewModel
                 {
                     FirstName = user.FirstName,
                     LastName = user.LastName,
