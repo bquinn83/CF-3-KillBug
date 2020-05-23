@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using KillBug.Classes;
 using KillBug.Models;
+using Microsoft.AspNet.Identity;
 
 namespace KillBug.Controllers
 {
     public class TicketAttachmentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private NotificationHelper notificationHelper = new NotificationHelper();
 
         // GET: TicketAttachments
         public ActionResult Index()
@@ -21,46 +25,43 @@ namespace KillBug.Controllers
             return View(ticketAttachments.ToList());
         }
 
-        // GET: TicketAttachments/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            TicketAttachment ticketAttachment = db.TicketAttachments.Find(id);
-            if (ticketAttachment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ticketAttachment);
-        }
-
-        // GET: TicketAttachments/Create
-        public ActionResult Create()
-        {
-            ViewBag.TicketId = new SelectList(db.Tickets, "Id", "SubmitterId");
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName");
-            return View();
-        }
-
         // POST: TicketAttachments/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,TicketId,UserId,FilePath,FileUrl,Description,Created")] TicketAttachment ticketAttachment)
+        public ActionResult Upload([Bind(Include = "TicketId,FilePath,Description")] TicketAttachment ticketAttachment, HttpPostedFileBase Attachment)
         {
             if (ModelState.IsValid)
             {
-                db.TicketAttachments.Add(ticketAttachment);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (Attachment != null)
+                {
+                    //create the file name
+                    var fileName = Path.GetFileNameWithoutExtension(Attachment.FileName);
+                    fileName = StringUtilities.URLFriendly(fileName);
+                    ticketAttachment.FileName = fileName + Path.GetExtension(Attachment.FileName);
+                    fileName = $"{fileName}-{DateTime.Now.Ticks}";
+                    fileName = $"{fileName}{Path.GetExtension(Attachment.FileName)}";
+
+                    //create the path
+                    var projId = db.Tickets.Find(ticketAttachment.TicketId).ProjectId;
+                    var path = Server.MapPath($"~/Uploads/Attachments/{ projId }/{ ticketAttachment.TicketId }/");
+                    Directory.CreateDirectory(Server.MapPath($"~/Uploads/Attachments/{ projId }/{ ticketAttachment.TicketId }/"));
+    
+                    //save file & ticket Attachment data
+                    Attachment.SaveAs(Path.Combine(Server.MapPath($"~/Uploads/Attachments/{ projId }/{ ticketAttachment.TicketId }/"), fileName));
+                    ticketAttachment.FilePath = $"~/Uploads/Attachments/{ projId }/{ ticketAttachment.TicketId }/{ fileName }";
+                    ticketAttachment.Created = DateTime.Now;
+                    ticketAttachment.UserId = User.Identity.GetUserId();
+
+                    db.TicketAttachments.Add(ticketAttachment);
+                    db.SaveChanges();
+
+                    notificationHelper.AttachmentNotification(ticketAttachment.Ticket);
+
+                }
+                return RedirectToAction("Dashboard", "Tickets", new { id = ticketAttachment.TicketId });
             }
 
-            ViewBag.TicketId = new SelectList(db.Tickets, "Id", "SubmitterId", ticketAttachment.TicketId);
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", ticketAttachment.UserId);
-            return View(ticketAttachment);
+            return RedirectToAction("Dashboard", "Tickets", new { id = ticketAttachment.TicketId });
         }
 
         // GET: TicketAttachments/Edit/5
@@ -81,8 +82,6 @@ namespace KillBug.Controllers
         }
 
         // POST: TicketAttachments/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,TicketId,UserId,FilePath,FileUrl,Description,Created")] TicketAttachment ticketAttachment)

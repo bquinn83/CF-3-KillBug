@@ -40,5 +40,73 @@
                         </div>
                     </div>
                 </div>
+            <div class="col-md-4">
+                <div class="block margin-bottom-sm">
+                    <div class="title"><strong>Upload Attachment</strong></div>
+                    @using (Html.BeginForm("Upload", "TicketAttachments", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("TicketId", Model.Id)
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col">
+                                    <label class="custom-file-upload">
+                                        <i class="fa fa-cloud-upload"></i>
+                                        &nbsp;Choose a File
+                                        <input type="file" name="Attachment" id="file-upload" />
+                                    </label>
+                                    &nbsp;
+                                    <span id="file-selected"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col">
+                                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <input type="text" name="Description" id="file-upload" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Upload" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                @if (Model.Attachments.Count > 0)
+                {
+                    <div class="block messages-block margin-bottom-sm">
+                        <div class="title"><strong>Attachments</strong></div>
+                        <div class="messages">
+                            @foreach (var attachment in Model.Attachments)
+                            {
+                                <a href="@Url.Content(attachment.FilePath)" class="message d-flex align-items-center" target="_blank">
+                                    <div class="">
+                                        <img src="@FileTypeIcons.AttachmentIconPath(attachment.FileName)" alt="..." class="filetype-icon">
+                                    </div>
+                                    <div class="content">
+                                        <strong class="d-block">@attachment.FileName</strong>
+                                        <span class="d-block">@attachment.Description</span>
+                                        <small class="d-block">@Html.DisplayFor(modelItem => attachment.Created) by @attachment.User.FullName</small>
+                                    </div>
+                                </a>
+                            }
+                            @*<a href="#" class="text-center message"> <strong>See All Attachments <i class="fa fa-angle-right"></i></strong></a>*@
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
 </section>
+
+@section Scripts{
+    <script>
+        $('#file-upload').bind('change', function () {
+            var fileName = '';
+            fileName = $(this).val();
+            fileName = fileName.substring(12)
+            $('#file-selected').html(fileName);
+        })
+    </script>
+}
