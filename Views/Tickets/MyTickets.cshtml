@@ -1,12 +1,9 @@
 ﻿@model IEnumerable<KillBug.Models.Ticket>
 
 @{
-    ViewBag.Title = "All Tickets";
+    ViewBag.Title = "My Tickets";
 }
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -19,9 +16,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Description)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayName("Developer")
             </th>
@@ -34,9 +31,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Created)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayName("Submitter")
-            </th>
+            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -53,11 +50,11 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.Description)
-                </td>
+                </td>*@
                 <td>
-                    @Html.DisplayFor(modelItem => item.Developer.FirstName)
+                    @Html.DisplayFor(modelItem => item.Developer.FullName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.TicketType.Name)
@@ -68,13 +65,14 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Created)
                 </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.Submitter.FullName)
+                </td>*@
                 <td>
-                    @Html.DisplayFor(modelItem => item.Submitter.Email)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                     @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Comment", "Create", "TicketComments", new { id = item.Id }, null) |
+                    @Html.ActionLink("Upload", "Create", "TicketAttachments", new { id = item.Id }, null)
                 </td>
             </tr>
         }
@@ -86,7 +84,7 @@
         $('.active').removeClass("active")
         $('#TicketsMenu').removeClass("collapsed")
         $('#TicketsDropdown').addClass("show")
-        $('#TicketAll').addClass("active")
+        $('#MyTickets').addClass("active")
 
         $('.table').DataTable();
     </script>
