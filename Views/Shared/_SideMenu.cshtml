@@ -31,8 +31,8 @@
             <li>
                 <a id="TicketsMenu" href="#TicketsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-list-1"></i>Tickets</a>
                 <ul id="TicketsDropdown" class="collapse list-unstyled ">
-                    <li id="TicketAll">@Html.ActionLink("All Tickets", "Index", "Tickets")</li>
-                    @*<li id="TicketCreate">@Html.ActionLink("Create", "Create", "Tickets")</li>*@
+                    <li id="TicketAll">@Html.ActionLink("All Tickets", "AllTickets", "Tickets")</li>
+                    <li id="History">@Html.ActionLink("History", "History", "Tickets")</li>
                 </ul>
             </li>
         }
@@ -47,6 +47,13 @@
                     <li id="ProjectsAssign">@Html.ActionLink("Assign Team", "AssignProjectUsers", "Projects")</li>
                 </ul>
             </li>
+            <li>
+                <a id="TicketsMenu" href="#TicketsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-list-1"></i>Tickets</a>
+                <ul id="TicketsDropdown" class="collapse list-unstyled ">
+                    <li id="MyTickets">@Html.ActionLink("My Tickets", "MyTickets", "Tickets")</li>
+                    <li id="History">@Html.ActionLink("History", "History", "Tickets")</li>
+                </ul>
+            </li>
         }
         else if (User.IsInRole("Developer"))
         {
@@ -59,8 +66,8 @@
             <li>
                 <a id="TicketsMenu" href="#TicketsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-list-1"></i>Tickets</a>
                 <ul id="TicketsDropdown" class="collapse list-unstyled ">
-                    <li id="TicketAll">@Html.ActionLink("All Tickets", "Index", "Tickets")</li>
-                    @*<li id="TicketCreate">@Html.ActionLink("Create", "Create", "Tickets")</li>*@
+                    <li id="MyTickets">@Html.ActionLink("My Tickets", "MyTickets", "Tickets")</li>
+                    <li id="History">@Html.ActionLink("History", "History", "Tickets")</li>
                 </ul>
             </li>
         }
@@ -76,7 +83,8 @@
                 <a id="TicketsMenu" href="#TicketsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-list-1"></i>Tickets</a>
                 <ul id="TicketsDropdown" class="collapse list-unstyled ">
                     <li id="TicketCreate">@Html.ActionLink("Create", "Create", "Tickets")</li>
-                    <li id="TicketAll">@Html.ActionLink("All Tickets", "Index", "Tickets")</li>
+                    <li id="MyTickets">@Html.ActionLink("My Tickets", "MyTickets", "Tickets")</li>
+                    <li id="History">@Html.ActionLink("History", "History", "Tickets")</li>
                 </ul>
             </li>
         }
