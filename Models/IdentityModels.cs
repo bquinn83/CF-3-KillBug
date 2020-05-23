@@ -39,6 +39,7 @@ namespace KillBug.Models
                 return $"{LastName}, {FirstName} ({UserRole()})";
             }
         }
+        
         public string UserRole()
         {
             var rolesHelper = new UserRolesHelper();
@@ -94,5 +95,6 @@ namespace KillBug.Models
         public System.Data.Entity.DbSet<KillBug.Models.TicketPriority> TicketPriorities { get; set; }
 
         public System.Data.Entity.DbSet<KillBug.Models.TicketStatus> TicketStatus { get; set; }
+        public DbSet<TicketNotification> TicketNotifications { get; set; }
     }
 }
