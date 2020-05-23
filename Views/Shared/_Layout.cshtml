@@ -1,6 +1,7 @@
 ﻿@using KillBug.Controllers
 @using KillBug.ViewModels
 @using Microsoft.AspNet.Identity
+@using KillBug.Classes
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,8 +14,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
 
-    @Styles.Render("~/Content/css")
-
+    @Styles.Render("~/css")
+    <link href="~/Content/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/css/datatables.css" rel="stylesheet" />
+    <link href="~/Content/css/font.css" rel="stylesheet" />
+    <link href="~/Content/css/style.red.css" rel="stylesheet" />
+    <link href="~/Content/css/custom.css" rel="stylesheet" />
     <!-- Google fonts - Muli-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,700">
     <!-- Favicon-->
@@ -48,32 +54,59 @@
                 </div>
                 <div class="right-menu list-inline no-margin-bottom">
                     <!-- Search -->
-                    <div class="list-inline-item"><a href="#" class="search-open nav-link"><i class="icon-magnifying-glass-browser"></i></a></div>
+                    @*<div class="list-inline-item"><a href="#" class="search-open nav-link"><i class="icon-magnifying-glass-browser"></i></a></div>*@
                     <!-- Messages -->
-                    <div class="list-inline-item dropdown">
-                        <a id="navbarDropdownMenuLink1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link messages-toggle"><i class="icon-email"></i><span class="badge dashbg-1">5</span></a>
-                        <div aria-labelledby="navbarDropdownMenuLink1" class="dropdown-menu messages">
-                            <a href="#" class="dropdown-item message d-flex align-items-center">
-                                <div class="profile">
-                                    <img src="~/img/avatar-0.jpg" alt="..." class="img-fluid">
-                                    <div class="status offline"></div>
-                                </div>
-                                <div class="content">   <strong class="d-block">Sara Wood</strong><span class="d-block">lorem ipsum dolor sit amit</span><small class="date d-block">10:30pm</small></div>
-                            </a>
-                            <a href="#" class="dropdown-item text-center message"> <strong>See All Messages <i class="fa fa-angle-right"></i></strong></a>
-                        </div>
+                    @*<div class="list-inline-item dropdown">
+            <a id="navbarDropdownMenuLink1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link messages-toggle"><i class="icon-email"></i><span class="badge dashbg-1">5</span></a>
+            <div aria-labelledby="navbarDropdownMenuLink1" class="dropdown-menu messages">
+                <a href="#" class="dropdown-item message d-flex align-items-center">
+                    <div class="profile">
+                        <img src="~/img/avatar-0.jpg" alt="..." class="img-fluid">
+                        <div class="status offline"></div>
                     </div>
+                    <div class="content">   <strong class="d-block">Sara Wood</strong><span class="d-block">lorem ipsum dolor sit amit</span><small class="date d-block">10:30pm</small></div>
+                </a>
+                <a href="#" class="dropdown-item text-center message"> <strong>See All Messages <i class="fa fa-angle-right"></i></strong></a>
+            </div>
+        </div>*@
                     <!-- Notifications -->
+                    @{
+                        var notifications = NotificationHelper.GetUnreadNotifications();
+                    }
+                    @Scripts.Render("~/bundles/jquery")
                     <div class="list-inline-item dropdown">
-                        <a id="navbarDropdownMenuLink2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link tasks-toggle"><i class="icon-new-file"></i><span class="badge dashbg-3">9</span></a>
+                        <a id="navbarDropdownMenuLink2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link tasks-toggle"><i class="icon-new-file"></i><span class="badge dashbg-3" id="notifications-count">@notifications.Count</span></a>
                         <div aria-labelledby="navbarDropdownMenuLink2" class="dropdown-menu tasks-list">
-                            <a href="#" class="dropdown-item">
-                                <div class="text d-flex justify-content-between"><strong>Task 1</strong><span>40% complete</span></div>
-                                <div class="progress">
-                                    <div role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" class="progress-bar dashbg-1"></div>
-                                </div>
+                            @foreach (var note in notifications)
+                            {
+                                using (Html.BeginForm("HasBeenRead", "Notifications", new { notificationID = note.Id }, FormMethod.Post, new { id = note.Id }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <a id="link-@note.Id" href="javascript:document.getElementById('@note.Id').submit()" class="dropdown-item message d-flex align-items-center">
+                                        <div class="profile">
+                                            <img src="@note.Sender.AvatarPath" alt="..." class="img-fluid">
+                                        </div>
+                                        <div class="content">
+                                            <strong class="d-block">@note.Sender.FullNamePosition</strong>
+                                            <span class="d-block">@note.Subject</span>
+                                            <span class="d-block">@Html.Raw(note.Body)</span>
+                                            <small class="date d-block">@Html.DisplayFor(model => note.Created)</small>
+                                        </div>
+                                    </a>
+                                    //
+                                }
+                                <script>
+                                    $(document).ready(() => {
+                                        $('#link-@note.Id').on("click", function () {
+                                            $('#link-@note.Id').hide()
+                                            //$('#@note.Id').submit()
+                                        })
+                                    })
+                                </script>
+                            }
+                            <a href="#" class="dropdown-item text-center">
+                                <strong>See All Notifications <i class="fa fa-angle-right"></i></strong>
                             </a>
-                            <a href="#" class="dropdown-item text-center"> <strong>See All Tasks <i class="fa fa-angle-right"></i></strong></a>
                         </div>
                     </div>
                     <!-- Log out  -->
@@ -109,7 +142,7 @@
                 <div class="footer__block block no-margin-bottom">
                     <div class="container-fluid text-center">
                         <p class="no-margin-bottom">
-                            2020 &copy; Your company. Design by <a href="https://bootstrapious.com/p/bootstrap-4-dark-admin">Bootstrapious</a>.
+                            2020 &copy; KillBug. A <a href="https://brianquinn.azurewebsites.net">Q's Lab Technology</a> Service.
                         </p>
                     </div>
                 </div>
