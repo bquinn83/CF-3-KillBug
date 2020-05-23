@@ -22,8 +22,9 @@ namespace KillBug.Controllers
             return View(tickets.ToList());
         }
 
-        // GET: Tickets/Details/5
-        public ActionResult Details(int? id)
+        // GET: Tickets/Dashboard
+        [Authorize]
+        public ActionResult Dashboard(int? id)
         {
             if (id == null)
             {
