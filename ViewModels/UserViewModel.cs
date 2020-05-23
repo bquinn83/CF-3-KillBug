@@ -18,18 +18,15 @@ namespace KillBug.ViewModels
 
         public CurrentUserInfoModel(string userId)
         {
-            //var user = userManager.FindById(userId);
             var user = db.Users.Find(userId);
             DisplayName = $"{user.FirstName} {user.LastName}";
             AvatarPath = user.AvatarPath;
             Role = userManager.GetRoles(userId).FirstOrDefault();
         }
     }
-    public class CustomUserViewModel
+
+    public class UserProfileViewModel
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string Role { get; set; }
+
     }
 }

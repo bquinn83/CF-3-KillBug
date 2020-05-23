@@ -39,7 +39,7 @@ namespace KillBug.Controllers
                 viewData.Add(new DeveloperAssignmentsViewModel
                 {
                     MenuDrop = $"{user.LastName}-{user.FirstName}",
-                    Name = user.FullName,
+                    Name = user.FullNamePosition,
                     AvatarPath = user.AvatarPath,
                     Email = user.Email,
                     Projects = projHelper.ListUserProjects(user.Id).Select(p => p.Name).ToList()
