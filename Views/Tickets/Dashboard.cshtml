@@ -114,11 +114,11 @@
                     <div class="block messages-block margin-bottom-sm">
                         <div class="title"><strong>Attachments</strong></div>
                         <div class="messages">
-                            @foreach (var attachment in Model.Attachments)
+                            @foreach (var attachment in Model.Attachments.OrderByDescending(a => a.Created))
                             {
                                 <a href="@Url.Content(attachment.FilePath)" class="message d-flex align-items-center" target="_blank">
                                     <div class="">
-                                        <img src="@FileTypeIcons.AttachmentIconPath(attachment.FileName)" alt="..." class="filetype-icon">
+                                        <img src="@FileTypeIcons.IconPathV2(attachment.FileName)" alt="..." class="filetype-icon">
                                     </div>
                                     <div class="content">
                                         <strong class="d-block">@attachment.FileName</strong>

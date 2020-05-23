@@ -1,8 +1,5 @@
-using System;
 using System.IO;
 using System.Web;
-using System.Web.Mvc;
-using Microsoft.SqlServer;
 
 namespace KillBug.Classes
 {
@@ -15,7 +12,9 @@ namespace KillBug.Classes
 
             string type = $"{ Path.GetExtension(filePath).Substring(1) }.png";
             iconPath += type;
-            return File.Exists(iconPath) ? iconPath : blankPath; ;
+
+            var server = HttpContext.Current.Server;
+            return File.Exists(server.MapPath(iconPath)) ? iconPath : blankPath; ;
         }
 
         public static string AttachmentIconPath(string filePath)
