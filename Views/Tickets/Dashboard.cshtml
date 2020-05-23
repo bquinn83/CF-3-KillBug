@@ -40,6 +40,42 @@
                         </div>
                     </div>
                 </div>
+                <div class="col">
+                    <div class="messages-block block">
+                        <div class="title"><strong>Comments <small>(@Model.Comments.Count)</small></strong></div>
+                        <div class="messages">
+                            @foreach (var comment in Model.Comments)
+                            {
+
+                                <a href="#" class="message d-flex align-items-center">
+                                    <div class="profile">
+                                        <img src="~/@comment.User.AvatarPath" alt="..." class="img-fluid">
+                                        @*<div class="status online"></div>*@
+                                    </div>
+                                    <div class="content">
+                                        <strong class="d-block">@comment.User.FullName</strong>
+                                        <span class="d-block">@comment.Comment</span>
+                                        <small class="date d-block">@comment.Created.ToString("MM/dd hh:mm tt")</small>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                        <hr />
+                        @using (Html.BeginForm("Create", "TicketComments"))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("TicketId", Model.Id)
+
+                            <div class="input-group">
+                                <input type="text" placeholder="Leave a Comment" class="form-control" name="Comment">
+                                <div class="input-group-append">
+                                    <input type="submit" value="Submit" class="btn btn-primary">
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
             <div class="col-md-4">
                 <div class="block margin-bottom-sm">
                     <div class="title"><strong>Upload Attachment</strong></div>
