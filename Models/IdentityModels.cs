@@ -95,6 +95,8 @@ namespace KillBug.Models
         public System.Data.Entity.DbSet<KillBug.Models.TicketPriority> TicketPriorities { get; set; }
 
         public System.Data.Entity.DbSet<KillBug.Models.TicketStatus> TicketStatus { get; set; }
+
+        public DbSet<TicketHistory> TicketHistories { get; set; }
         public DbSet<TicketNotification> TicketNotifications { get; set; }
     }
 }

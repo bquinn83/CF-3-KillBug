@@ -1,4 +1,5 @@
 ﻿using KillBug.Models;
+using KillBug.Classes;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -8,18 +9,42 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using KillBug.ViewModels;
 
 namespace KillBug.Controllers
 {
     public class TicketsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private UserRolesHelper rolesHelper = new UserRolesHelper();
+        private ProjectsHelper projHelper = new ProjectsHelper();
+        private TicketsHelper ticketHelper = new TicketsHelper();
+        private HistoryHelper historyHelper = new HistoryHelper();
+        private NotificationHelper notificationHelper = new NotificationHelper();
 
         // GET: Tickets
-        public ActionResult Index()
+        public ActionResult AllTickets()
         {
-            var tickets = db.Tickets.Include(t => t.Developer).Include(t => t.Project).Include(t => t.Submitter);
-            return View(tickets.ToList());
+            var ticketIndexVMs = new List<TicketsIndexViewModel>();
+            var allTickets = db.Tickets.ToList();
+            foreach (var ticket in allTickets)
+            {
+                ticketIndexVMs.Add(new TicketsIndexViewModel
+                {
+                    Ticket = ticket,
+                    TicketStatus = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId),
+
+                });
+            }
+
+            return View(ticketIndexVMs);
+        }
+
+        // GET :Tickets/MyTickets
+        [Authorize]
+        public ActionResult MyTickets()
+        {
+            return View(ticketHelper.ListMyTickets());
         }
 
         // GET: Tickets/Dashboard
@@ -38,26 +63,20 @@ namespace KillBug.Controllers
             return View(ticket);
         }
 
+        [Authorize(Roles = "Submitter")]
         // GET: Tickets/Create
         public ActionResult Create()
         {
-            //ViewBag.DeveloperId = new SelectList(db.Users, "Id", "FirstName");
-            //ViewBag.SubmitterId = new SelectList(db.Users, "Id", "FirstName");
-
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
+            var myProjects = projHelper.ListUserProjects(User.Identity.GetUserId());
+            ViewBag.ProjectId = new SelectList(myProjects, "Id", "Name");
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name");
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
-
-            //ViewBag.TicketType = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
-            //ViewBag.TicketPriority = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
-            //ViewBag.TicketStatus = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId);
 
             return View();
         }
 
         // POST: Tickets/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Submitter")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,ProjectId,TicketTypeId,TicketPriorityId,Title,Description")] Ticket ticket)
@@ -70,14 +89,19 @@ namespace KillBug.Controllers
 
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("MyTickets");
             }
 
-            //ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
+            var myProjects = projHelper.ListUserProjects(User.Identity.GetUserId());
+            ViewBag.ProjectId = new SelectList(myProjects, "Id", "Name");
+            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name");
+            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
+
             return View(ticket);
         }
 
         // GET: Tickets/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -89,32 +113,49 @@ namespace KillBug.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.DeveloperId = new SelectList(db.Users, "Id", "FirstName", ticket.DeveloperId);
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
-            ViewBag.SubmitterId = new SelectList(db.Users, "Id", "FirstName", ticket.SubmitterId);
+
+            ViewBag.DeveloperId = new SelectList(ticketHelper.AssignableDevelopers(ticket.ProjectId), "Id", "FullNamePosition", ticket.DeveloperId);
+
+            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
+            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
+            ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId);
             return View(ticket);
         }
 
         // POST: Tickets/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,ProjectId,TicketTypeId,TicketStatusId,TicketPriorityId,SubmitterId,DeveloperId,Title,Description,Created,Updated,IsArchived")] Ticket ticket)
+        [Authorize]
+        public ActionResult Edit([Bind(Include = "Id,ProjectId,TicketTypeId,TicketStatusId,TicketPriorityId,DeveloperId,SubmitterId,Title,Description,Created,IsArchived")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
+                var oldTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
+
+                ticket.Updated = DateTime.Now;
                 db.Entry(ticket).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                var newTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
+                historyHelper.CreateHistory(oldTicket, ticket);
+                notificationHelper.ManageNotifications(oldTicket, newTicket);
+
+                if (User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("AllTickets");
+                }
+                return RedirectToAction("MyTickets");
             }
-            ViewBag.DeveloperId = new SelectList(db.Users, "Id", "FirstName", ticket.DeveloperId);
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
-            ViewBag.SubmitterId = new SelectList(db.Users, "Id", "FirstName", ticket.SubmitterId);
+
+            ViewBag.DeveloperId = new SelectList(ticketHelper.AssignableDevelopers(ticket.ProjectId), "Id", "FullNamePosition", ticket.DeveloperId);
+            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
+            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
+            ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId);
             return View(ticket);
         }
 
         // GET: Tickets/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -130,6 +171,7 @@ namespace KillBug.Controllers
         }
 
         // POST: Tickets/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -139,6 +181,22 @@ namespace KillBug.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        // GET: Tickets/History
+        [Authorize]
+        public ActionResult History()
+        {
+            //var userId = User.Identity.GetUserId();
+            //var ticketHistories = new List<TicketHistory>();
+
+            //if (User.IsInRole("Submitter"))
+            //{
+            //    ticketHistories = db.TicketHistories.Include(t => t.Ticket).Include(t => t.User).Where(t => t.Ticket.SubmitterId == userId).ToList();
+            //}
+            //return View(ticketHistories);
+            return View(HistoryHelper.ListMyHistory());
+        }
+
 
         protected override void Dispose(bool disposing)
         {
