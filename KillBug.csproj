@@ -377,10 +377,8 @@
     <Content Include="Views\Projects\Details.cshtml" />
     <Content Include="Views\Projects\Edit.cshtml" />
     <Content Include="Views\Projects\AllProjects.cshtml" />
-    <Content Include="Views\TicketAttachments\Create.cshtml" />
     <Content Include="Views\TicketAttachments\Delete.cshtml" />
     <Content Include="Views\TicketAttachments\Details.cshtml" />
-    <Content Include="Views\TicketAttachments\Edit.cshtml" />
     <Content Include="Views\TicketAttachments\Index.cshtml" />
     <Content Include="Views\TicketComments\Create.cshtml" />
     <Content Include="Views\TicketComments\Delete.cshtml" />
