@@ -220,6 +220,12 @@
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\datatables.css" />
     <Content Include="Content\css\datatables.min.css" />
+    <Content Include="Content\favicon_io\android-chrome-192x192.png" />
+    <Content Include="Content\favicon_io\android-chrome-512x512.png" />
+    <Content Include="Content\favicon_io\apple-touch-icon.png" />
+    <Content Include="Content\favicon_io\favicon-16x16.png" />
+    <Content Include="Content\favicon_io\favicon-32x32.png" />
+    <Content Include="Content\favicon_io\favicon.ico" />
     <Content Include="Content\Images\FileTypeIcons\aac.png" />
     <Content Include="Content\Images\FileTypeIcons\ai.png" />
     <Content Include="Content\Images\FileTypeIcons\aiff.png" />
@@ -315,6 +321,7 @@
     <Content Include="Content\fonts\fontawesome-webfont.woff2" />
     <Content Include="Content\fonts\FontAwesome.otf" />
     <Content Include="private.config" />
+    <Content Include="Content\favicon_io\site.webmanifest" />
     <None Include="Properties\PublishProfiles\KillBug - Web Deploy.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\datatables.js" />
@@ -377,14 +384,6 @@
     <Content Include="Views\Projects\Details.cshtml" />
     <Content Include="Views\Projects\Edit.cshtml" />
     <Content Include="Views\Projects\AllProjects.cshtml" />
-    <Content Include="Views\TicketAttachments\Delete.cshtml" />
-    <Content Include="Views\TicketAttachments\Details.cshtml" />
-    <Content Include="Views\TicketAttachments\Index.cshtml" />
-    <Content Include="Views\TicketComments\Create.cshtml" />
-    <Content Include="Views\TicketComments\Delete.cshtml" />
-    <Content Include="Views\TicketComments\Details.cshtml" />
-    <Content Include="Views\TicketComments\Edit.cshtml" />
-    <Content Include="Views\TicketComments\Index.cshtml" />
     <Content Include="Views\Shared\_Account.cshtml" />
     <Content Include="Views\Account\ConfirmationSent.cshtml" />
     <Content Include="Views\Account\ResendEmailConfirmation.cshtml" />
