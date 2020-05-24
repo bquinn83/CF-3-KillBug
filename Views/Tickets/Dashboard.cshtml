@@ -188,57 +188,59 @@
                         <div class="block-body">
                             @foreach (var item in Model.History.OrderByDescending(h => h.ChangedOn))
                             {
-                            <div class="history-item">
-                                <strong>@Html.DisplayFor(model => item.Property)</strong>
-                                <div class="row">
-                                    <div class="col-md-2">Old Data</div>
-                                    <div class="col-md-10">@HistoryHelper.Display(item.Property, item.OldValue)</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-2">New Data</div>
-                                    <div class="col-md-10">@HistoryHelper.Display(item.Property, item.NewValue)</div>
-                                </div>
-                                <small>@Html.DisplayFor(model => item.ChangedOn) by: @Html.DisplayFor(model => item.User.FullNamePosition)</small>
+                                <div class="history-item">
+                                    <strong>@Html.DisplayFor(model => item.Property)</strong>
+                                    <div class="row">
+                                        <div class="col-md-2">Old Data</div>
+                                        <div class="col-md-10">@HistoryHelper.Display(item.Property, item.OldValue)</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">New Data</div>
+                                        <div class="col-md-10">@HistoryHelper.Display(item.Property, item.NewValue)</div>
+                                    </div>
+                                    <small>@Html.DisplayFor(model => item.ChangedOn) by: @Html.DisplayFor(model => item.User.FullNamePosition)</small>
 
-                            </div>
+                                </div>
                             }
-                            @*<div class="table-responsive">
-                                <table class="table table-striped table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Property</th>
-                                            <th>Old Value</th>
-                                            <th>New Value</th>
-                                            <th>Date</th>
-                                            <th>Edited By</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.History)
-                                        {
+                            @*
+                                    <div class="table-responsive">
+                                    <table class="table table-striped table-sm">
+                                        <thead>
                                             <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Property)
-                                                </td>
-                                                <td>
-                                                    @HistoryHelper.Display(item.Property, item.OldValue)
-                                                </td>
-                                                <td>
-                                                    @HistoryHelper.Display(item.Property, item.NewValue)
-                                                </td>
+                                                <th>Property</th>
+                                                <th>Old Value</th>
+                                                <th>New Value</th>
+                                                <th>Date</th>
+                                                <th>Edited By</th>
                                             </tr>
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ChangedOn)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.User.FullNamePosition)
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>*@
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.History)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Property)
+                                                    </td>
+                                                    <td>
+                                                        @HistoryHelper.Display(item.Property, item.OldValue)
+                                                    </td>
+                                                    <td>
+                                                        @HistoryHelper.Display(item.Property, item.NewValue)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.ChangedOn)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.User.FullNamePosition)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            *@
                         </div>
                     </div>
                 </div>
