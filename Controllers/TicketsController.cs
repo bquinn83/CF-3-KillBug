@@ -60,7 +60,27 @@ namespace KillBug.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.DeveloperId = new SelectList(ticketHelper.AssignableDevelopers(ticket.ProjectId), "Id", "FullNamePosition", ticket.DeveloperId);
+
+            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
+            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
+            ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId);
             return View(ticket);
+        }
+
+        // GET: Tickets/History
+        [Authorize]
+        public ActionResult History()
+        {
+            //var userId = User.Identity.GetUserId();
+            //var ticketHistories = new List<TicketHistory>();
+
+            //if (User.IsInRole("Submitter"))
+            //{
+            //    ticketHistories = db.TicketHistories.Include(t => t.Ticket).Include(t => t.User).Where(t => t.Ticket.SubmitterId == userId).ToList();
+            //}
+            //return View(ticketHistories);
+            return View(HistoryHelper.ListMyHistory());
         }
 
         [Authorize(Roles = "Submitter")]
@@ -100,28 +120,6 @@ namespace KillBug.Controllers
             return View(ticket);
         }
 
-        // GET: Tickets/Edit/5
-        [Authorize]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Ticket ticket = db.Tickets.Find(id);
-            if (ticket == null)
-            {
-                return HttpNotFound();
-            }
-
-            ViewBag.DeveloperId = new SelectList(ticketHelper.AssignableDevelopers(ticket.ProjectId), "Id", "FullNamePosition", ticket.DeveloperId);
-
-            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
-            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
-            ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId);
-            return View(ticket);
-        }
-
         // POST: Tickets/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -137,21 +135,19 @@ namespace KillBug.Controllers
                 db.SaveChanges();
 
                 var newTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
+
                 historyHelper.CreateHistory(oldTicket, ticket);
                 notificationHelper.ManageNotifications(oldTicket, newTicket);
 
-                if (User.IsInRole("Admin"))
-                {
-                    return RedirectToAction("AllTickets");
-                }
-                return RedirectToAction("MyTickets");
+                RedirectToAction("Dashboard", new { id = ticket.Id });
             }
 
             ViewBag.DeveloperId = new SelectList(ticketHelper.AssignableDevelopers(ticket.ProjectId), "Id", "FullNamePosition", ticket.DeveloperId);
+
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
             ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId);
-            return View(ticket);
+            return RedirectToAction("Dashboard", new { id = ticket.Id });
         }
 
         // GET: Tickets/Delete/5
@@ -181,22 +177,6 @@ namespace KillBug.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
-        // GET: Tickets/History
-        [Authorize]
-        public ActionResult History()
-        {
-            //var userId = User.Identity.GetUserId();
-            //var ticketHistories = new List<TicketHistory>();
-
-            //if (User.IsInRole("Submitter"))
-            //{
-            //    ticketHistories = db.TicketHistories.Include(t => t.Ticket).Include(t => t.User).Where(t => t.Ticket.SubmitterId == userId).ToList();
-            //}
-            //return View(ticketHistories);
-            return View(HistoryHelper.ListMyHistory());
-        }
-
 
         protected override void Dispose(bool disposing)
         {

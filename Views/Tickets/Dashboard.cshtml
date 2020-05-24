@@ -2,51 +2,158 @@
 @model KillBug.Models.Ticket
 
 @{
-    ViewBag.Title = "Dashboard";
+    ViewBag.Title = "Dashboard: " + @Model.Title.ToString();
 }
 
 <section class="no-padding-bottom">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8">
+                <!--DETAILS-->
                 <div class="col">
                     <div class="block">
-                        <div class="title"><strong>@Model.Title</strong></div>
-                        <div class="checklist">
-                            <div class="item d-flex align-items-center">
-                                <input type="checkbox" id="input-1" name="input-1" class="checkbox-template">
-                                <label for="input-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</label>
-                            </div>
-                            <div class="item d-flex align-items-center">
-                                <input type="checkbox" id="input-2" name="input-2" checked="" class="checkbox-template">
-                                <label for="input-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</label>
-                            </div>
-                            <div class="item d-flex align-items-center">
-                                <input type="checkbox" id="input-3" name="input-3" class="checkbox-template">
-                                <label for="input-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</label>
-                            </div>
-                            <div class="item d-flex align-items-center">
-                                <input type="checkbox" id="input-4" name="input-4" class="checkbox-template">
-                                <label for="input-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</label>
-                            </div>
-                            <div class="item d-flex align-items-center">
-                                <input type="checkbox" id="input-5" name="input-5" class="checkbox-template">
-                                <label for="input-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</label>
-                            </div>
-                            <div class="item d-flex align-items-center">
-                                <input type="checkbox" id="input-6" name="input-6" class="checkbox-template">
-                                <label for="input-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</label>
-                            </div>
+                        <div class="title">
+                            <strong class="d-block">Details</strong>
+                            <small class="d-block">(id: @Model.Id)</small>
+                        </div>
+                        <div class="block-body">
+                            @using (Html.BeginForm("Edit","Tickets"))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(model => model.Id)
+                                @Html.HiddenFor(model => model.Created)
+                                @Html.HiddenFor(model => model.ProjectId)
+                                @Html.HiddenFor(model => model.SubmitterId)
+                                <div class="form-horizontal">
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                                        <div class="col-md-10 font-weight-bold ticket-details">
+                                            @Html.DisplayFor(model => model.Title)
+                                        </div>
+                                        <div class="col-md-10 ticket-input d-none">
+                                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                                        <div class="col-md-10 font-weight-bold ticket-details">
+                                            @Html.DisplayFor(model => model.Description)
+                                        </div>
+                                        <div class="col-md-10 ticket-input d-none">
+                                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Project, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                                        <div class="col-md-10 font-weight-bold">
+                                            @Html.DisplayFor(model => model.Project.Name)
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.TicketTypeId, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                                        <div class="col-md-4 font-weight-bold ticket-details">
+                                            @Html.DisplayFor(model => model.TicketType.Name)
+                                        </div>
+                                        <div class="col-md-4 ticket-input d-none">
+                                            @Html.DropDownList("TicketTypeId", null, htmlAttributes: new { @class = "form-control" })
+                                        </div>
+
+                                        @Html.LabelFor(model => model.TicketPriorityId, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                                        <div class="col-md-4 font-weight-bold ticket-details">
+                                            @Html.DisplayFor(model => model.TicketPriority.Name)
+                                        </div>
+                                        <div class="col-md-4 ticket-input d-none">
+                                            @Html.DropDownList("TicketPriorityId", null, htmlAttributes: new { @class = "form-control" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.TicketStatusId, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                                        <div class="col-md-4 font-weight-bold ticket-details">
+                                            @Html.DisplayFor(model => model.TicketStatus.Name)
+                                        </div>
+                                        <div class="col-md-4 ticket-input d-none">
+                                            @Html.DropDownList("TicketStatusId", null, htmlAttributes: new { @class = "form-control" })
+                                        </div>
+
+                                        @Html.LabelFor(model => model.Developer, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                                        {
+                                            <div class="col-md-4 font-weight-bold ticket-details">
+                                                @if (@Model.DeveloperId != null)
+                                                {
+                                                    @Html.DisplayFor(model => model.Developer.FullName)
+                                                }
+                                                else
+                                                {
+                                                    @Html.DisplayName("- UnAssigned -")
+                                                }
+                                            </div>
+                                            <div class="col-md-4 ticket-input d-none">
+                                                @Html.DropDownList("DeveloperId", null, "- Select Developer -", htmlAttributes: new { @class = "form-control" })
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-4 font-weight-bold">
+                                                @if (@Model.DeveloperId != null)
+                                                {
+                                                    @Html.DisplayFor(model => model.Developer.FullName)
+                                                }
+                                                else
+                                                {
+                                                    @Html.DisplayName("- UnAssigned -")
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                                        <div class="col-md-4 font-weight-bold">
+                                            @Html.DisplayFor(model => model.Created)
+                                        </div>
+
+                                        @Html.LabelFor(model => model.Submitter, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                                        <div class="col-md-4 font-weight-bold">
+                                            @Html.DisplayFor(model => model.Submitter.FullName)
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.IsArchived, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                                        <div class="col-md-10 ticket-details">
+                                            <div class="checkbox">
+                                                @Html.DisplayFor(model => model.IsArchived)
+                                            </div>
+                                        </div>
+                                        <div class="col-md-10 ticket-input d-none">
+                                            <div class="checkbox">
+                                                @Html.EditorFor(model => model.IsArchived, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                            <input type="button" value="Edit" class="btn btn-primary" id="edit-details" />
+                                            <input type="button" value="Cancel" class="btn btn-secondary d-none" id="edit-cancel" />
+                                        </div>
+                                        <div class="col-md-2 ml-auto">
+                                            <input type="submit" value="Save" class="btn btn-primary d-none" id="edit-save" />
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
+                <!--COMMENTS-->
                 <div class="col">
                     <div class="messages-block block">
-                        <div class="title"><strong>Comments <small>(@Model.Comments.Count)</small></strong></div>
+                        <div class="title"><strong>Comments<small>(@Model.Comments.Count)</small></strong></div>
                         <div class="messages">
                             @foreach (var comment in Model.Comments)
                             {
-
                                 <a href="#" class="message d-flex align-items-center">
                                     <div class="profile">
                                         <img src="~/@comment.User.AvatarPath" alt="..." class="img-fluid">
@@ -76,7 +183,9 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-md-4">
+                <!--ATTACHMENT-->
                 <div class="block margin-bottom-sm">
                     <div class="title"><strong>Upload Attachment</strong></div>
                     @using (Html.BeginForm("Upload", "TicketAttachments", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -97,7 +206,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col">
-                                    @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.Label("Description", htmlAttributes: new { @class = "form-control-label col-md-2" })
                                     <input type="text" name="Description" id="file-upload" class="form-control" />
                                 </div>
                             </div>
@@ -138,11 +247,30 @@
 
 @section Scripts{
     <script>
+        $('.active').removeClass("active")
+        $('#TicketsMenu').removeClass("collapsed")
+        $('#TicketsDropdown').addClass("show")
+
         $('#file-upload').bind('change', function () {
             var fileName = '';
             fileName = $(this).val();
             fileName = fileName.substring(12)
             $('#file-selected').html(fileName);
+        })
+
+        $('#edit-details').on("click", () => {
+            $('#edit-details').hide()
+            $('#edit-cancel').removeClass("d-none")
+            $('#edit-save').removeClass("d-none")
+            $('.ticket-details').hide()
+            $('.ticket-input').removeClass("d-none")
+        })
+        $('#edit-cancel').on("click", () => {
+            $('#edit-details').show()
+            $('#edit-cancel').addClass("d-none")
+            $('#edit-save').addClass("d-none")
+            $('.ticket-details').show()
+            $('.ticket-input').addClass("d-none")
         })
     </script>
 }

@@ -16,9 +16,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>*@
             <th>
                 @Html.DisplayName("Developer")
             </th>
@@ -31,9 +28,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Created)
             </th>
-            @*<th>
-                @Html.DisplayName("Submitter")
-            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -50,9 +44,6 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.Developer.FullName)
                 </td>
@@ -65,14 +56,8 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Created)
                 </td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => item.Submitter.FullName)
-                </td>*@
                 <td>
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Comment", "Create", "TicketComments", new { id = item.Id }, null) |
-                    @Html.ActionLink("Upload", "Create", "TicketAttachments", new { id = item.Id }, null)
+                    @Html.ActionLink("Dashboard", "Dashboard", "Tickets", new { id = item.Id }, null)
                 </td>
             </tr>
         }
