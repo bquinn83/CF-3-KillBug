@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace KillBug.Models
+namespace KillBug.ViewModels
 {
     public class ExternalLoginConfirmationViewModel
     {

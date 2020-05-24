@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using KillBug.Models;
+using KillBug.ViewModels;
 using System.Web.Configuration;
 
 namespace KillBug.Controllers
