@@ -14,6 +14,9 @@ namespace KillBug.ViewModels
         public int ProjectsCount { get; set; }
         public int TicketsCount { get; set; }
         public int NewTicketsCount { get; set; }
+        public int CommentsCount { get; set; }
+        public int AttachmentsCount { get; set; }
+        public int HistoryCount { get; set; }
 
     }
 }

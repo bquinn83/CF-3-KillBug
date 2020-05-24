@@ -27,6 +27,9 @@ namespace KillBug.Controllers
                 ProjectsCount = db.Projects.Count(),
                 TicketsCount = db.Tickets.Count(),
                 NewTicketsCount = db.Tickets.Where(t => t.TicketStatus.Name == "New").Count(),
+                CommentsCount = db.TicketComments.Count(),
+                AttachmentsCount = db.TicketAttachments.Count(),
+                HistoryCount = db.TicketHistories.Count()
             };
 
             return View(viewData);

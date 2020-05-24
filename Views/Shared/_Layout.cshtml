@@ -76,7 +76,6 @@
                     @{
                         var notifications = NotificationHelper.GetUnreadNotifications();
                     }
-                    @Scripts.Render("~/bundles/jquery")
                     <div class="list-inline-item dropdown">
                         <a id="navbarDropdownMenuLink2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link tasks-toggle"><i class="icon-new-file"></i><span class="badge dashbg-3" id="notifications-count">@notifications.Count</span></a>
                         <div aria-labelledby="navbarDropdownMenuLink2" class="dropdown-menu tasks-list">
