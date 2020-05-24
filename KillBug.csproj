@@ -192,7 +192,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\EmailModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -375,9 +375,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Tickets\Create.cshtml" />
-    <Content Include="Views\Tickets\Delete.cshtml" />
-    <Content Include="Views\Tickets\Details.cshtml" />
-    <Content Include="Views\Tickets\Edit.cshtml" />
     <Content Include="Views\Tickets\AllTickets.cshtml" />
     <Content Include="Views\Projects\Create.cshtml" />
     <Content Include="Views\Projects\Delete.cshtml" />
@@ -390,21 +387,21 @@
     <Content Include="Views\Admin\ManageRoles.cshtml" />
     <Content Include="Views\Shared\_SideMenu.cshtml" />
     <Content Include="Views\Projects\AssignProjectUsers.cshtml" />
-    <Content Include="Views\TicketTypes\Create.cshtml" />
-    <Content Include="Views\TicketTypes\Delete.cshtml" />
-    <Content Include="Views\TicketTypes\Details.cshtml" />
-    <Content Include="Views\TicketTypes\Edit.cshtml" />
-    <Content Include="Views\TicketTypes\Index.cshtml" />
-    <Content Include="Views\TicketPriorities\Create.cshtml" />
-    <Content Include="Views\TicketPriorities\Delete.cshtml" />
-    <Content Include="Views\TicketPriorities\Details.cshtml" />
-    <Content Include="Views\TicketPriorities\Edit.cshtml" />
-    <Content Include="Views\TicketPriorities\Index.cshtml" />
-    <Content Include="Views\TicketStatus\Create.cshtml" />
-    <Content Include="Views\TicketStatus\Delete.cshtml" />
-    <Content Include="Views\TicketStatus\Details.cshtml" />
-    <Content Include="Views\TicketStatus\Edit.cshtml" />
-    <Content Include="Views\TicketStatus\Index.cshtml" />
+    <Content Include="Views\Admin\TicketTypes\Create.cshtml" />
+    <Content Include="Views\Admin\TicketTypes\Delete.cshtml" />
+    <Content Include="Views\Admin\TicketTypes\Details.cshtml" />
+    <Content Include="Views\Admin\TicketTypes\Edit.cshtml" />
+    <Content Include="Views\Admin\TicketTypes\Index.cshtml" />
+    <Content Include="Views\Admin\TicketPriorities\Create.cshtml" />
+    <Content Include="Views\Admin\TicketPriorities\Delete.cshtml" />
+    <Content Include="Views\Admin\TicketPriorities\Details.cshtml" />
+    <Content Include="Views\Admin\TicketPriorities\Edit.cshtml" />
+    <Content Include="Views\Admin\TicketPriorities\Index.cshtml" />
+    <Content Include="Views\Admin\TicketStatus\Create.cshtml" />
+    <Content Include="Views\Admin\TicketStatus\Delete.cshtml" />
+    <Content Include="Views\Admin\TicketStatus\Details.cshtml" />
+    <Content Include="Views\Admin\TicketStatus\Edit.cshtml" />
+    <Content Include="Views\Admin\TicketStatus\Index.cshtml" />
     <Content Include="Views\Projects\ReAssignManager.cshtml" />
     <Content Include="Views\Projects\MyProjects.cshtml" />
     <Content Include="Views\Tickets\MyTickets.cshtml" />
@@ -416,7 +413,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Notifications\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
