@@ -12,7 +12,7 @@ namespace KillBug.Models
         #region IDS
         public int Id { get; set; }
         public int TicketId { get; set; }
-        [DisplayName("User")]
+        [DisplayName("Edited By")]
         public string UserId { get; set; }
         #endregion
 
@@ -24,7 +24,7 @@ namespace KillBug.Models
         public string NewValue { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}")]
-        [DisplayName("Changed On")]
+        [DisplayName("Edited On")]
         public DateTime ChangedOn { get; set; }
         #endregion
 

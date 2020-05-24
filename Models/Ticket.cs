@@ -43,7 +43,7 @@ namespace KillBug.Models
         public virtual ApplicationUser Developer { get; set; }
         public virtual ICollection<TicketAttachment> Attachments { get; set; }
         public virtual ICollection<TicketComment> Comments { get; set; }
-        public virtual ICollection<TicketHistory> TicketHistories { get; set; }
+        public virtual ICollection<TicketHistory> History { get; set; }
         public virtual ICollection<TicketNotification> Notifications { get; set; }
         #endregion
 
@@ -51,7 +51,7 @@ namespace KillBug.Models
         {
             Attachments = new HashSet<TicketAttachment>();
             Comments = new HashSet<TicketComment>();
-            TicketHistories = new HashSet<TicketHistory>();
+            History = new HashSet<TicketHistory>();
             Notifications = new HashSet<TicketNotification>();
         }
     }

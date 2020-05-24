@@ -94,3 +94,9 @@ table.dataTable tbody tr {
 input[type="file"] {
     display: none;
 }
+
+.history-item {
+    border-bottom: 1px solid #393c43;
+    border-top: 1px solid #393c43;
+    padding: 10px;
+}
