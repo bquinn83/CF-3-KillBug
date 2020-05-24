@@ -405,7 +405,7 @@
     <Content Include="Views\Projects\ReAssignManager.cshtml" />
     <Content Include="Views\Projects\MyProjects.cshtml" />
     <Content Include="Views\Tickets\MyTickets.cshtml" />
-    <Content Include="Views\Home\UserProfile.cshtml" />
+    <Content Include="Views\Manage\UserProfile.cshtml" />
     <Content Include="Views\Tickets\History.cshtml" />
     <Content Include="Views\Tickets\Dashboard.cshtml" />
     <Content Include="Uploads\Attachments\1\3\bootstrap-4-4-1-dist-637257100535600120.zip" />

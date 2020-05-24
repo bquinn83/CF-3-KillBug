@@ -15,6 +15,9 @@ namespace KillBug.ViewModels
         public string DisplayName { get; set; }
         public string AvatarPath { get; set; }
         public string Role { get; set; }
+        public string Address { get; set; }
+        public string PhoneNumber { get; set; }
+        public string AboutMe { get; set; }
 
         public CurrentUserInfoModel(string userId)
         {
@@ -22,6 +25,9 @@ namespace KillBug.ViewModels
             DisplayName = $"{user.FirstName} {user.LastName}";
             AvatarPath = user.AvatarPath;
             Role = userManager.GetRoles(userId).FirstOrDefault();
+            Address = "Demo Street 123, Demo City 04312, NJ";
+            PhoneNumber = "610-555-3708";
+            AboutMe = "Web Designer / UX / Graphic Artist / Coffee Lover";
         }
     }
 
