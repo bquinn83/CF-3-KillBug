@@ -24,7 +24,6 @@
     <!-- Google fonts - Muli-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,700">
     <!-- Favicon-->
-    <link rel="shortcut icon" href="img/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="~/Content/favicon_io/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="~/Content/favicon_io/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="~/Content/favicon_io/favicon-16x16.png">
@@ -88,7 +87,7 @@
                                     @Html.AntiForgeryToken()
                                     <a id="link-@note.Id" href="javascript:document.getElementById('@note.Id').submit()" class="dropdown-item message d-flex align-items-center">
                                         <div class="profile">
-                                            <img src="@note.Sender.AvatarPath" alt="..." class="img-fluid">
+                                            <img src="~/@note.Sender.AvatarPath" alt="..." class="img-fluid">
                                         </div>
                                         <div class="content">
                                             <strong class="d-block">@note.Sender.FullNamePosition</strong>
