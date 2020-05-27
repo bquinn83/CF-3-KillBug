@@ -16,6 +16,7 @@ namespace KillBug.Controllers
     {
         private readonly UserRolesHelper RolesHelper = new UserRolesHelper();
         private ApplicationDbContext db = new ApplicationDbContext();
+        private NotificationHelper notifications = new NotificationHelper();
 
         //GET: ManageRoles
         public ActionResult ManageRoles()
@@ -55,6 +56,8 @@ namespace KillBug.Controllers
                     }
                     RolesHelper.AddUserToRole(userId, roleName);
 
+                    //send notification
+                    notifications.RoleChangeNotification(userId, roleName);
                 }
             }
             return RedirectToAction("ManageRoles");

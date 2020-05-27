@@ -98,15 +98,22 @@ namespace KillBug.Classes
                     break;
             }
         }
-
-        private void SaveNotification(TicketNotification notification, string recipientId)
+        public void RoleChangeNotification(string userId, string roleName)
         {
-            if (recipientId != null)
+            var notification = new Notification
             {
-                notification.RecipientId = recipientId;
-                db.TicketNotifications.Add(notification);
-                db.SaveChanges();
-            }
+                Created = DateTime.Now,
+                SenderId = HttpContext.Current.User.Identity.GetUserId(),
+                Subject = "New Role!",
+                Body = $"Your role has been changed to { roleName }!",
+            };
+
+            SaveNotification(notification, userId);
+        }
+
+        public void ManagerUpdateNotification()
+        {
+
         }
     }
 }
