@@ -44,9 +44,13 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        @Html.LabelFor(model => model.Project, htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                        <div class="col-md-10 font-weight-bold">
+                                        @Html.LabelFor(model => model.Project.Name, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                                        <div class="col-md-4 font-weight-bold">
                                             @Html.DisplayFor(model => model.Project.Name)
+                                        </div>
+                                        @Html.Label("Manager", htmlAttributes: new { @class = "form-control-label col-md-2" })
+                                        <div class="col-md-4 font-weight-bold">
+                                            @Html.DisplayFor(model => model.Project.ProjectManager.FullName)
                                         </div>
                                     </div>
 
@@ -168,7 +172,7 @@
                             }
                         </div>
                         <hr />
-                        @using (Html.BeginForm("Create", "TicketComments"))
+                        @using (Html.BeginForm("Create", "TicketComments",FormMethod.Post))
                         {
                             @Html.AntiForgeryToken()
                             @Html.Hidden("TicketId", Model.Id)
@@ -199,7 +203,6 @@
                                         <div class="col-md-10">@HistoryHelper.Display(item.Property, item.NewValue)</div>
                                     </div>
                                     <small>@Html.DisplayFor(model => item.ChangedOn) by: @Html.DisplayFor(model => item.User.FullNamePosition)</small>
-
                                 </div>
                             }
                             @*
