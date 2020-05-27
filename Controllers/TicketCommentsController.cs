@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using KillBug.Classes;
 using KillBug.Models;
 using Microsoft.AspNet.Identity;
 
@@ -14,6 +15,7 @@ namespace KillBug.Controllers
     public class TicketCommentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        NotificationHelper notifications = new NotificationHelper();
 
         // GET: TicketComments
         public ActionResult Index()
@@ -46,8 +48,6 @@ namespace KillBug.Controllers
         }
 
         // POST: TicketComments/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Comment,TicketId")] TicketComment ticketComment)
@@ -59,8 +59,17 @@ namespace KillBug.Controllers
 
                 db.TicketComments.Add(ticketComment);
                 db.SaveChanges();
-
-                //create & send comment notification
+                
+                var ticket = db.Tickets.Find(ticketComment.TicketId);
+                Notification newNotification = new Notification
+                {
+                    Created = DateTime.Now,
+                    TicketId = ticket.Id,
+                    SenderId = User.Identity.GetUserId(),
+                    Subject = "New Comment",
+                    Body = $"Theres a new Comment on one of your tickets! <br/>Ticket: { ticket.Title }<br/>Comment: {ticket.Comments.OrderByDescending(c => c.Created).FirstOrDefault().Comment }<br/>By: { user.FullNamePosition }"
+                };
+                notifications.TicketUpdateNotification(newNotification, ticket);
             }
 
             return RedirectToAction("Dashboard", "Tickets", new { id = ticketComment.TicketId });

@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.ComponentModel.DataAnnotations;
 
 namespace KillBug.Models
 {
-    public class TicketNotification
+    public class Notification
     {
         #region IDS
         public int Id { get; set; }
-        public int TicketId { get; set; }
         public string SenderId { get; set; }
         public string RecipientId { get; set; }
         #endregion
@@ -24,9 +20,12 @@ namespace KillBug.Models
         #endregion
 
         #region NAVIGATION
-        public virtual Ticket Ticket { get; set; }
         public virtual ApplicationUser Sender { get; set; }
         public virtual ApplicationUser Recipient { get; set; }
+        //NOT IMPLEMENTED:
+        public int? TicketId { get; set; }
+        public int? ProjectId { get; set; }
+        //Why are the above Id's here??? For future feature, having a notification about a Project/Ticket be able to link to the Project/Ticket
         #endregion
     }
 }

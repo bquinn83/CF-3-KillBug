@@ -11,31 +11,39 @@ namespace KillBug.Classes
     public class NotificationHelper
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private UserRolesHelper rolesHelper = new UserRolesHelper();
 
-        public static List<TicketNotification> GetUnreadNotifications()
+        public static List<Notification> GetUnreadNotifications()
         {
             ApplicationDbContext db = new ApplicationDbContext();
             var userId = HttpContext.Current.User.Identity.GetUserId();
 
             if (userId == null)
-                return new List<TicketNotification>();
+                return new List<Notification>();
 
-            return db.TicketNotifications.Where(t => t.RecipientId == userId && !t.IsRead).ToList();
+            return db.Notifications.Where(t => t.RecipientId == userId && !t.IsRead).ToList();
         }
-
         public void ManageNotifications(Ticket oldTicket, Ticket newTicket)
         {
+            var user = db.Users.Find(HttpContext.Current.User.Identity.GetUserId());
+
             //Manage a Developer assignment notification
             //EXTRA CREDIT: See if there is a developer being assigned or re-assigned
-            ManageAssignmentNotifications(oldTicket, newTicket);
+            if (oldTicket.DeveloperId != newTicket.DeveloperId)
+            {
+                DeveloperAssignmentNotifications(oldTicket, newTicket);
+            }
             //Manage some other general change notification
-
-            //GenerateTicketChangeNotification(oldTicket, newTicket);
-
+            Notification newNotification = new Notification
+            {
+                Created = DateTime.Now,
+                TicketId = newTicket.Id,
+                SenderId = user.Id,
+                Subject = "Ticket Updated",
+                Body = $"One of your tickets has been updated! <br/>Ticket: { newTicket.Title }<br/>By: { user.FullNamePosition }"
+            };
+            TicketUpdateNotification(newNotification, newTicket);
         }
-
-        private void ManageAssignmentNotifications(Ticket oldTicket, Ticket newTicket)
+        private void DeveloperAssignmentNotifications(Ticket oldTicket, Ticket newTicket)
         {
             bool assigned = oldTicket.DeveloperId == null && newTicket.DeveloperId != null;
             bool unassigned = oldTicket.DeveloperId != null && newTicket.DeveloperId == null;
@@ -43,7 +51,7 @@ namespace KillBug.Classes
 
             if (assigned)
             {
-                db.TicketNotifications.Add(new TicketNotification
+                db.Notifications.Add(new Notification
                 {
                     Created = DateTime.Now,
                     TicketId = newTicket.Id,
@@ -56,27 +64,20 @@ namespace KillBug.Classes
 
             db.SaveChanges();
         }
-
-        private void GenerateTicketChangeNotification(Ticket oldTicket, Ticket newTicket)
+        private void SaveNotification(Notification notification, string recipientId)
         {
-            throw new NotImplementedException();
-        }
-
-        public void AttachmentNotification(Ticket ticket)
-        {
-            ApplicationUser user = db.Users.Find(HttpContext.Current.User.Identity.GetUserId());
-            string userRole = rolesHelper.ListUserRoles(user.Id).FirstOrDefault();
-
-            TicketNotification newNotification = new TicketNotification
+            if (recipientId != null)
             {
-                Created = DateTime.Now,
-                TicketId = ticket.Id,
-                SenderId = user.Id,
-                Subject = "New Attachment",
-                Body = $"Theres a new Attachment on one of your tickets! <br/>Ticket: { ticket.Title }<br/>Attachment: {ticket.Attachments.OrderByDescending(a => a.Created).FirstOrDefault().FileName }"
-            };
+                notification.RecipientId = recipientId;
+                db.Notifications.Add(notification);
+                db.SaveChanges();
+            }
+        }
+        public void TicketUpdateNotification(Notification newNotification, Ticket ticket)
+        {
+            ApplicationUser user = db.Users.Find(newNotification.SenderId);
 
-            switch (userRole)
+            switch (user.UserRole())
             {
                 case "Admin":
                     SaveNotification(newNotification, ticket.Project.ProjectManagerId);
@@ -85,6 +86,10 @@ namespace KillBug.Classes
                     break;
                 case "Project Manager":
                     SaveNotification(newNotification, ticket.DeveloperId);
+                    SaveNotification(newNotification, ticket.SubmitterId);
+                    break;
+                case "Developer":
+                    SaveNotification(newNotification, ticket.Project.ProjectManagerId);
                     SaveNotification(newNotification, ticket.SubmitterId);
                     break;
                 case "Submitter":

@@ -60,6 +60,7 @@ namespace KillBug.Controllers
             {
                 return HttpNotFound();
             }
+
             ViewBag.DeveloperId = new SelectList(ticketHelper.AssignableDevelopers(ticket.ProjectId), "Id", "FullNamePosition", ticket.DeveloperId);
 
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
@@ -137,6 +138,7 @@ namespace KillBug.Controllers
                 var newTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
 
                 historyHelper.CreateHistory(oldTicket, ticket);
+
                 notificationHelper.ManageNotifications(oldTicket, newTicket);
 
                 RedirectToAction("Dashboard", new { id = ticket.Id });

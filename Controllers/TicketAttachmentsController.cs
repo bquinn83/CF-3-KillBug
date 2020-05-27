@@ -55,8 +55,16 @@ namespace KillBug.Controllers
                     db.TicketAttachments.Add(ticketAttachment);
                     db.SaveChanges();
 
-                    notificationHelper.AttachmentNotification(ticketAttachment.Ticket);
-
+                    var ticket = db.Tickets.Find(ticketAttachment.TicketId);
+                    var notification = new Notification
+                    {
+                        Created = DateTime.Now,
+                        TicketId = ticket.Id,
+                        SenderId = User.Identity.GetUserId(),
+                        Subject = "New Attachment",
+                        Body = $"Theres a new Attachment on one of your tickets! <br/>Ticket: { ticket.Title }<br/>Attachment: {ticket.Attachments.OrderByDescending(a => a.Created).FirstOrDefault().FileName }"
+                    };
+                    notificationHelper.TicketUpdateNotification(notification, ticket);
                 }
                 return RedirectToAction("Dashboard", "Tickets", new { id = ticketAttachment.TicketId });
             }
