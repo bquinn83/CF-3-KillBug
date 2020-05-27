@@ -114,3 +114,7 @@ input[type="file"] {
     background-color: #ff3f3f !important;
     border-color: #ff3f3f !important;
 }
+
+nav#sidebar .sidebar-header {
+    width: 100%;
+}

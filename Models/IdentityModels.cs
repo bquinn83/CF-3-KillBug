@@ -21,7 +21,19 @@ namespace KillBug.Models
         public string FirstName { get; set; }
         [DisplayName("Last Name")]
         public string LastName { get; set; }
+
+        #region ADDRESS
+        public string AddressLine1 { get; set; }
+        public string AddressLine2 { get; set; }
+        public string AddressCity { get; set; }
+        public string AddressState { get; set; }
+        public int AddressZip { get; set; }
+        #endregion
+
+        [DisplayName("About Me")]
+        public string AboutMe { get; set; }
         public string AvatarPath { get; set; }
+
         [NotMapped]
         [DisplayName("Name")]
         public string FullName
@@ -82,21 +94,14 @@ namespace KillBug.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<KillBug.Models.Ticket> Tickets { get; set; }
-
-        public System.Data.Entity.DbSet<KillBug.Models.Project> Projects { get; set; }
-
-        public System.Data.Entity.DbSet<KillBug.Models.TicketAttachment> TicketAttachments { get; set; }
-
-        public System.Data.Entity.DbSet<KillBug.Models.TicketComment> TicketComments { get; set; }
-
-        public System.Data.Entity.DbSet<KillBug.Models.TicketType> TicketTypes { get; set; }
-
-        public System.Data.Entity.DbSet<KillBug.Models.TicketPriority> TicketPriorities { get; set; }
-
-        public System.Data.Entity.DbSet<KillBug.Models.TicketStatus> TicketStatus { get; set; }
-
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<TicketAttachment> TicketAttachments { get; set; }
+        public DbSet<TicketComment> TicketComments { get; set; }
+        public DbSet<TicketType> TicketTypes { get; set; }
+        public DbSet<TicketPriority> TicketPriorities { get; set; }
+        public DbSet<TicketStatus> TicketStatus { get; set; }
         public DbSet<TicketHistory> TicketHistories { get; set; }
-        public DbSet<TicketNotification> TicketNotifications { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
     }
 }

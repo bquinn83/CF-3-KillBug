@@ -1,5 +1,5 @@
 ﻿@using KillBug.ViewModels
-@model CurrentUserInfoModel
+@model UserProfileViewModel
 @{
     ViewBag.Title = "My Profile";
 }
@@ -10,6 +10,24 @@
             @Model.Role
         </div>
         <div class="card-body">
+            @using (Html.BeginForm("UpdateUser", "Manage"))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="row">
+                    <div class="col-7">
+                        <h2 class="lead"><b><strong>@Model.DisplayName</strong></b></h2>
+                        <p class="text-muted text-sm"><b>About: </b> @Model.AboutMe </p>
+                        <ul class="ml-4 mb-0 fa-ul text-muted">
+                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-home"></i></span> Address: @Model.Address</li>
+                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: @Model.PhoneNumber</li>
+                        </ul>
+                    </div>
+                    <div class="col-5 text-center">
+                        <img src="~/@Model.AvatarPath" alt="" class="rounded-circle img-fluid">
+                    </div>
+                </div>
+            }
             <div class="row">
                 <div class="col-7">
                     <h2 class="lead"><b><strong>@Model.DisplayName</strong></b></h2>
@@ -23,6 +41,38 @@
                     <img src="~/@Model.AvatarPath" alt="" class="rounded-circle img-fluid">
                 </div>
             </div>
+            <!-- Ticket code -->
+
+            @*@using (Html.BeginForm("Edit", "Tickets"))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.Created)
+                @Html.HiddenFor(model => model.ProjectId)
+                @Html.HiddenFor(model => model.SubmitterId)
+                <div class="form-horizontal">
+                    <div class="form-group row">
+                        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                        <div class="col-md-10 font-weight-bold ticket-details">
+                            @Html.DisplayFor(model => model.Title)
+                        </div>
+                        <div class="col-md-10 ticket-input d-none">
+                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-2">
+                            <input type="button" value="Edit" class="btn btn-primary" id="edit-details" />
+                            <input type="button" value="Cancel" class="btn btn-secondary d-none" id="edit-cancel" />
+                        </div>
+                        <div class="col-md-2 ml-auto">
+                            <input type="submit" value="Save" class="btn btn-primary d-none" id="edit-save" />
+                        </div>
+                    </div>
+                </div>
+            }*@
+
         </div>
         <div class="card-footer">
             <div class="text-right">
@@ -31,3 +81,20 @@
         </div>
     </div>
 </div>
+
+<script>
+    $('#edit-details').on("click", () => {
+        $('#edit-details').hide()
+        $('#edit-cancel').removeClass("d-none")
+        $('#edit-save').removeClass("d-none")
+        $('.ticket-details').hide()
+        $('.ticket-input').removeClass("d-none")
+    })
+    $('#edit-cancel').on("click", () => {
+        $('#edit-details').show()
+        $('#edit-cancel').addClass("d-none")
+        $('#edit-save').addClass("d-none")
+        $('.ticket-details').show()
+        $('.ticket-input').addClass("d-none")
+    })
+</script>
