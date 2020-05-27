@@ -202,7 +202,7 @@
     <Compile Include="Models\TicketAttachment.cs" />
     <Compile Include="Models\TicketComment.cs" />
     <Compile Include="Models\TicketHistory.cs" />
-    <Compile Include="Models\TicketNotification.cs" />
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\TicketPriority.cs" />
     <Compile Include="Controllers\TicketsController.cs" />
     <Compile Include="Models\TicketStatus.cs" />
@@ -289,6 +289,7 @@
     <Content Include="Content\Images\FileTypeIcons\xml.png" />
     <Content Include="Content\Images\FileTypeIcons\yml.png" />
     <Content Include="Content\Images\FileTypeIcons\zip.png" />
+    <Content Include="Content\Images\Stock\admin.png" />
     <Content Include="Content\Images\Stock\avatar-0.jpg" />
     <Content Include="Content\Images\Stock\avatar-1.jpg" />
     <Content Include="Content\Images\Stock\avatar-10.jpg" />
@@ -301,6 +302,7 @@
     <Content Include="Content\Images\Stock\avatar-7.jpg" />
     <Content Include="Content\Images\Stock\avatar-8.jpg" />
     <Content Include="Content\Images\Stock\avatar-9.jpg" />
+    <Content Include="Content\Images\Stock\dev.png" />
     <Content Include="Content\Images\Stock\odin.jpg" />
     <Content Include="Content\css\custom.css" />
     <Content Include="Content\css\font-awesome.css" />
@@ -311,6 +313,8 @@
     <Content Include="Content\Images\blank-avatar.png" />
     <Content Include="Content\Images\app-chalkboard.jpg" />
     <Content Include="Content\css\style.red.css" />
+    <Content Include="Content\Images\Stock\pm.png" />
+    <Content Include="Content\Images\Stock\sub.png" />
     <Content Include="Global.asax" />
     <Content Include="Content\fonts\dark-dashboard.eot" />
     <Content Include="Content\fonts\dark-dashboard.ttf" />

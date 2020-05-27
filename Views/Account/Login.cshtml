@@ -10,12 +10,12 @@
     <div class="form-group">
         @Html.TextBoxFor(m => m.Email, new { @class = "form-control input-material" })
         @Html.LabelFor(m => m.Email, new { @class = "label-material" })
-        @*@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })*@
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">
         @Html.PasswordFor(m => m.Password, new { @class = "form-control input-material" })
         @Html.LabelFor(m => m.Password, new { @class = "label-material" })
-        @*@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })*@
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
     </div>
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
@@ -32,20 +32,34 @@
 <br>
 <small>Do not have an account? </small>@Html.ActionLink("Sign Up!", "Register", null, new { @class = "signup" })
 <hr />
-@using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = ViewBag.ReturnUrl }))
-{
-    @Html.AntiForgeryToken()
-    <div id="socialLoginList">
-        <p>
-            @{
-                var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
-                foreach (AuthenticationDescription p in loginProviders)
-                {
-                    <button type="submit" class="btn btn-primary" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
-                }
+<small>Try a Demo User!</small>
+<div id="DemoAdmin">
+    <p>
+        @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post, htmlAttributes: new { style = "max-width: 100%" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <button type="submit" class="btn btn-primary" name="emailKey" value="DemoEmailAdmin">Admin</button>
+            <button type="submit" class="btn btn-primary" name="emailKey" value="DemoEmailProjectManager">Project Manager</button>
+            <button type="submit" class="btn btn-primary" name="emailKey" value="DemoEmailDeveloper">Developer</button>
+            <button type="submit" class="btn btn-primary" name="emailKey" value="DemoEmailSubmitter">Submitter</button>
+        }
+    </p>
+</div>
+<hr />
+<small>Sign up with an External Login!</small>
+@Html.AntiForgeryToken()
+<div id="socialLoginList">
+    <p>
+        @using (Html.BeginForm("ExternalLogin", "Account", FormMethod.Post, htmlAttributes: new { style = "max-width: 100%" }))
+        {
+            var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+            foreach (AuthenticationDescription p in loginProviders)
+            {
+                <button type="submit" class="btn btn-primary" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
             }
-        </p>
-    </div>
-}
+        }
+    </p>
+</div>
 
 @*@Scripts.Render("~/bundles/jqueryval")*@
