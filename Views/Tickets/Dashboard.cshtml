@@ -17,7 +17,7 @@
                             <small class="d-block">(id: @Model.Id)</small>
                         </div>
                         <div class="block-body">
-                            @using (Html.BeginForm("Edit", "Tickets"))
+                            @using (Html.BeginForm("Edit", "Tickets", FormMethod.Post, new { id = "edit-form" }))
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.HiddenFor(model => model.Id)
@@ -74,13 +74,21 @@
 
                                     <div class="form-group row">
                                         @Html.LabelFor(model => model.TicketStatusId, htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                        <div class="col-md-4 font-weight-bold ticket-details">
-                                            @Html.DisplayFor(model => model.TicketStatus.Name)
-                                        </div>
-                                        <div class="col-md-4 ticket-input d-none">
-                                            @Html.DropDownList("TicketStatusId", null, htmlAttributes: new { @class = "form-control" })
-                                        </div>
-
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("Developer"))
+                                        {
+                                            <div class="col-md-4 font-weight-bold ticket-details ">
+                                                @Html.DisplayFor(model => model.TicketStatus.Name)
+                                            </div>
+                                            <div class="col-md-4 ticket-input d-none">
+                                                @Html.DropDownList("TicketStatusId", null, htmlAttributes: new { @class = "form-control" })
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-4 font-weight-bold">
+                                                @Html.DisplayFor(model => model.TicketStatus.Name)
+                                            </div>
+                                        }
                                         @Html.LabelFor(model => model.Developer, htmlAttributes: new { @class = "form-control-label col-md-2" })
                                         @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
                                         {
@@ -172,7 +180,7 @@
                             }
                         </div>
                         <hr />
-                        @using (Html.BeginForm("Create", "TicketComments",FormMethod.Post))
+                        @using (Html.BeginForm("Create", "TicketComments", FormMethod.Post))
                         {
                             @Html.AntiForgeryToken()
                             @Html.Hidden("TicketId", Model.Id)
@@ -186,9 +194,10 @@
                         }
                     </div>
                 </div>
+                <!--HISTORY-->
                 <div class="col">
                     <div class="block">
-                        <div class="title"><strong>History</strong></div>
+                        <div class="title"><strong>History<small>(@Model.History.Count)</small></strong></div>
                         <div class="block-body">
                             @foreach (var item in Model.History.OrderByDescending(h => h.ChangedOn))
                             {
@@ -272,7 +281,7 @@
                             <div class="form-group">
                                 <div class="col">
                                     @Html.Label("Description", htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                    <input type="text" name="Description" id="file-upload" class="form-control" />
+                                    <input type="text" name="Description" id="file-upload-description" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -286,7 +295,7 @@
                 @if (Model.Attachments.Count > 0)
                 {
                     <div class="block messages-block margin-bottom-sm">
-                        <div class="title"><strong>Attachments</strong></div>
+                        <div class="title"><strong>Attachments<small>(@Model.Attachments.Count)</small></strong></div>
                         <div class="messages">
                             @foreach (var attachment in Model.Attachments.OrderByDescending(a => a.Created))
                             {
@@ -315,7 +324,6 @@
         $('.active').removeClass("active")
         $('#TicketsMenu').removeClass("collapsed")
         $('#TicketsDropdown').addClass("show")
-
         $('.table').DataTable();
 
         $('#file-upload').bind('change', function () {
