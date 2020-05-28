@@ -16,7 +16,6 @@ namespace KillBug.Models
         public string FilePath { get; set; }
         public string FileName { get; set; }
         public string Description { get; set; }
-
         [DisplayFormat(DataFormatString = "{0:MM/dd/yy hh:mm tt}")]
         public DateTime Created { get; set; }
         public virtual Ticket Ticket { get; set; }

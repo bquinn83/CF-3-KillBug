@@ -18,7 +18,6 @@ namespace KillBug.Classes
         {
             return userManager.IsInRole(userId, roleName);
         }
-
         public ICollection<string> ListUserRoles(string userId)
         {
             return userManager.GetRoles(userId);
@@ -29,12 +28,12 @@ namespace KillBug.Classes
             var result = userManager.AddToRole(userId, roleName);
             return result.Succeeded;
         }
-
         public bool RemoveUserFromRole(string userId, string roleName)
         {
             var result = userManager.RemoveFromRole(userId, roleName);
             return result.Succeeded;
         }
+
         public ICollection<ApplicationUser> UsersInRole(string roleName)
         {
             var resultList = new List<ApplicationUser>();
@@ -46,7 +45,6 @@ namespace KillBug.Classes
             }
             return resultList;
         }
-
         public ICollection<ApplicationUser> UsersNotInRole(string roleName)
         {
             var resultList = new List<ApplicationUser>();

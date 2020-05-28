@@ -14,7 +14,7 @@ namespace KillBug.Controllers
         [HttpPost]
         public void HasBeenRead(int notificationID)
         {
-            db.TicketNotifications.Find(notificationID).IsRead = true;
+            db.Notifications.Find(notificationID).IsRead = true;
             db.SaveChanges();
         }
     }

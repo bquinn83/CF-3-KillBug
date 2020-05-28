@@ -87,13 +87,12 @@ namespace KillBug.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-        }
 
+        }
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
-
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<TicketAttachment> TicketAttachments { get; set; }

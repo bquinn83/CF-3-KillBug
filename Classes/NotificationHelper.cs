@@ -110,7 +110,6 @@ namespace KillBug.Classes
 
             SaveNotification(notification, userId);
         }
-
         public void ManagerUpdateNotification()
         {
 
