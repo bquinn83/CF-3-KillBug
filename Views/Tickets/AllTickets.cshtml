@@ -80,6 +80,7 @@
         $('#TicketAll').addClass("active")
 
         //$('.table').DataTable();
+
         var table = $('#tickTable').DataTable()
         $('#tickTable tbody').on('click', 'tr', function () {
             var data = table.row(this).data();

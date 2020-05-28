@@ -133,17 +133,20 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        @Html.LabelFor(model => model.IsArchived, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                                        @Html.LabelFor(model => model.IsArchived, htmlAttributes: new { @class = "form-control-label col-md-2 ticket-details" })
                                         <div class="col-md-10 ticket-details">
                                             <div class="checkbox">
                                                 @Html.DisplayFor(model => model.IsArchived)
                                             </div>
                                         </div>
-                                        <div class="col-md-10 ticket-input d-none">
-                                            <div class="checkbox">
-                                                @Html.EditorFor(model => model.IsArchived, new { @class = "form-control" })
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                                        {
+                                            <div class="col-md-10 ticket-input d-none">
+                                                <div class="checkbox">
+                                                    @Html.EditorFor(model => model.IsArchived, new { @class = "form-control" })
+                                                </div>
                                             </div>
-                                        </div>
+                                        }
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-md-2">
