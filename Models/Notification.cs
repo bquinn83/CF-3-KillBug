@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace KillBug.Models
 {
@@ -14,6 +15,7 @@ namespace KillBug.Models
         #region DATA
         public bool IsRead { get; set; }
         public string Subject { get; set; }
+        [AllowHtml]
         public string Body { get; set; }
         [DisplayFormat(DataFormatString = "{0:MM/dd/yy hh:mm tt}")]
         public DateTime Created { get; set; }

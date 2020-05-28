@@ -110,6 +110,21 @@ namespace KillBug.Controllers
 
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
+
+                //New Ticket Notification:
+                var user = db.Users.Find(User.Identity.GetUserId());
+                var projectName = db.Projects.Find(ticket.ProjectId).Name;
+                Notification newNotification = new Notification
+                {
+                    Created = DateTime.Now,
+                    TicketId = ticket.Id,
+                    SenderId = user.Id,
+                    Subject = "New Ticket",
+                    Body = $"One of your projects has a new ticket!<br/>Ticket: { ticket.Title }<br/>Project: { projectName }<br/>By: { user.FullNamePosition }"
+                };
+
+                notificationHelper.NewTicketNotification(newNotification, ticket);
+
                 return RedirectToAction("MyTickets");
             }
 

@@ -19,6 +19,7 @@ namespace KillBug.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         private UserRolesHelper rolesHelper = new UserRolesHelper();
         private ProjectsHelper projHelper = new ProjectsHelper();
+        private NotificationHelper notificationHelper = new NotificationHelper();
 
         [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult AssignProjectUsers()
@@ -62,6 +63,7 @@ namespace KillBug.Controllers
                 {
                     foreach (var projectId in projectIds)
                     {
+                        notificationHelper.ProjectAssignmentNotification(projectId, userId);
                         projHelper.AddUserToProject(userId, projectId);
                     }
                 }
@@ -80,6 +82,7 @@ namespace KillBug.Controllers
                 {
                     foreach (var projectId in projectIds)
                     {
+                        notificationHelper.RemovedProjectNotification(projectId, userId);
                         projHelper.RemoveUserFromProject(userId, projectId);
                     }
                 }
@@ -102,6 +105,7 @@ namespace KillBug.Controllers
             {
                 foreach (var proj in projects)
                 {
+                    notificationHelper.NewProjectManagerNotification(proj, projectManagers);
                     projHelper.AssignProjectManager(proj, projectManagers);
                 }
             }
@@ -174,6 +178,12 @@ namespace KillBug.Controllers
                 project.IsArchived = false;
                 db.Projects.Add(project);
                 db.SaveChanges();
+
+                if (User.IsInRole("Admin"))
+                {
+                    notificationHelper.NewProjectNotification(project);
+                }
+
                 return RedirectToAction("MyProjects", "Projects");
             }
 
