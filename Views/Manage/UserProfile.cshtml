@@ -4,97 +4,180 @@
     ViewBag.Title = "My Profile";
 }
 
-<div class="col-sm-12 d-flex align-items-stretch">
-    <div class="card">
-        <div class="card-header text-muted">
-            @Model.Role
-        </div>
-        <div class="card-body">
-            @using (Html.BeginForm("UpdateUser", "Manage"))
-            {
-                @Html.AntiForgeryToken()
+<div class="row">
+    <div class="col-6">
+        @using (Html.BeginForm("UpdateUser", "Manage"))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-header text-muted">
+                    @Model.Role
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-7">
+                            <h2 class="lead"><b><strong>@Model.DisplayName</strong></b></h2>
+                            <p class="text-muted text-sm"><b>About: </b> @Model.AboutMe </p>
+                            <ul class="ml-4 mb-0 fa-ul text-muted">
+                                <li class="small"><span class="fa-li"><i class="fas fa-lg fa-home"></i></span> Address: @Model.Address</li>
+                                <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: @Model.PhoneNumber</li>
+                            </ul>
+                        </div>
+                        <div class="col-5 text-center">
+                            <img src="~/@Model.AvatarPath" alt="" class="rounded-circle img-fluid">
+                        </div>
+                    </div>
 
-                <div class="row">
-                    <div class="col-7">
-                        <h2 class="lead"><b><strong>@Model.DisplayName</strong></b></h2>
-                        <p class="text-muted text-sm"><b>About: </b> @Model.AboutMe </p>
-                        <ul class="ml-4 mb-0 fa-ul text-muted">
-                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-home"></i></span> Address: @Model.Address</li>
-                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: @Model.PhoneNumber</li>
-                        </ul>
-                    </div>
-                    <div class="col-5 text-center">
-                        <img src="~/@Model.AvatarPath" alt="" class="rounded-circle img-fluid">
+                    <div class="row d-none" id="user-edit">
+                        <div class="col-7">
+                            <h2 class="lead"><b><strong>@Model.DisplayName</strong></b></h2>
+                            <p class="text-muted text-sm"><b>About: </b> @Model.AboutMe </p>
+                            <ul class="ml-4 mb-0 fa-ul text-muted">
+                                <li class="small"><span class="fa-li"><i class="fas fa-lg fa-home"></i></span> Address: @Model.Address</li>
+                                <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: @Model.PhoneNumber</li>
+                            </ul>
+                        </div>
+                        <div class="col-5 text-center">
+                            <img src="~/@Model.AvatarPath" alt="" class="rounded-circle img-fluid">
+                        </div>
                     </div>
                 </div>
-            }
-            <div class="row">
-                <div class="col-7">
-                    <h2 class="lead"><b><strong>@Model.DisplayName</strong></b></h2>
-                    <p class="text-muted text-sm"><b>About: </b> @Model.AboutMe </p>
-                    <ul class="ml-4 mb-0 fa-ul text-muted">
-                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-home"></i></span> Address: @Model.Address</li>
-                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: @Model.PhoneNumber</li>
-                    </ul>
-                </div>
-                <div class="col-5 text-center">
-                    <img src="~/@Model.AvatarPath" alt="" class="rounded-circle img-fluid">
+                <div class="card-footer">
+                    <div class="col-md-2">
+                        <input type="button" value="Edit Profile" class="btn btn-primary" id="edit-details" />
+                        <input type="button" value="Cancel" class="btn btn-secondary d-none" id="edit-cancel" />
+                    </div>
+                    <div class="col-md-2 ml-auto">
+                        <input type="submit" value="Save" class="btn btn-primary d-none" id="edit-save" />
+                    </div>
                 </div>
             </div>
-            <!-- Ticket code -->
-
-            @*@using (Html.BeginForm("Edit", "Tickets"))
-            {
-                @Html.AntiForgeryToken()
-                @Html.HiddenFor(model => model.Id)
-                @Html.HiddenFor(model => model.Created)
-                @Html.HiddenFor(model => model.ProjectId)
-                @Html.HiddenFor(model => model.SubmitterId)
-                <div class="form-horizontal">
-                    <div class="form-group row">
-                        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "form-control-label col-md-2" })
-                        <div class="col-md-10 font-weight-bold ticket-details">
-                            @Html.DisplayFor(model => model.Title)
-                        </div>
-                        <div class="col-md-10 ticket-input d-none">
-                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                        </div>
+        }
+    </div>
+    <div class="col-sm-6 col-lg-3" id="user-options">
+        <div class="card">
+            <div class="card-header text-muted">
+                Account Options
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <a href="#" id="btn_Change_Email">Change Email</a>
                     </div>
-
-                    <div class="form-group row">
-                        <div class="col-md-2">
-                            <input type="button" value="Edit" class="btn btn-primary" id="edit-details" />
-                            <input type="button" value="Cancel" class="btn btn-secondary d-none" id="edit-cancel" />
-                        </div>
-                        <div class="col-md-2 ml-auto">
-                            <input type="submit" value="Save" class="btn btn-primary d-none" id="edit-save" />
-                        </div>
+                    <div class="col-12">
+                        <a href="#" id="btn_Change_Password">Change Password</a>
+                    </div>
+                    <div class="col-12">
+                        <p class="class-success">@ViewBag.StatusMessage</p>
                     </div>
                 </div>
-            }*@
-
+            </div>
         </div>
-        <div class="card-footer">
-            <div class="text-right">
-                <input type="button" class="btn btn-primary" value="Edit Profile" />
+    </div>
+    <div class="col-sm-6 col-lg-3 d-none" id="password-management">
+        <div class="card">
+            <div class="card-header text-muted">
+                Change Password
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        @using (Html.BeginForm("ChangePassword", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary("", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Password.OldPassword, new { @class = "form-control-label" })
+                                <div class="col-md-10">
+                                    <input type="password" name="OldPassword" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Password.NewPassword, new { @class = "form-control-label" })
+                                <div class="col-md-10">
+                                    <input type="password" name="NewPassword" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Password.ConfirmPassword, new { @class = "form-control-label" })
+                                <div class="col-md-10">
+                                    <input type="password" name="ConfirmPassword" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Change Password" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3 d-none" id="email-management">
+        <div class="card">
+            <div class="card-header text-muted">
+                Change Email Address
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        @using (Html.BeginForm("ChangeEmail", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary("", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.Label("New Email Address", new { @class = "form-control-label" })
+                                <div class="col-md-10">
+                                    <input type="email" name="newEmail" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Change Email" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    $('#edit-details').on("click", () => {
-        $('#edit-details').hide()
-        $('#edit-cancel').removeClass("d-none")
-        $('#edit-save').removeClass("d-none")
-        $('.ticket-details').hide()
-        $('.ticket-input').removeClass("d-none")
-    })
-    $('#edit-cancel').on("click", () => {
-        $('#edit-details').show()
-        $('#edit-cancel').addClass("d-none")
-        $('#edit-save').addClass("d-none")
-        $('.ticket-details').show()
-        $('.ticket-input').addClass("d-none")
-    })
-</script>
+
+@section Scripts{
+    <script>
+        $('#edit-btn').on("click", () => {
+            $('#edit-details').hide()
+            $('#edit-cancel').removeClass("d-none")
+            $('#edit-save').removeClass("d-none")
+            $('.user-profile').hide()
+            $('.user-edit').removeClass("d-none")
+        })
+        $('#edit-cancel').on("click", () => {
+            $('#edit-details').show()
+            $('#edit-cancel').addClass("d-none")
+            $('#edit-save').addClass("d-none")
+            $('.user-profile').show()
+            $('.user-edit').addClass("d-none")
+        })
+        $('#btn_Change_Password').on("click", () => {
+            if ($('#password-management').hasClass('d-none')) {
+                $('#password-management').removeClass('d-none')
+            }
+            else {
+                $('#password-management').addClass('d-none')
+            }
+        })
+        $('#btn_Change_Email').on("click", () => {
+            if ($('#email-management').hasClass('d-none')) {
+                $('#email-management').removeClass('d-none')
+            }
+            else {
+                $('#email-management').addClass('d-none')
+            }
+        })
+    </script>
+}

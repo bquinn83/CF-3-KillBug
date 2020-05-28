@@ -106,7 +106,7 @@ input[type="file"] {
 }
 
 .card .card-header {
-    margin-bottom: 15px;
+    /*margin-bottom: 15px;*/
     background-color: rgba(0,0,0,0.1);
 }
 

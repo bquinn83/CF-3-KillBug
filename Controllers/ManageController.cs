@@ -9,6 +9,9 @@ using Microsoft.Owin.Security;
 using KillBug.Models;
 using KillBug.ViewModels;
 using System.Configuration;
+using KillBug.Classes;
+using System.Web.Services.Description;
+using System.Data.Entity;
 
 namespace KillBug.Controllers
 {
@@ -35,9 +38,9 @@ namespace KillBug.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -53,10 +56,37 @@ namespace KillBug.Controllers
             }
         }
 
-        public ActionResult UserProfile()
+        public ActionResult UserProfile(ManageMessageId? message)
         {
+            ViewBag.StatusMessage = message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+                : message == ManageMessageId.ChangeEmailSuccess ? "Your email has been changed."
+                : message == ManageMessageId.Error ? "There has been an error."
+                : "";
 
-            return View(new CurrentUserInfoModel(User.Identity.GetUserId()));
+            var user = db.Users.Find(User.Identity.GetUserId());
+            var UserProfile = new UserProfileViewModel
+            {
+                DisplayName = $"{user.FirstName} {user.LastName}",
+                AvatarPath = user.AvatarPath,
+                Address = $"{ user.AddressLine1 }, { user.AddressCity } { user.AddressState } { user.AddressZip }",
+                PhoneNumber = user.PhoneNumber,
+                //next line is temporary
+                AboutMe = "Web Designer / UX / Graphic Artist / Coffee Lover",
+                Role = db.Users.Find(User.Identity.GetUserId()).UserRole()
+            };
+            return View(UserProfile);
+        }
+
+        //
+        // POST: /Manage/UpdateUser
+        public ActionResult UpdateUser()
+        {
+            //Save new user data
+
+
+
+
+            return RedirectToAction("UserProfile");
         }
 
         //
@@ -68,7 +98,6 @@ namespace KillBug.Controllers
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
                 : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
 
@@ -108,54 +137,27 @@ namespace KillBug.Controllers
             return RedirectToAction("ManageLogins", new { Message = message });
         }
 
-        //
-        // GET: /Manage/AddPhoneNumber
-        public ActionResult AddPhoneNumber()
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult ChangeEmail(string newEmail)
         {
-            return View();
-        }
+            if (newEmail == null)
+            {
+                return RedirectToAction("UserProfile", "Manage");
+            }
+            else
+            {
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(User.Identity.GetUserId());
 
-        //
-        // POST: /Manage/AddPhoneNumber
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            // Generate the token and send it
-            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
-            if (UserManager.SmsService != null)
-            {
-                var message = new IdentityMessage
-                {
-                    Destination = model.Number,
-                    Body = "Your security code is: " + code
-                };
-                await UserManager.SmsService.SendAsync(message);
-            }
-            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number });
-        }
+                user.Email = newEmail;
+                user.UserName = newEmail;
 
-        //
-        // POST: /Manage/RemovePhoneNumber
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemovePhoneNumber()
-        {
-            var result = await UserManager.SetPhoneNumberAsync(User.Identity.GetUserId(), null);
-            if (!result.Succeeded)
-            {
-                return RedirectToAction("Index", new { Message = ManageMessageId.Error });
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+
+                return RedirectToAction("UserProfile", new { Message = ManageMessageId.ChangeEmailSuccess });
             }
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            if (user != null)
-            {
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-            }
-            return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
+            
         }
 
         //
@@ -169,11 +171,11 @@ namespace KillBug.Controllers
         // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+        public async Task<ActionResult> ChangePassword([Bind(Include = "OldPassword,NewPassword,ConfirmPassword")] ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("UserProfile", "Manage", model);
             }
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
@@ -183,7 +185,7 @@ namespace KillBug.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                return RedirectToAction("UserProfile", "Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);
             return View(model);
@@ -278,7 +280,7 @@ namespace KillBug.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -320,7 +322,7 @@ namespace KillBug.Controllers
 
         public enum ManageMessageId
         {
-            AddPhoneSuccess,
+            ChangeEmailSuccess,
             ChangePasswordSuccess,
             SetTwoFactorSuccess,
             SetPasswordSuccess,
@@ -329,6 +331,6 @@ namespace KillBug.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }
