@@ -321,9 +321,8 @@
 
 @section Scripts{
     <script>
-        $('.active').removeClass("active")
-        $('#TicketsMenu').removeClass("collapsed")
-        $('#TicketsDropdown').addClass("show")
+        $('#TicketsMenu').click()
+
         $('.table').DataTable();
 
         $('#file-upload').bind('change', function () {

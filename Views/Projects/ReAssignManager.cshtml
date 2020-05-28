@@ -1,8 +1,6 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "ReAssignManager";
 }
-
 @using (Html.BeginForm("ReAssignManager", "Projects"))
 {
     @Html.AntiForgeryToken()
@@ -29,10 +27,7 @@
 
 @section Scripts {
     <script>
-        $('.active').removeClass("active")
-        $('#ProjectsMenu').removeClass("collapsed")
-        $('#ProjectsDropdown').addClass("show")
+        $('#ProjectsMenu').click()
         $('#ReAssignManager').addClass("active")
-
     </script>
 }
