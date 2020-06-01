@@ -30,46 +30,53 @@ namespace KillBug.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Upload([Bind(Include = "TicketId,FilePath,Description")] TicketAttachment ticketAttachment, HttpPostedFileBase Attachment)
         {
-            if (ModelState.IsValid)
+            var userId = User.Identity.GetUserId();
+            var ticket = db.Tickets.Find(ticketAttachment.TicketId);
+            if ((userId == ticket.SubmitterId) || (userId == ticket.DeveloperId) || (userId == ticket.Project.ProjectManagerId) || (ticket.Project.Users.Any(u => u.Id == userId)) || User.IsInRole("Admin"))
             {
-                if (Attachment != null)
+                if (ModelState.IsValid)
                 {
-                    //create the file name
-                    var fileName = Path.GetFileNameWithoutExtension(Attachment.FileName);
-                    fileName = StringUtilities.URLFriendly(fileName);
-                    ticketAttachment.FileName = fileName + Path.GetExtension(Attachment.FileName);
-                    fileName = $"{fileName}-{DateTime.Now.Ticks}";
-                    fileName = $"{fileName}{Path.GetExtension(Attachment.FileName)}";
-
-                    //create the path
-                    var projId = db.Tickets.Find(ticketAttachment.TicketId).ProjectId;
-                    var path = Server.MapPath($"~/Uploads/Attachments/{ projId }/{ ticketAttachment.TicketId }/");
-                    Directory.CreateDirectory(Server.MapPath($"~/Uploads/Attachments/{ projId }/{ ticketAttachment.TicketId }/"));
-    
-                    //save file & ticket Attachment data
-                    Attachment.SaveAs(Path.Combine(Server.MapPath($"~/Uploads/Attachments/{ projId }/{ ticketAttachment.TicketId }/"), fileName));
-                    ticketAttachment.FilePath = $"~/Uploads/Attachments/{ projId }/{ ticketAttachment.TicketId }/{ fileName }";
-                    ticketAttachment.Created = DateTime.Now;
-                    ticketAttachment.UserId = User.Identity.GetUserId();
-
-                    db.TicketAttachments.Add(ticketAttachment);
-                    db.SaveChanges();
-
-                    var ticket = db.Tickets.Find(ticketAttachment.TicketId);
-                    var notification = new Notification
+                    if (Attachment != null)
                     {
-                        Created = DateTime.Now,
-                        TicketId = ticket.Id,
-                        SenderId = User.Identity.GetUserId(),
-                        Subject = "New Attachment",
-                        Body = $"Theres a new Attachment on one of your tickets! <br/>Ticket: { ticket.Title }<br/>Attachment: {ticket.Attachments.OrderByDescending(a => a.Created).FirstOrDefault().FileName }"
-                    };
-                    notificationHelper.TicketUpdateNotification(notification, ticket);
-                }
-                return RedirectToAction("Dashboard", "Tickets", new { id = ticketAttachment.TicketId });
-            }
+                        //create the file name
+                        var fileName = Path.GetFileNameWithoutExtension(Attachment.FileName);
+                        fileName = StringUtilities.URLFriendly(fileName);
+                        ticketAttachment.FileName = fileName + Path.GetExtension(Attachment.FileName);
+                        fileName = $"{fileName}-{DateTime.Now.Ticks}";
+                        fileName = $"{fileName}{Path.GetExtension(Attachment.FileName)}";
 
-            return RedirectToAction("Dashboard", "Tickets", new { id = ticketAttachment.TicketId });
+                        //create the path
+                        var projId = db.Tickets.Find(ticketAttachment.TicketId).ProjectId;
+                        var path = Server.MapPath($"~/Uploads/Attachments/{ projId }/{ ticketAttachment.TicketId }/");
+                        Directory.CreateDirectory(Server.MapPath($"~/Uploads/Attachments/{ projId }/{ ticketAttachment.TicketId }/"));
+
+                        //save file & ticket Attachment data
+                        Attachment.SaveAs(Path.Combine(Server.MapPath($"~/Uploads/Attachments/{ projId }/{ ticketAttachment.TicketId }/"), fileName));
+                        ticketAttachment.FilePath = $"~/Uploads/Attachments/{ projId }/{ ticketAttachment.TicketId }/{ fileName }";
+                        ticketAttachment.Created = DateTime.Now;
+                        ticketAttachment.UserId = User.Identity.GetUserId();
+
+                        db.TicketAttachments.Add(ticketAttachment);
+                        db.SaveChanges();
+
+                        var notification = new Notification
+                        {
+                            Created = DateTime.Now,
+                            TicketId = ticket.Id,
+                            SenderId = User.Identity.GetUserId(),
+                            Subject = "New Attachment",
+                            Body = $"Theres a new Attachment on one of your tickets! <br/>Ticket: { ticket.Title }<br/>Attachment: {ticket.Attachments.OrderByDescending(a => a.Created).FirstOrDefault().FileName }"
+                        };
+                        notificationHelper.TicketUpdateNotification(notification, ticket);
+                    }
+                    return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
+                }
+
+                return RedirectToAction("Details", "Tickets", new { id = ticketAttachment.TicketId });
+            } else
+            {
+                return RedirectToAction("Error", "Tickets", new { message = TicketsController.TicketError.NotAuthorizedToUpload });
+            }
         }
 
         // GET: TicketAttachments/Edit/5

@@ -12,6 +12,8 @@ using Microsoft.AspNet.Identity;
 
 namespace KillBug.Controllers
 {
+    [Authorize]
+    [RoutePrefix("Comments")]
     public class TicketCommentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -52,27 +54,35 @@ namespace KillBug.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Comment,TicketId")] TicketComment ticketComment)
         {
-            if (ModelState.IsValid)
+            var userId = User.Identity.GetUserId();
+            var ticket = db.Tickets.Find(ticketComment.TicketId);
+            if ((userId == ticket.SubmitterId) || (userId == ticket.DeveloperId) || (userId == ticket.Project.ProjectManagerId) || (ticket.Project.Users.Any(u => u.Id == userId)) || User.IsInRole("Admin"))
             {
-                ticketComment.UserId = User.Identity.GetUserId();
-                ticketComment.Created = DateTime.Now;
-
-                db.TicketComments.Add(ticketComment);
-                db.SaveChanges();
-                
-                var ticket = db.Tickets.Find(ticketComment.TicketId);
-                Notification newNotification = new Notification
+                if (ModelState.IsValid)
                 {
-                    Created = DateTime.Now,
-                    TicketId = ticket.Id,
-                    SenderId = User.Identity.GetUserId(),
-                    Subject = "New Comment",
-                    Body = $"Theres a new Comment on one of your tickets! <br/>Ticket: { ticket.Title }<br/>Comment: {ticket.Comments.OrderByDescending(c => c.Created).FirstOrDefault().Comment }<br/>By: { user.FullNamePosition }"
-                };
-                notifications.TicketUpdateNotification(newNotification, ticket);
-            }
+                    ticketComment.UserId = User.Identity.GetUserId();
+                    ticketComment.Created = DateTime.Now;
 
-            return RedirectToAction("Dashboard", "Tickets", new { id = ticketComment.TicketId });
+                    db.TicketComments.Add(ticketComment);
+                    db.SaveChanges();
+
+                    var user = db.Users.Find(User.Identity.GetUserId());
+                    Notification newNotification = new Notification
+                    {
+                        Created = DateTime.Now,
+                        TicketId = ticket.Id,
+                        SenderId = User.Identity.GetUserId(),
+                        Subject = "New Comment",
+                        Body = $"Theres a new Comment on one of your tickets! <br/>Ticket: { ticket.Title }<br/>Comment: {ticket.Comments.OrderByDescending(c => c.Created).FirstOrDefault().Comment }<br/>By: { user.FullNamePosition }"
+                    };
+                    notifications.TicketUpdateNotification(newNotification, ticket);
+                }
+
+                return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
+            } else
+            {
+                return RedirectToAction("Error", "Tickets", new { message = TicketsController.TicketError.NotAuthorizedToComment });
+            }
         }
 
         // GET: TicketComments/Edit/5

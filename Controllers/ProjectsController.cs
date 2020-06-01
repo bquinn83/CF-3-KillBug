@@ -70,7 +70,7 @@ namespace KillBug.Controllers
             }
             return RedirectToAction("AssignProjectUsers");
         }
-        
+
         [Authorize(Roles = "Admin, Project Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -215,21 +215,29 @@ namespace KillBug.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,Description,Created,ProjectManagerId,IsArchived")] Project project)
         {
-            if (ModelState.IsValid)
+            var userId = User.Identity.GetUserId();
+            if (User.IsInRole("Admin") || userId == project.ProjectManagerId)
             {
-                project.Updated = DateTime.Now;
-                db.Entry(project).State = EntityState.Modified;
-                db.SaveChanges();
-                if (User.IsInRole("Admin"))
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction("AllProjects");
+                    project.Updated = DateTime.Now;
+                    db.Entry(project).State = EntityState.Modified;
+                    db.SaveChanges();
+                    if (User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("AllProjects");
+                    }
+                    else
+                    {
+                        return RedirectToAction("MyProjects");
+                    }
                 }
-                else
-                {
-                    return RedirectToAction("MyProjects");
-                }
+                return View(project);
             }
-            return View(project);
+            else
+            {
+                return RedirectToAction("Error", "Projects", new { message = ProjectError.NotAuthorizedToEdit });
+            }
         }
 
         // GET: Projects/Delete/5
@@ -243,7 +251,7 @@ namespace KillBug.Controllers
             Project project = db.Projects.Find(id);
             if (project == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("Error", new { message = ProjectError.NullProject });
             }
             return View(project);
         }
@@ -259,6 +267,17 @@ namespace KillBug.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        private ActionResult Testing()
+        {
+            return View();
+        }
+        protected ActionResult Error(ProjectError? message)
+        {
+            ViewBag.ErrorMessage = message == ProjectError.NotAuthorizedToEdit ? "You are not authorized to edit this Project."
+                : message == ProjectError.NullProject ? "There has been an error retrieving the project. Please alert your superior."
+                : "There has been an error. Please alert your superior if it persists.";
+            return View();
+        }
 
         protected override void Dispose(bool disposing)
         {
@@ -267,6 +286,12 @@ namespace KillBug.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        protected enum ProjectError
+        {
+            NotAuthorizedToEdit,
+            NullProject
         }
     }
 }

@@ -49,24 +49,34 @@ namespace KillBug.Controllers
 
         // GET: Tickets/Dashboard
         [Authorize]
-        public ActionResult Dashboard(int? id)
+        public ActionResult Details(int? id)
         {
+            var userId = User.Identity.GetUserId();
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Ticket ticket = db.Tickets.Find(id);
             if (ticket == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("Error", new { message = TicketError.NullTicket });
             }
 
-            ViewBag.DeveloperId = new SelectList(ticketHelper.AssignableDevelopers(ticket.ProjectId), "Id", "FullNamePosition", ticket.DeveloperId);
+            if ((userId == ticket.SubmitterId) || (userId == ticket.DeveloperId) || (userId == ticket.Project.ProjectManagerId) || (ticket.Project.Users.Any(u => u.Id == userId)) || User.IsInRole("Admin"))
+            {
+                ViewBag.DeveloperId = new SelectList(ticketHelper.AssignableDevelopers(ticket.ProjectId), "Id", "FullNamePosition", ticket.DeveloperId);
 
-            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
-            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
-            ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId);
-            return View(ticket);
+                ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
+                ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
+                ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId);
+                return View(ticket);
+            }
+            else
+            {
+                return RedirectToAction("Error", new { message = TicketError.NotAuthorizedToView });
+            }
         }
 
         // GET: Tickets/History
@@ -89,11 +99,15 @@ namespace KillBug.Controllers
         public ActionResult Create()
         {
             var myProjects = projHelper.ListUserProjects(User.Identity.GetUserId());
-            ViewBag.ProjectId = new SelectList(myProjects, "Id", "Name");
-            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name");
-            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
+            if (myProjects.Count > 0)
+            {
+                ViewBag.ProjectId = new SelectList(myProjects, "Id", "Name");
+                ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name");
+                ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
 
-            return View();
+                return View();
+            }
+            return RedirectToAction("Error", new { message = TicketError.NoProjects });
         }
 
         // POST: Tickets/Create
@@ -125,7 +139,7 @@ namespace KillBug.Controllers
 
                 notificationHelper.NewTicketNotification(newNotification, ticket);
 
-                return RedirectToAction("MyTickets");
+                return RedirectToAction("Details", new { id = ticket.Id });
             }
 
             var myProjects = projHelper.ListUserProjects(User.Identity.GetUserId());
@@ -142,31 +156,52 @@ namespace KillBug.Controllers
         [Authorize]
         public ActionResult Edit([Bind(Include = "Id,ProjectId,TicketTypeId,TicketStatusId,TicketPriorityId,DeveloperId,SubmitterId,Title,Description,Created,IsArchived")] Ticket ticket)
         {
-            if (ModelState.IsValid)
+            var userId = User.Identity.GetUserId();
+            var project = db.Projects.Find(ticket.ProjectId);
+            if ((userId == ticket.SubmitterId) || (userId == ticket.DeveloperId) || (userId == project.ProjectManagerId) || User.IsInRole("Admin"))
             {
-                var oldTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
+                if (ModelState.IsValid)
+                {
+                    var oldTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
 
-                ticket.Updated = DateTime.Now;
-                db.Entry(ticket).State = EntityState.Modified;
-                db.SaveChanges();
+                    ticket.Updated = DateTime.Now;
+                    db.Entry(ticket).State = EntityState.Modified;
+                    db.SaveChanges();
 
-                var newTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
+                    var newTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
 
-                historyHelper.CreateHistory(oldTicket, ticket);
+                    historyHelper.CreateHistory(oldTicket, ticket);
 
-                notificationHelper.ManageNotifications(oldTicket, newTicket);
+                    notificationHelper.ManageNotifications(oldTicket, newTicket);
 
-                RedirectToAction("Dashboard", new { id = ticket.Id });
+                    RedirectToAction("Details", new { id = ticket.Id });
+                }
+
+                ViewBag.DeveloperId = new SelectList(ticketHelper.AssignableDevelopers(ticket.ProjectId), "Id", "FullNamePosition", ticket.DeveloperId);
+
+                ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
+                ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
+                ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId);
+                return RedirectToAction("Details", new { id = ticket.Id });
             }
-
-            ViewBag.DeveloperId = new SelectList(ticketHelper.AssignableDevelopers(ticket.ProjectId), "Id", "FullNamePosition", ticket.DeveloperId);
-
-            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
-            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
-            ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId);
-            return RedirectToAction("Dashboard", new { id = ticket.Id });
+            else
+            {
+                return RedirectToAction("Error", new { message = TicketError.NotAuthorizedToEdit });
+            }
         }
 
+        public ActionResult Error(TicketError? message)
+        {
+            ViewBag.ErrorMessage = message == TicketError.NoProjects ? "You are not assigned to any Projects.<br/><br/>Please contact your superior to be assigned to a new Project."
+                : message == TicketError.NotAuthorizedToEdit ? "You are not authorized to Edit this Ticket."
+                : message == TicketError.NotAuthorizedToComment ? "You are not authorized to leave Comments on this Ticket."
+                : message == TicketError.NotAuthorizedToUpload ? "You are not authorized to upload Attachments to this Ticket."
+                : message == TicketError.NotAuthorizedToView ? "You are not authorized to view this Ticket."
+                : message == TicketError.NullTicket ? "There has been an error retrieving the ticket. Please alert your superior."
+                : "There has been an error. Please try again and alert management if it persists.";
+
+            return View();
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -174,6 +209,16 @@ namespace KillBug.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public enum TicketError
+        {
+            NoProjects,
+            NotAuthorizedToEdit,
+            NotAuthorizedToComment,
+            NotAuthorizedToUpload,
+            NotAuthorizedToView,
+            NullTicket
         }
     }
 }
