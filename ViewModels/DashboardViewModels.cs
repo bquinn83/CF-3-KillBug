@@ -17,6 +17,17 @@ namespace KillBug.ViewModels
         public int CommentsCount { get; set; }
         public int AttachmentsCount { get; set; }
         public int HistoryCount { get; set; }
+    }
+    public class MainDashViewModel
+    {
+
+    }
+    public class ProjectsDashViewModel
+    {
+
+    }
+    public class TicketsDashViewModel
+    {
 
     }
 }

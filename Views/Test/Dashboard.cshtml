@@ -7,6 +7,7 @@
     <div class="container-fluid">
         <!-- FIRST ROW TEAM DATA -->
         <div class="row">
+            <!--TEAM DATA-->
             <div class="col-md-3 col-sm-6">
                 <div class="statistic-block block">
                     <div class="progress-details d-flex align-items-end justify-content-between">
@@ -45,79 +46,64 @@
                     </div>
                 </div>
             </div>
+            <!--PROJECT DATA-->
             <div class="col-md-3 col-sm-6">
                 <div class="statistic-block block">
                     <div class="progress-details d-flex align-items-end justify-content-between">
                         <div class="title">
-                            <div class="icon"><i class="icon-windows"></i></div><strong>Comments</strong>
+                            <div class="icon"><i class="icon-user-1"></i></div><strong>Projects</strong>
                         </div>
-                        <div class="number dashtext-2">@Model.CommentsCount</div>
+                        <div class="number dashtext-1">@Model.ProjectsCount</div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="statistic-block block">
+                    <hr />
+                    <div class="progress-details d-flex align-items-end justify-content-between">
+                        <div class="title">
+                            <div class="icon"><i class="icon-windows"></i></div><strong>Tickets</strong>
+                        </div>
+                        <div class="number dashtext-2">@Model.TicketsCount</div>
+                    </div>
+                    <div class="progress-details d-flex align-items-end justify-content-between">
+                        <div class="title">
+                            <div class="icon"><i class="icon-list-1"></i></div><strong>Comments</strong>
+                        </div>
+                        <div class="number dashtext-3">@Model.CommentsCount</div>
+                    </div>
                     <div class="progress-details d-flex align-items-end justify-content-between">
                         <div class="title">
                             <div class="icon"><i class="icon-list-1"></i></div><strong>Attachments</strong>
                         </div>
-                        <div class="number dashtext-3">@Model.AttachmentsCount</div>
+                        <div class="number dashtext-4">@Model.AttachmentsCount</div>
                     </div>
+                </div>
+            </div>
 
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="statistic-block block">
-                    <div class="progress-details d-flex align-items-end justify-content-between">
-                        <div class="title">
-                            <div class="icon"><i class="icon-list-1"></i></div><strong>History</strong>
-                        </div>
-                        <div class="number dashtext-4">@Model.HistoryCount</div>
-                    </div>
-                </div>
-            </div>
         </div>
         <!-- NEXT ROW -->
-        <div class="row">
-            <div class="col-md-3 col-sm-6">
-                <div class="statistic-block block">
-                    <div class="progress-details d-flex align-items-end justify-content-between">
-                        <div class="title">
-                            <div class="icon"><i class="icon-windows"></i></div><strong>Projects</strong>
-                        </div>
-                        <div class="number dashtext-2">@Model.ProjectsCount</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="statistic-block block">
-                    <div class="progress-details d-flex align-items-end justify-content-between">
-                        <div class="title">
-                            <div class="icon"><i class="icon-list-1"></i></div><strong>New Tickets</strong>
-                        </div>
-                        <div class="number dashtext-3">@Model.NewTicketsCount</div>
-                    </div>
-                    <div class="progress progress-template">
-                        <div role="progressbar" style="width: @Model.NewTicketsCount%" aria-valuenow="@Model.NewTicketsCount" aria-valuemin="0" aria-valuemax="@Model.TicketsCount" class="progress-bar progress-bar-template dashbg-3"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="statistic-block block">
-                    <div class="progress-details d-flex align-items-end justify-content-between">
-                        <div class="title">
-                            <div class="icon"><i class="icon-list-1"></i></div><strong>All Tickets</strong>
-                        </div>
-                        <div class="number dashtext-4">@Model.TicketsCount</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+        <input type="button" value="Display" class="btn btn-primary" id="display-test" />
+        <p id="test-p">test</p>
     </div>
 </section>
 
 @section Scripts{
     <script>
+        $('#display-test').on("click", function () {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("Test", "Charts")",
+                data: {input: "hello"},
+                dataType: "json",
+                success: function (result) {
+                            alert(result);
+                },
+                error: errorFunc
+            });
+
+            function errorFunc() {
+                alert('error');
+            }
+        });
+
         $('#DashboardMenu').addClass('active')
     </script>
 }

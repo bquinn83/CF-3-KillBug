@@ -12,11 +12,14 @@
                 <!--DETAILS-->
                 <div class="col">
                     <div class="block">
-                        <div class="title">
-                            <strong class="d-block">Details</strong>
-                            <small class="d-block">(id: @Model.Id)</small>
+                        <div class="title row no-gutters mb-0">
+                            <div class="col-10">
+                                <strong class="d-block">Details</strong>
+                                <small class="d-block">(id: @Model.Id)</small>
+                            </div>
+                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-details"></i></div>
                         </div>
-                        <div class="block-body">
+                        <div class="block-body collapsable">
                             @using (Html.BeginForm("Edit", "Tickets", FormMethod.Post, new { id = "edit-form" }))
                             {
                                 @Html.AntiForgeryToken()
@@ -85,6 +88,7 @@
                                         }
                                         else
                                         {
+                                            @Html.HiddenFor(model => model.TicketStatusId)
                                             <div class="col-md-4 font-weight-bold">
                                                 @Html.DisplayFor(model => model.TicketStatus.Name)
                                             </div>
@@ -165,11 +169,14 @@
                 <!--COMMENTS-->
                 <div class="col">
                     <div class="messages-block block">
-                        <div class="title"><strong>Comments<small>(@Model.Comments.Count)</small></strong></div>
-                        <div class="messages">
+                        <div class="title row no-gutters mb-0">
+                            <div class="col-10"><strong>Comments<small>(@Model.Comments.Count)</small></strong></div>
+                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-comments"></i></div>
+                        </div>
+                        <div class="messages collapsable">
                             @foreach (var comment in Model.Comments)
                             {
-                                <a href="#" class="message d-flex align-items-center">
+                                <a href="" class="message d-flex align-items-center">
                                     <div class="profile">
                                         <img src="~/@comment.User.AvatarPath" alt="..." class="img-fluid">
                                         @*<div class="status online"></div>*@
@@ -200,8 +207,11 @@
                 <!--HISTORY-->
                 <div class="col">
                     <div class="block">
-                        <div class="title"><strong>History<small>(@Model.History.Count)</small></strong></div>
-                        <div class="block-body">
+                        <div class="title row no-gutters mb-0">
+                            <div class="col-10"><strong>History<small>(@Model.History.Count)</small></strong></div>
+                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-history"></i></div>
+                        </div>
+                        <div class="block-body collapsable">
                             @foreach (var item in Model.History.OrderByDescending(h => h.ChangedOn))
                             {
                                 <div class="history-item">
@@ -264,8 +274,11 @@
             <div class="col-md-4">
                 <!--ATTACHMENT-->
                 <div class="block margin-bottom-sm">
-                    <div class="title"><strong>Upload Attachment</strong></div>
-                    @using (Html.BeginForm("Upload", "TicketAttachments", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    <div class="title row no-gutters mb-0">
+                        <div class="col-10"><strong>Upload Attachment</strong></div>
+                        <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-uploads"></i></div>
+                    </div>
+                    @using (Html.BeginForm("Upload", "TicketAttachments", FormMethod.Post, new { @class="collapsable",enctype = "multipart/form-data" }))
                     {
                         @Html.AntiForgeryToken()
                         @Html.Hidden("TicketId", Model.Id)
@@ -298,8 +311,11 @@
                 @if (Model.Attachments.Count > 0)
                 {
                     <div class="block messages-block margin-bottom-sm">
-                        <div class="title"><strong>Attachments<small>(@Model.Attachments.Count)</small></strong></div>
-                        <div class="messages">
+                        <div class="title row no-gutters mb-0">
+                            <div class="col-10"><strong>Attachments<small>(@Model.Attachments.Count)</small></strong></div>
+                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-attachments"></i></div>
+                        </div>
+                        <div class="messages collapsable">
                             @foreach (var attachment in Model.Attachments.OrderByDescending(a => a.Created))
                             {
                                 <a href="@Url.Content(attachment.FilePath)" class="message d-flex align-items-center" target="_blank">
@@ -334,7 +350,6 @@
             fileName = fileName.substring(12)
             $('#file-selected').html(fileName);
         })
-
         $('#edit-details').on("click", () => {
             $('#edit-details').hide()
             $('#edit-cancel').removeClass("d-none")
@@ -349,5 +364,26 @@
             $('.ticket-details').show()
             $('.ticket-input').addClass("d-none")
         })
+
+        $('#collapse-details').on("click", function (e) {
+            $('#collapse-details').parent().parent().siblings('.collapsable').slideToggle();
+            $('#collapse-details').toggleClass(['fa-chevron-up', 'fa-chevron-down'])
+        });
+        $('#collapse-comments').on("click", function (e) {
+            $('#collapse-comments').parent().parent().siblings('.collapsable').slideToggle();
+            $('#collapse-comments').toggleClass(['fa-chevron-up', 'fa-chevron-down'])
+        });
+        $('#collapse-history').on("click", function (e) {
+            $('#collapse-history').parent().parent().siblings('.collapsable').slideToggle();
+            $('#collapse-history').toggleClass(['fa-chevron-up', 'fa-chevron-down'])
+        });
+        $('#collapse-uploads').on("click", function (e) {
+            $('#collapse-uploads').parent().parent().siblings('.collapsable').slideToggle();
+            $('#collapse-uploads').toggleClass(['fa-chevron-up', 'fa-chevron-down'])
+        });
+        $('#collapse-attachments').on("click", function (e) {
+            $('#collapse-attachments').parent().parent().siblings('.collapsable').slideToggle();
+            $('#collapse-attachments').toggleClass(['fa-chevron-up', 'fa-chevron-down'])
+        });
     </script>
 }

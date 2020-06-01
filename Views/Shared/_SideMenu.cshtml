@@ -17,7 +17,7 @@
             <!-- Sidebar Navidation Menus-->
             <span class="heading">Main</span>
             <ul class="list-unstyled">
-                <li id="DashboardMenu"><a href="@Url.Action("Dashboard","Home")"> <i class="icon-home"></i>Dashboard</a></li>
+                <li id="DashboardMenu"><a href="@Url.Action("Main","Dashboard")"> <i class="icon-home"></i>Dashboard</a></li>
                 @if (User.IsInRole("Admin"))
                 {
                     <li>

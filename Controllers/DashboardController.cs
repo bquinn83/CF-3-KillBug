@@ -1,19 +1,19 @@
-﻿using KillBug.Models;
+﻿using KillBug.Classes;
+using KillBug.Models;
 using KillBug.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using KillBug.Classes;
 
 namespace KillBug.Controllers
 {
-    [Authorize]
-    public class HomeController : Controller
+    public class DashboardController : Controller
     {
-        public ActionResult Dashboard()
+        private ApplicationDbContext db = new ApplicationDbContext();
+        // GET: Main
+        public ActionResult Main()
         {
             ApplicationDbContext db = new ApplicationDbContext();
             UserRolesHelper rolesHelper = new UserRolesHelper();
@@ -33,6 +33,19 @@ namespace KillBug.Controllers
             };
 
             return View(viewData);
+        }
+
+
+        // GET: Projects
+        public ActionResult Projects()
+        {
+            return View();
+        }
+
+        // GET: Tickets
+        public ActionResult Tickets()
+        {
+            return View();
         }
     }
 }
