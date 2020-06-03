@@ -67,7 +67,7 @@
                     @Html.DisplayFor(modelItem => item.Ticket.Submitter.FullName)
                 </td>
                 <td>
-                    @Html.ActionLink("Dashboard", "Dashboard", "Tickets", new { id = item.Ticket.Id }, null)
+                    @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Ticket.Id }, null)
                 </td>
             </tr>
         }

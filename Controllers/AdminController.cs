@@ -73,6 +73,4 @@ namespace KillBug.Controllers
             return View();
         }
     }
-
-
 }

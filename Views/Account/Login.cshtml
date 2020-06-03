@@ -48,11 +48,11 @@
 </div>
 <hr />
 <small>Sign up with an External Login!</small>
-@Html.AntiForgeryToken()
 <div id="socialLoginList">
     <p>
         @using (Html.BeginForm("ExternalLogin", "Account", FormMethod.Post, htmlAttributes: new { style = "max-width: 100%" }))
         {
+            @Html.AntiForgeryToken()
             var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
             foreach (AuthenticationDescription p in loginProviders)
             {

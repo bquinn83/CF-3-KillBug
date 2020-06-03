@@ -39,7 +39,7 @@
                     @Html.DisplayFor(modelItem => item.TicketPriority.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Project.Name)
+                    @Html.DisplayFor(modelItem => item.Project.Name, new { data_order = item.Id })
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Title)
@@ -57,7 +57,7 @@
                     @Html.DisplayFor(modelItem => item.Created)
                 </td>
                 <td>
-                    @Html.ActionLink("Dashboard", "Dashboard", "Tickets", new { id = item.Id }, null)
+                    @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, null)
                 </td>
             </tr>
         }

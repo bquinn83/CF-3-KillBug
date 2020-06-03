@@ -22,15 +22,6 @@ namespace KillBug
                       "~/Scripts/popper.js",
                       "~/Scripts/bootstrap.js"
                       ));
-
-            bundles.Add(new StyleBundle("~/css").Include(
-                      "~/Content/css/bootstrap.min.css",
-                      "~/Content/css/font-awesome.min.css",
-                      "~/Content/css/datatables.min.css",
-                      "~/Content/css/font.css",
-                      "~/Content/css/style.red.css",
-                      "~/Content/css/custom.css"
-                      ));
         }
     }
 }

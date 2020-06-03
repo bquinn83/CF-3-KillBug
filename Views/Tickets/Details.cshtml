@@ -10,7 +10,6 @@
         <div class="row">
             <div class="col-md-8">
                 <!--DETAILS-->
-                <div class="col">
                     <div class="block">
                         <div class="title row no-gutters mb-0">
                             <div class="col-10">
@@ -145,6 +144,7 @@
                                         </div>
                                         @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
                                         {
+                                            @Html.LabelFor(model => model.IsArchived, htmlAttributes: new { @class = "form-control-label col-md-2 ticket-input d-none" })
                                             <div class="col-md-10 ticket-input d-none">
                                                 <div class="checkbox">
                                                     @Html.EditorFor(model => model.IsArchived, new { @class = "form-control" })
@@ -165,12 +165,10 @@
                             }
                         </div>
                     </div>
-                </div>
                 <!--COMMENTS-->
-                <div class="col">
                     <div class="messages-block block">
                         <div class="title row no-gutters mb-0">
-                            <div class="col-10"><strong>Comments<small>(@Model.Comments.Count)</small></strong></div>
+                            <div class="col-10"><strong>Comments</strong> <small>(@Model.Comments.Count)</small></div>
                             <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-comments"></i></div>
                         </div>
                         <div class="messages collapsable">
@@ -203,12 +201,10 @@
                             </div>
                         }
                     </div>
-                </div>
                 <!--HISTORY-->
-                <div class="col">
                     <div class="block">
                         <div class="title row no-gutters mb-0">
-                            <div class="col-10"><strong>History<small>(@Model.History.Count)</small></strong></div>
+                            <div class="col-10"><strong>History</strong> <small>(@Model.History.Count)</small></div>
                             <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-history"></i></div>
                         </div>
                         <div class="block-body collapsable">
@@ -268,11 +264,10 @@
                             *@
                         </div>
                     </div>
-                </div>
             </div>
 
             <div class="col-md-4">
-                <!--ATTACHMENT-->
+                <!--UPLOAD-->
                 <div class="block margin-bottom-sm">
                     <div class="title row no-gutters mb-0">
                         <div class="col-10"><strong>Upload Attachment</strong></div>
@@ -308,11 +303,12 @@
                         </div>
                     }
                 </div>
+                <!--ATTACHMENTS-->
                 @if (Model.Attachments.Count > 0)
                 {
                     <div class="block messages-block margin-bottom-sm">
                         <div class="title row no-gutters mb-0">
-                            <div class="col-10"><strong>Attachments<small>(@Model.Attachments.Count)</small></strong></div>
+                            <div class="col-10"><strong>Attachments</strong> <small>(@Model.Attachments.Count)</small></div>
                             <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-attachments"></i></div>
                         </div>
                         <div class="messages collapsable">

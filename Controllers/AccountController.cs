@@ -59,6 +59,10 @@ namespace KillBug.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("CustomLogOff");
+            }
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -82,7 +86,7 @@ namespace KillBug.Controllers
             {
                 case SignInStatus.Success:
                     //LOCK OUT USERS WHO HAVE NOT CONFIRMED AN EMAIL
-                    return RedirectToAction("Dashboard", "Home");
+                    return RedirectToAction("Main", "Dashboard");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -108,7 +112,7 @@ namespace KillBug.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToAction("Dashboard", "Home");
+                    return RedirectToAction("Main", "Dashboard");
                 case SignInStatus.Failure:
                 default:
                     return RedirectToAction("Login", "Account");
@@ -459,7 +463,7 @@ namespace KillBug.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Manage");
+                return RedirectToAction("UserProfile", "Manage");
             }
 
             if (ModelState.IsValid)
@@ -477,9 +481,11 @@ namespace KillBug.Controllers
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
+                    EmailConfirmed = true,
                     AvatarPath = "Content/Images/blank-avatar.png"
                 };
                 var result = await UserManager.CreateAsync(user);
+                //UserManager.AddToRoles(user.Id, "Submitter");
                 if (result.Succeeded)
                 {
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
@@ -501,6 +507,12 @@ namespace KillBug.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Login", "Account");
+        }
+
+        public ActionResult CustomLogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Login", "Account");
@@ -560,7 +572,7 @@ namespace KillBug.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Main", "Dashboard");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult
