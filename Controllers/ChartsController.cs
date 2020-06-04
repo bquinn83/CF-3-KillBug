@@ -53,16 +53,6 @@ namespace KillBug.Controllers
             }
             return Json(data);
         }
-        [HttpGet]
-        public JsonResult Test()
-        {
-            return Json("look at that", JsonRequestBehavior.AllowGet);
-        }
-        [HttpPost]
-        public JsonResult Test(string data)
-        {
-            if (data == null) data = "NULL data Error.";
-            return Json(data.ToUpper());
-        }
+
     }
 }
