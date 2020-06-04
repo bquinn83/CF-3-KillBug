@@ -35,7 +35,6 @@ namespace KillBug.Controllers
             return View(viewData);
         }
 
-
         // GET: Projects
         public ActionResult Projects()
         {
