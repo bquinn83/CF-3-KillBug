@@ -32,21 +32,6 @@
 <br>
 <small>Do not have an account? </small>@Html.ActionLink("Sign Up!", "Register", null, new { @class = "signup" })
 <hr />
-<small>Try a Demo User!</small>
-<div id="DemoAdmin">
-    <p>
-        @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post, htmlAttributes: new { style = "max-width: 100%" }))
-        {
-            @Html.AntiForgeryToken()
-
-            <button type="submit" class="btn btn-primary" name="emailKey" value="DemoEmailAdmin">Admin</button>
-            <button type="submit" class="btn btn-primary" name="emailKey" value="DemoEmailProjectManager">Project Manager</button>
-            <button type="submit" class="btn btn-primary" name="emailKey" value="DemoEmailDeveloper">Developer</button>
-            <button type="submit" class="btn btn-primary" name="emailKey" value="DemoEmailSubmitter">Submitter</button>
-        }
-    </p>
-</div>
-<hr />
 <small>Sign up with an External Login!</small>
 <div id="socialLoginList">
     <p>
@@ -58,6 +43,21 @@
             {
                 <button type="submit" class="btn btn-primary" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
             }
+        }
+    </p>
+</div>
+<hr />
+<small>Try a Demo User!</small>
+<div id="DemoAdmin">
+    <p>
+        @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post, htmlAttributes: new { style = "max-width: 100%" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <button type="submit" class="btn btn-primary" name="emailKey" value="DemoEmailAdmin">Admin</button>
+            <button type="submit" class="btn btn-primary" name="emailKey" value="DemoEmailProjectManager">Project Manager</button>
+            <button type="submit" class="btn btn-primary" name="emailKey" value="DemoEmailDeveloper">Developer</button>
+            <button type="submit" class="btn btn-primary" name="emailKey" value="DemoEmailSubmitter">Submitter</button>
         }
     </p>
 </div>
