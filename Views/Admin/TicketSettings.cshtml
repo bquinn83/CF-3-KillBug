@@ -1,7 +1,7 @@
 ﻿@using KillBug.Controllers
 @model TicketSettingsVM
 @{
-    ViewBag.Title = "Admin Dashboard";
+    ViewBag.Title = "Ticket Settings";
 }
 
 <div class="row shortcut-bar">
@@ -142,10 +142,9 @@
         <div class="block">
             <div class="title row no-gutters mb-0">
                 <div class="col-auto"><strong>Ticket Status</strong> <small>(@Model.Status.Count)</small></div>
-                <div class="col-auto ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-household"></i></div>
-                @*<div class="col-auto"><i class="fas fa-lg fa-times btn btn-block-close"></i></div>*@
+                <div class="col-auto ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize"></i></div>
             </div>
-            <div class="block-body collapsable" id="show-types">
+            <div class="block-body collapsable" id="show-status">
                 @foreach (var status in Model.Status)
                 {
                     <hr />
@@ -161,16 +160,14 @@
         <div class="block">
             <div class="title row no-gutters mb-0">
                 <div class="col-auto"><strong>Ticket Priorities</strong> <small>(@Model.Status.Count)</small></div>
-                <div class="col-auto ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-household"></i></div>
-                @*<div class="col-auto"><i class="fas fa-lg fa-times btn btn-block-close"></i></div>*@
+                <div class="col-auto ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize"></i></div>
             </div>
-            <div class="block-body collapsable" id="show-types">
+            <div class="block-body collapsable" id="show-priorities">
                 @foreach (var priority in Model.Priorities)
                 {
                     <hr />
                     <div class="content">
                         <strong class="d-block">@priority.Name</strong>
-
                     </div>
                 }
             </div>
@@ -219,6 +216,8 @@
                     var txt3 = $('<span class="d-block"></span>').text(result.Description);
                     var txt4 = '</div>';
                     $('#show-types').append(txt1, txt2, txt3, txt4);
+                    $('#type').val("")
+                    $('#type-description').val("")
                 },
                 error: function () {
                     alert('There was an error adding your Ticket Type. Please try again.');
@@ -236,6 +235,7 @@
                     var txt2 = $('<strong class="d-block"></strong>').text(result.Name);
                     var txt3 = '</div>';
                     $('#show-status').append(txt1, txt2, txt3);
+                    $('#ticket-status').val("")
                 },
                 error: function () {
                     alert('There was an error adding your Ticket Status. Please try again.');
@@ -253,6 +253,7 @@
                     var txt2 = $('<strong class="d-block"></strong>').text(result.Name);
                     var txt3 = '</div>';
                     $('#show-priorities').append(txt1, txt2, txt3);
+                    $('#ticket-priority').val("")
                 },
                 error: function () {
                     alert('There was an error adding your Ticket Priority. Please try again.');
