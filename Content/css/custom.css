@@ -213,3 +213,7 @@ nav#sidebar a[data-toggle="collapse"]::after {
 nav #sidebar a[aria-expanded="true"]::after {
     content: '\f078';
 }
+
+.fas.btn {
+    font-weight: 900;
+}
