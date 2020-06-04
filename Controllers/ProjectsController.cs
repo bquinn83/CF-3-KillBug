@@ -21,11 +21,6 @@ namespace KillBug.Controllers
         private ProjectsHelper projHelper = new ProjectsHelper();
         private NotificationHelper notificationHelper = new NotificationHelper();
 
-        [Authorize]
-        public ActionResult Dashboard()
-        {
-            return View();
-        }
         [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult AssignProjectUsers()
         {

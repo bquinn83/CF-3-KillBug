@@ -22,14 +22,6 @@ namespace KillBug.Controllers
         private HistoryHelper historyHelper = new HistoryHelper();
         private NotificationHelper notificationHelper = new NotificationHelper();
 
-        [Authorize]
-        // GET: Dashboard
-        public ActionResult Dashboard()
-        {
-
-            return View();
-        }
-
         // GET: Tickets
         public ActionResult AllTickets()
         {
