@@ -1,0 +1,263 @@
+﻿@using KillBug.Controllers
+@model TicketSettingsVM
+@{
+    ViewBag.Title = "Admin Dashboard";
+}
+
+<div class="row shortcut-bar">
+    <div class="col-auto">
+        <div class="shortcut btn" id="shc-type">Ticket Types <i class="fas fa-plus"></i></div>
+    </div>
+    <div class="col-auto">
+        <div class="shortcut btn" id="shc-status">Ticket Status <i class="fas fa-plus"></i></div>
+    </div>
+    <div class="col-auto">
+        <div class="shortcut btn" id="shc-priority">Ticket Priority <i class="fas fa-plus"></i></div>
+    </div>
+</div>
+<div class="row">
+    <!--Add Ticket Types-->
+    <div class="col-4 d-none" id="add-type">
+        <div class="block">
+            <div class="title row no-gutters mb-0">
+                <div class="col-auto"><strong>Add Ticket Type</strong></div>
+                <div class="col-auto ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize"></i></div>
+                <div class="col-auto"><i class="fas fa-lg fa-times btn btn-block-close"></i></div>
+            </div>
+            <div class="block-body collapsable">
+                @using (Html.BeginForm(""))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.Label("Name", htmlAttributes: new { @class = "form-control-label col-md-" })
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name="TicketType" id="type" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Description", htmlAttributes: new { @class = "form-control-label col-md-" })
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name="TicketType" id="type-description" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-auto ml-auto">
+                                <input id="Add-TicketType" value="Create" type="button" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!--Add Ticket Status-->
+    <div class="col-4 d-none" id="add-status">
+        <div class="block">
+            <div class="title row no-gutters mb-0">
+                <div class="col-auto"><strong>Add Ticket Status</strong></div>
+                <div class="col-auto ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize"></i></div>
+                <div class="col-auto"><i class="fas fa-lg fa-times btn btn-block-close"></i></div>
+            </div>
+            <div class="block-body collapsable">
+                @using (Html.BeginForm(""))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.Label("Name", htmlAttributes: new { @class = "form-control-label col-md-" })
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name="ticketstatus" id="ticket-status" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-auto ml-auto">
+                                <input id="Add-TicketStatus" value="Create" type="button" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!--Add Ticket Priority-->
+    <div class="col-4 d-none" id="add-priority">
+        <div class="block">
+            <div class="title row no-gutters mb-0">
+                <div class="col-auto"><strong>Add Ticket Priority</strong></div>
+                <div class="col-auto ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize"></i></div>
+                <div class="col-auto"><i class="fas fa-lg fa-times btn btn-block-close"></i></div>
+            </div>
+            <div class="block-body collapsable">
+                @using (Html.BeginForm(""))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.Label("Name", htmlAttributes: new { @class = "form-control-label col-md-" })
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name="ticketpriority" id="ticket-priority" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-auto ml-auto">
+                                <input id="Add-TicketPriority" value="Create" type="button" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!--Show Ticket Types-->
+    <div class="col-4">
+        <div class="block">
+            <div class="title row no-gutters mb-0">
+                <div class="col-auto"><strong>Ticket Types</strong> <small>(@Model.Status.Count)</small></div>
+                <div class="col-auto ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-household"></i></div>
+                @*<div class="col-auto"><i class="fas fa-lg fa-times btn btn-block-close"></i></div>*@
+            </div>
+            <div class="block-body collapsable" id="show-types">
+                @foreach (var type in Model.Types)
+                {
+                    <hr />
+                    <div class="content">
+                        <strong class="d-block">@type.Name</strong>
+                        <span class="d-block">@type.Description</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!--Show Ticket Status-->
+    <div class="col-4">
+        <div class="block">
+            <div class="title row no-gutters mb-0">
+                <div class="col-auto"><strong>Ticket Status</strong> <small>(@Model.Status.Count)</small></div>
+                <div class="col-auto ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-household"></i></div>
+                @*<div class="col-auto"><i class="fas fa-lg fa-times btn btn-block-close"></i></div>*@
+            </div>
+            <div class="block-body collapsable" id="show-types">
+                @foreach (var status in Model.Status)
+                {
+                    <hr />
+                    <div class="content">
+                        <strong class="d-block">@status.Name</strong>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!--Show Ticket Priorities-->
+    <div class="col-4">
+        <div class="block">
+            <div class="title row no-gutters mb-0">
+                <div class="col-auto"><strong>Ticket Priorities</strong> <small>(@Model.Status.Count)</small></div>
+                <div class="col-auto ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-household"></i></div>
+                @*<div class="col-auto"><i class="fas fa-lg fa-times btn btn-block-close"></i></div>*@
+            </div>
+            <div class="block-body collapsable" id="show-types">
+                @foreach (var priority in Model.Priorities)
+                {
+                    <hr />
+                    <div class="content">
+                        <strong class="d-block">@priority.Name</strong>
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        //ACTIVATE SIDE NAV BUTTON
+        $('#TicketSettings').addClass('active')
+
+        //BLOCK CONTROL BUTTONS
+        $('.btn-block-minimize').on("click", function (e) {
+            $(e.currentTarget).toggleClass(['fa-chevron-up', 'fa-chevron-down'])
+            $(e.currentTarget).closest('.block').children('.collapsable').slideToggle()
+        });
+        $('.btn-block-close').on("click", function (e) {
+            $(e.currentTarget).closest('.block').parent().toggleClass('d-none')
+        });
+
+        //SHORTCUT BUTTONS
+        $('#shc-type').on("click", () => {
+            $('#add-type').removeClass('d-none')
+            $('#play-row').prepend($('#add-type'))
+        })
+        $('#shc-status').on("click", () => {
+            $('#add-status').removeClass('d-none')
+            $('#play-row').prepend($('#add-status'))
+        })
+        $('#shc-priority').on("click", () => {
+            $('#add-priority').removeClass('d-none')
+            $('#play-row').prepend($('#add-priority'))
+        })
+
+        //ADD TICKET SETTINGS AJAX
+        $('#Add-TicketType').on("click", function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddTicketType", "Admin")",
+                data: { type: $('#type').val(), description: $('#type-description').val() },
+                dataType: "json",
+                success: function (result) {
+                    var txt1 = '<hr/><div class="content">';
+                    var txt2 = $('<strong class="d-block"></strong>').text(result.Name);
+                    var txt3 = $('<span class="d-block"></span>').text(result.Description);
+                    var txt4 = '</div>';
+                    $('#show-types').append(txt1, txt2, txt3, txt4);
+                },
+                error: function () {
+                    alert('There was an error adding your Ticket Type. Please try again.');
+                }
+            });
+        });
+        $('#Add-TicketStatus').on("click", function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddTicketStatus", "Admin")",
+                data: { name: $('#ticket-status').val() },
+                dataType: "json",
+                success: function (result) {
+                    var txt1 = '<hr/><div class="content">';
+                    var txt2 = $('<strong class="d-block"></strong>').text(result.Name);
+                    var txt3 = '</div>';
+                    $('#show-status').append(txt1, txt2, txt3);
+                },
+                error: function () {
+                    alert('There was an error adding your Ticket Status. Please try again.');
+                }
+            });
+        });
+        $('#Add-TicketPriority').on("click", function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddTicketPriority", "Admin")",
+                data: { name: $('#ticket-priority').val() },
+                dataType: "json",
+                success: function (result) {
+                    var txt1 = '<hr/><div class="content">';
+                    var txt2 = $('<strong class="d-block"></strong>').text(result.Name);
+                    var txt3 = '</div>';
+                    $('#show-priorities').append(txt1, txt2, txt3);
+                },
+                error: function () {
+                    alert('There was an error adding your Ticket Priority. Please try again.');
+                }
+            });
+        });
+    </script>
+}

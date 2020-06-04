@@ -9,5 +9,10 @@ namespace KillBug.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public TicketPriority() { }
+        public TicketPriority(string name)
+        {
+            Name = name;
+        }
     }
 }
