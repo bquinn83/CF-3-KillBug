@@ -86,7 +86,7 @@
                 <div class="block">
                     <div class="title row no-gutters mb-0">
                         <div class="col-10"><strong class="d-block">Ticket Priority</strong></div>
-                        <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-ticket-priorities"></i></div>
+                        <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-ticket-priorities"></i></div>
                     </div>
                     <div class="block-body collapsable">
                         <canvas id="priority-bar"></canvas>
@@ -97,7 +97,7 @@
                 <div class="block">
                     <div class="title row no-gutters mb-0">
                         <div class="col-10"><strong class="d-block">Ticket Types</strong></div>
-                        <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-ticket-types"></i></div>
+                        <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-ticket-types"></i></div>
                     </div>
                     <div class="block-body collapsable">
                         <canvas id="types-polar"></canvas>
@@ -108,7 +108,7 @@
                 <div class="block">
                     <div class="title row no-gutters mb-0">
                         <div class="col-10"><strong class="d-block">Ticket Status</strong></div>
-                        <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-ticket-status"></i></div>
+                        <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-ticket-status"></i></div>
                     </div>
                     <div class="block-body collapsable">
                         <canvas id="types-doughnut"></canvas>
@@ -122,22 +122,6 @@
 
 @section Scripts{
     <script>
-        $('#display-test').on("click", function () {
-            $.ajax({
-                type: "GET",
-                url: "@Url.Action("Test", "Charts")",
-                data: {input: "hello"},
-                dataType: "json",
-                success: function (result) {
-                            alert(result);
-                },
-                error: errorFunc
-            });
-
-            function errorFunc() {
-                alert('error');
-            }
-        });
         $.ajax({
             type: "POST",
             url: "@Url.Action("TicketPriorityChartData", "Charts")",
@@ -211,18 +195,9 @@
             });
         });
 
-
-        $('#collapse-ticket-priorities').on("click", function (e) {
-            $('#collapse-ticket-priorities').parent().parent().siblings('.collapsable').slideToggle();
-            $('#collapse-ticket-priorities').toggleClass(['fa-chevron-up', 'fa-chevron-down'])
-        });
-        $('#collapse-ticket-types').on("click", function (e) {
-            $('#collapse-ticket-types').parent().parent().siblings('.collapsable').slideToggle();
-            $('#collapse-ticket-types').toggleClass(['fa-chevron-up', 'fa-chevron-down'])
-        });
-        $('#collapse-ticket-status').on("click", function (e) {
-            $('#collapse-ticket-status').parent().parent().siblings('.collapsable').slideToggle();
-            $('#collapse-ticket-status').toggleClass(['fa-chevron-up', 'fa-chevron-down'])
+        $('.btn-block-minimize').on("click", function (e) {
+            $(e.currentTarget).toggleClass(['fa-chevron-up', 'fa-chevron-down'])
+            $(e.currentTarget).closest('.block').children('.collapsable').slideToggle()
         });
     </script>
 }
