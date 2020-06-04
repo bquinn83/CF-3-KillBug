@@ -7,6 +7,7 @@
 nav#sidebar.shrinked .sidebar-header .avatar {
     margin-right: 0px;
 }
+
 nav#sidebar a.user-profile :hover {
     background-color: #282b2f !important;
 }
@@ -167,13 +168,13 @@ nav#sidebar .sidebar-header {
     position: relative;
 }
 
-#profile-container:hover .image {
-    opacity: 0.3;
-}
+    #profile-container:hover .image {
+        opacity: 0.3;
+    }
 
-#profile-container:hover .centered {
-    opacity: 1;
-}
+    #profile-container:hover .centered {
+        opacity: 1;
+    }
 
 .centered {
     font-size: 2rem;
@@ -190,7 +191,7 @@ nav#sidebar .sidebar-header {
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     text-align: center;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .image {
@@ -201,4 +202,14 @@ nav#sidebar .sidebar-header {
     transition: .5s ease;
     backface-visibility: hidden;
     border: 5px dashed #FF3F42;
+}
+
+nav#sidebar a[data-toggle="collapse"]::after {
+    content: '\f053';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+nav #sidebar a[aria-expanded="true"]::after {
+    content: '\f078';
 }

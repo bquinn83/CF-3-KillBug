@@ -17,11 +17,11 @@
             <!-- Sidebar Navidation Menus-->
             <span class="heading">Main</span>
             <ul class="list-unstyled">
-                <li id="DashboardMenu"><a href="@Url.Action("Main","Dashboard")"> <i class="icon-home"></i>Dashboard</a></li>
+                <li id="DashboardMenu"><a href="@Url.Action("Main","Dashboard")"> <i class="fas fa-lg fa-home"></i>Dashboard</a></li>
                 @if (User.IsInRole("Admin"))
                 {
                     <li>
-                        <a id="ProjectsMenu" href="#ProjectsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>Projects </a>
+                        <a id="ProjectsMenu" href="#ProjectsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-lg fa-project-diagram"></i>Projects </a>
                         <ul id="ProjectsDropdown" class="collapse list-unstyled ">
                             <li id="AllProjects">@Html.ActionLink("All Projects", "AllProjects", "Projects")</li>
                             <li id="ProjectsCreate">@Html.ActionLink("Create", "Create", "Projects")</li>
@@ -31,7 +31,7 @@
                     </li>
 
                     <li>
-                        <a id="TicketsMenu" href="#TicketsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-list-1"></i>Tickets</a>
+                        <a id="TicketsMenu" href="#TicketsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-lg fa-tasks"></i>Tickets</a>
                         <ul id="TicketsDropdown" class="collapse list-unstyled ">
                             <li id="TicketAll">@Html.ActionLink("All Tickets", "AllTickets", "Tickets")</li>
                             <li id="History">@Html.ActionLink("History", "History", "Tickets")</li>
@@ -41,7 +41,7 @@
                 else if (User.IsInRole("Project Manager"))
                 {
                     <li>
-                        <a id="ProjectsMenu" href="#ProjectsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>Projects </a>
+                        <a id="ProjectsMenu" href="#ProjectsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-lg fa-project-diagram"></i>Projects </a>
                         <ul id="ProjectsDropdown" class="collapse list-unstyled ">
                             <li id="MyProjects">@Html.ActionLink("My Projects", "MyProjects", "Projects")</li>
                             <li id="AllProjects">@Html.ActionLink("All Projects", "AllProjects", "Projects")</li>
@@ -50,7 +50,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a id="TicketsMenu" href="#TicketsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-list-1"></i>Tickets</a>
+                        <a id="TicketsMenu" href="#TicketsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-lg fa-tasks"></i>Tickets</a>
                         <ul id="TicketsDropdown" class="collapse list-unstyled ">
                             <li id="MyTickets">@Html.ActionLink("My Tickets", "MyTickets", "Tickets")</li>
                             <li id="History">@Html.ActionLink("History", "History", "Tickets")</li>
@@ -60,13 +60,13 @@
                 else if (User.IsInRole("Developer"))
                 {
                     <li>
-                        <a id="ProjectsMenu" href="#ProjectsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>Projects </a>
+                        <a id="ProjectsMenu" href="#ProjectsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-lg fa-project-diagram"></i>Projects </a>
                         <ul id="ProjectsDropdown" class="collapse list-unstyled ">
                             <li id="MyProjects">@Html.ActionLink("My Projects", "MyProjects", "Projects")</li>
                         </ul>
                     </li>
                     <li>
-                        <a id="TicketsMenu" href="#TicketsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-list-1"></i>Tickets</a>
+                        <a id="TicketsMenu" href="#TicketsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-lg fa-tasls"></i>Tickets</a>
                         <ul id="TicketsDropdown" class="collapse list-unstyled ">
                             <li id="MyTickets">@Html.ActionLink("My Tickets", "MyTickets", "Tickets")</li>
                             <li id="History">@Html.ActionLink("History", "History", "Tickets")</li>
@@ -76,13 +76,13 @@
                 else if (User.IsInRole("Submitter"))
                 {
                     <li>
-                        <a id="ProjectsMenu" href="#ProjectsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>Projects </a>
+                        <a id="ProjectsMenu" href="#ProjectsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-lg fa-project-diagram"></i>Projects </a>
                         <ul id="ProjectsDropdown" class="collapse list-unstyled ">
                             <li id="MyProjects">@Html.ActionLink("My Projects", "MyProjects", "Projects")</li>
                         </ul>
                     </li>
                     <li>
-                        <a id="TicketsMenu" href="#TicketsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-list-1"></i>Tickets</a>
+                        <a id="TicketsMenu" href="#TicketsDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-lg fa-tasks"></i>Tickets</a>
                         <ul id="TicketsDropdown" class="collapse list-unstyled ">
                             <li id="TicketCreate">@Html.ActionLink("Create", "Create", "Tickets")</li>
                             <li id="MyTickets">@Html.ActionLink("My Tickets", "MyTickets", "Tickets")</li>
@@ -96,7 +96,8 @@
                 {
                     <span class="heading">Admin</span>
                     <ul class="list-unstyled">
-                        <li id="AdminManageRoles"> <a href="@Url.Action("ManageRoles", "Admin")"><i class="icon-settings-1"></i>Roles</a></li>
+                        <li id="AdminManageRoles"> <a href="@Url.Action("ManageRoles", "Admin")"><i class="fas fa-lg fa-user-tag"></i>Roles</a></li>
+                        <li id="TicketSettings"> <a href="@Url.Action("TicketSettings", "Admin")"><i class="fas fa-lg fa-tasks"></i>Ticket Settings</a></li>
                     </ul>
                 }
             }

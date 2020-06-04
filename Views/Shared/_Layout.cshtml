@@ -16,12 +16,11 @@
 
     <link href="~/Content/css/bootstrap.css" rel="stylesheet" />
     <link href="~/Content/css/datatables.css" rel="stylesheet" />
+    <link href="~/Content/css/Chart.css" rel="stylesheet" />
     <link href="~/Content/css/font.css" rel="stylesheet" />
+    <link href="~/Content/css/all.css" rel="stylesheet" />
     <link href="~/Content/css/style.red.css" rel="stylesheet" />
     <link href="~/Content/css/custom.css" rel="stylesheet" />
-    <link href="~/Content/css/all.css" rel="stylesheet" />
-    <link href="~/Content/css/font-awesome.css" rel="stylesheet" />
-    <link href="~/Content/css/Chart.css" rel="stylesheet" />
 
     <!-- Google fonts - Muli-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,700">
@@ -42,14 +41,13 @@
                         <div class="brand-text brand-sm"><strong class="text-primary">K</strong><strong>B</strong></div>
                     </a>
                     <!-- Sidebar Toggle Btn -->
-                    <button class="sidebar-toggle"><i class="fa fa-long-arrow-left"></i></button>
+                    <button class="sidebar-toggle"><i class="fas fa-arrow-left"></i></button>
                 </div>
                 <div class="right-menu list-inline no-margin-bottom">
                     <!-- Notifications -->
                     <div class="list-inline-item dropdown">
-                        <a id="navbarDropdownMenuLink2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link tasks-toggle"><i class="icon-new-file"></i><span class="badge dashbg-3" id="notifications-count">@notifications.Count</span></a>
+                        <a id="navbarDropdownMenuLink2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link tasks-toggle"><i class="fab fa-lg fa-stack-exchange"></i><span class="badge dashbg-3" id="notifications-count">@notifications.Count</span></a>
                         <div aria-labelledby="navbarDropdownMenuLink2" class="dropdown-menu tasks-list">
-                            @foreach (var note in notifications)
                             {
                                 using (Html.BeginForm("HasBeenRead", "Notifications", new { notificationID = note.Id }, FormMethod.Post, new { id = note.Id }))
                                 {
@@ -86,7 +84,7 @@
                         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
                         {
                             @Html.AntiForgeryToken()
-                            <a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link"><span class="d-none d-sm-inline">Logout </span><i class="icon-logout"></i></a>
+                            <a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link"><span class="d-none d-sm-inline">Logout </span><i class="fas fa-lg fa-sign-out-alt"></i></a>
                         }
                     </div>
                 </div>

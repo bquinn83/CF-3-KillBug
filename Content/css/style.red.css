@@ -753,11 +753,12 @@ nav#sidebar {
     }
 
         nav#sidebar a[data-toggle="collapse"]::after {
-            content: '\f104';
+            content: '\f053';
             display: inline-block;
             -webkit-transform: translateY(-50%);
             transform: translateY(-50%);
-            font-family: 'FontAwesome';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
             position: absolute;
             top: 50%;
             right: 20px;
@@ -768,7 +769,7 @@ nav#sidebar {
         }
 
             nav#sidebar a[aria-expanded="true"]::after {
-                content: '\f107';
+                content: '\f078';
             }
 
         nav#sidebar a i {
