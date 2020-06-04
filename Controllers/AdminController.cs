@@ -35,11 +35,11 @@ namespace KillBug.Controllers
         public ActionResult ManageRoles()
         {
             var users = db.Users.ToList();
-            var viewData = new List<UserRoleViewModel>();
+            var viewData = new List<UserRoleVM>();
 
             foreach (var user in users)
             {
-                viewData.Add(new UserRoleViewModel
+                viewData.Add(new UserRoleVM
                 {
                     FirstName = user.FirstName,
                     LastName = user.LastName,
@@ -52,7 +52,6 @@ namespace KillBug.Controllers
 
             return View(viewData);
         }
-
         //POST: ManageRoles
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -75,7 +74,6 @@ namespace KillBug.Controllers
             }
             return RedirectToAction("ManageRoles");
         }
-
         // GET: Admin
         public ActionResult AskAboutRoles()
         {
@@ -85,7 +83,6 @@ namespace KillBug.Controllers
             }
             return View();
         }
-
         [HttpPost]
         public JsonResult AddTicketType(string type, string description)
         {
@@ -131,13 +128,5 @@ namespace KillBug.Controllers
                 return Json(false);
             }
         }
-    }
-
-    public class TicketSettingsVM
-    {
-        public List<TicketType> Types = new List<TicketType>();
-        public List<TicketStatus> Status = new List<TicketStatus>();
-        public List<TicketPriority> Priorities = new List<TicketPriority>();
-
     }
 }
