@@ -1,23 +1,25 @@
 ﻿@using KillBug.ViewModels
 @model UserProfileViewModel
+@*@model KillBug.Models.ApplicationUser*@
 @{
     ViewBag.Title = "My Profile";
 }
 
 <div class="row">
     <div class="col-6">
-        @using (Html.BeginForm("UpdateUser", "Manage"))
-        {
-            @Html.AntiForgeryToken()
-            <div class="card">
-                <div class="card-header text-muted">
-                    @Model.Role
-                </div>
+        <div class="card">
+            <div class="card-header text-muted">@Model.Role</div>
+            @using (Html.BeginForm("UpdateUser", "Manage", FormMethod.Post, new { id = "edit-form", enctype = "Multipart/form-data" } ))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.AvatarPath)
                 <div class="card-body">
-                    <div class="row">
+                    <!-- USER PROFILE -->
+                    <div class="row" id="user-details">
                         <div class="col-7">
-                            <h2 class="lead"><b><strong>@Model.DisplayName</strong></b></h2>
-                            <p class="text-muted text-sm"><b>About: </b> @Model.AboutMe </p>
+                            <h2 class="lead"><b><strong>@Model.FirstName @Model.LastName</strong></b></h2>
+                            <p class="text-muted text-sm"><b>About: </b>@Model.AboutMe</p>
                             <ul class="ml-4 mb-0 fa-ul text-muted">
                                 <li class="small"><span class="fa-li"><i class="fas fa-lg fa-home"></i></span> Address: @Model.Address</li>
                                 <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: @Model.PhoneNumber</li>
@@ -27,34 +29,104 @@
                             <img src="~/@Model.AvatarPath" alt="" class="rounded-circle img-fluid">
                         </div>
                     </div>
-
+                    <!-- EDIT USER PROFILE -->
                     <div class="row d-none" id="user-edit">
                         <div class="col-7">
-                            <h2 class="lead"><b><strong>@Model.DisplayName</strong></b></h2>
-                            <p class="text-muted text-sm"><b>About: </b> @Model.AboutMe </p>
-                            <ul class="ml-4 mb-0 fa-ul text-muted">
-                                <li class="small"><span class="fa-li"><i class="fas fa-lg fa-home"></i></span> Address: @Model.Address</li>
-                                <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: @Model.PhoneNumber</li>
-                            </ul>
+                            <div class="form-horizontal">
+                                <div class="form-group row no-gutters">
+                                    @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "form-control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal">
+                                <div class="form-group row no-gutters">
+                                    @Html.Label("Last Name", htmlAttributes: new { @class = "form-control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal">
+                                <div class="form-group row no-gutters">
+                                    @Html.Label("Address", htmlAttributes: new { @class = "form-control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.AddressLine1, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal">
+                                <div class="form-group row no-gutters">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.AddressLine2, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal">
+                                <div class="form-group row no-gutters">
+                                    @Html.Label("City", htmlAttributes: new { @class = "form-control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.AddressCity, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal">
+                                <div class="form-group row no-gutters">
+                                    @Html.Label("State", htmlAttributes: new { @class = "form-control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.AddressState, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal">
+                                <div class="form-group row no-gutters">
+                                    @Html.Label("Zip", htmlAttributes: new { @class = "form-control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.AddressZip, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal">
+                                <div class="form-group row no-gutters">
+                                    @Html.Label("Phone #", htmlAttributes: new { @class = "form-control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal">
+                                <div class="form-group row no-gutters">
+                                    @Html.Label("About Me", htmlAttributes: new { @class = "form-control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EditorFor(model => model.AboutMe, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-5 text-center">
-                            <img src="~/@Model.AvatarPath" alt="" class="rounded-circle img-fluid">
+                            <div id="profile-container">
+                                <img id="profileImage" class="image img-fluid rounded-circle" src="~/@Model.AvatarPath" />
+                                <div class="centered"><strong>EDIT</strong></div>
+                            </div>
+                            <input id="imageUpload" type="file" name="image" placeholder="Photo" required="" capture>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <div class="col-md-2">
+                <div class="card-footer row no-gutters">
+                    <div class="col-auto">
                         <input type="button" value="Edit Profile" class="btn btn-primary" id="edit-details" />
                         <input type="button" value="Cancel" class="btn btn-secondary d-none" id="edit-cancel" />
                     </div>
-                    <div class="col-md-2 ml-auto">
+                    <div class="col-auto ml-auto">
                         <input type="submit" value="Save" class="btn btn-primary d-none" id="edit-save" />
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-
+    <!--ACCOUNT OPTIONS-->
     <div class="col-sm-6 col-lg-3" id="user-options">
         <div class="card">
             <div class="card-header text-muted">
@@ -75,10 +147,12 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-lg-3 d-none" id="password-management">
+    <!--PASSWORD-->
+    <div class="col-sm-6 col-lg-3 d-none closable-box" id="password-management">
         <div class="card">
-            <div class="card-header text-muted">
-                Change Password
+            <div class="card-header text-muted row no-gutters">
+                <div class="col-10">Change Password</div>
+                @*<div class="ml-auto"><i class="fas fa-lg fa-times btn btn-block-close" id="close-password"></i></div>*@
             </div>
             <div class="card-body">
                 <div class="row">
@@ -88,19 +162,19 @@
                             @Html.AntiForgeryToken()
                             @Html.ValidationSummary("", new { @class = "text-danger" })
                             <div class="form-group">
-                                @Html.LabelFor(m => m.Password.OldPassword, new { @class = "form-control-label" })
+                                @Html.Label("Old Password", new { @class = "form-control-label" })
                                 <div class="col-md-10">
                                     <input type="password" name="OldPassword" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                @Html.LabelFor(m => m.Password.NewPassword, new { @class = "form-control-label" })
+                                @Html.Label("New Password", new { @class = "form-control-label" })
                                 <div class="col-md-10">
                                     <input type="password" name="NewPassword" class="form-control" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                @Html.LabelFor(m => m.Password.ConfirmPassword, new { @class = "form-control-label" })
+                                @Html.Label("Confirm Password", new { @class = "form-control-label" })
                                 <div class="col-md-10">
                                     <input type="password" name="ConfirmPassword" class="form-control" />
                                 </div>
@@ -116,10 +190,12 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-lg-3 d-none" id="email-management">
+    <!--EMAIL-->
+    <div class="col-sm-6 col-lg-3 d-none closable-box" id="email-management">
         <div class="card">
-            <div class="card-header text-muted">
-                Change Email Address
+            <div class="card-header text-muted row no-gutters">
+                <div class="col-10">Change Email Address</div>
+                @*<div class="ml-auto"><i class="fas fa-lg fa-times btn btn-block-controls" id="close-email"></i></div>*@
             </div>
             <div class="card-body">
                 <div class="row">
@@ -131,6 +207,7 @@
                             <div class="form-group">
                                 @Html.Label("New Email Address", new { @class = "form-control-label" })
                                 <div class="col-md-10">
+                                    @*@Html.EditorFor(model => model.Email.EmailAddress, new { htmlAttributes = new { htmlAttributes = new {@class = "form-control" } })*@
                                     <input type="email" name="newEmail" class="form-control" />
                                 </div>
                             </div>
@@ -147,38 +224,59 @@
     </div>
 </div>
 
-
 @section Scripts{
     <script>
-        $('#edit-btn').on("click", () => {
+        $('#edit-details').on("click", () => {
             $('#edit-details').hide()
             $('#edit-cancel').removeClass("d-none")
             $('#edit-save').removeClass("d-none")
-            $('.user-profile').hide()
-            $('.user-edit').removeClass("d-none")
+            $('#user-details').hide()
+            $('#user-edit').removeClass("d-none")
         })
         $('#edit-cancel').on("click", () => {
             $('#edit-details').show()
             $('#edit-cancel').addClass("d-none")
             $('#edit-save').addClass("d-none")
-            $('.user-profile').show()
-            $('.user-edit').addClass("d-none")
+            $('#user-details').show()
+            $('#user-edit').addClass("d-none")
         })
+        //BLOCK CONTROLS
+        $('.btn-block-close').on("click", function (e) {
+            $(e.currentTarget).closest('.card').parent().addClass('d-none')
+        });
+
         $('#btn_Change_Password').on("click", () => {
-            if ($('#password-management').hasClass('d-none')) {
-                $('#password-management').removeClass('d-none')
-            }
-            else {
-                $('#password-management').addClass('d-none')
-            }
+            $('#password-management').toggleClass('d-none')
+            $('#password-management').insertAfter('#user-options')
         })
         $('#btn_Change_Email').on("click", () => {
-            if ($('#email-management').hasClass('d-none')) {
-                $('#email-management').removeClass('d-none')
-            }
-            else {
-                $('#email-management').addClass('d-none')
-            }
+            $('#email-management').toggleClass('d-none')
+            $('#email-management').insertAfter('#user-options')
         })
+        $('#close-email').on("click", () => {
+            $('#email-management').addClass('d-none')
+        })
+        $('#close-password').on("click", () => {
+            $('#password-management').addClass('d-none')
+        })
+
+        //AVATAR 2
+        $("#profileImage").click(function (e) {
+            $("#imageUpload").click();
+        });
+        $('.centered').click(function (e) {
+            $('#imageUpload').click();
+        });
+        $("#imageUpload").change(function () {
+            fasterPreview(this);
+        });
+
+        function fasterPreview(uploader) {
+            if (uploader.files && uploader.files[0]) {
+                $('#profileImage').attr('src',
+                    window.URL.createObjectURL(uploader.files[0]));
+            }
+        }
+
     </script>
 }

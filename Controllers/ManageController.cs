@@ -12,6 +12,8 @@ using System.Configuration;
 using KillBug.Classes;
 using System.Web.Services.Description;
 using System.Data.Entity;
+using Blog.Classes;
+using System.IO;
 
 namespace KillBug.Controllers
 {
@@ -61,32 +63,59 @@ namespace KillBug.Controllers
             ViewBag.StatusMessage = message == ManageMessage.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessage.ChangeEmailSuccess ? "Your email has been changed."
                 : message == ManageMessage.Error ? "There has been an error."
+                : message == ManageMessage.UpdateProfileSuccess ? "You have successfully updated your profile."
+                : message == ManageMessage.UpdateProfileError ? "There has been an error updateing your profile."
                 : "";
 
             var user = db.Users.Find(User.Identity.GetUserId());
-            var UserProfile = new UserProfileViewModel
-            {
-                DisplayName = $"{user.FirstName} {user.LastName}",
-                AvatarPath = user.AvatarPath,
-                Address = $"{ user.AddressLine1 }, { user.AddressCity } { user.AddressState } { user.AddressZip }",
-                PhoneNumber = user.PhoneNumber,
-                //next line is temporary
-                AboutMe = "Web Designer / UX / Graphic Artist / Coffee Lover",
-                Role = db.Users.Find(User.Identity.GetUserId()).UserRole()
-            };
+            var UserProfile = new UserProfileViewModel(user);
+
             return View(UserProfile);
         }
 
         //
         // POST: /Manage/UpdateUser
-        public ActionResult UpdateUser()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateUser([Bind(Include ="Id,FirstName,LastName,AvatarPath,AddressLine1,AddressLine2,AddressCity,AddressState,AddressZip,PhoneNumber,AboutMe")] ApplicationUser profile, HttpPostedFileBase image)
         {
-            //Save new user data
+            if(profile != null)
+            {
+                try
+                {
+                    var dbUser = db.Users.Find(profile.Id);
 
+                    dbUser.FirstName = profile.FirstName;
+                    dbUser.LastName = profile.LastName;
+                    dbUser.AvatarPath = profile.AvatarPath;
+                    dbUser.AddressLine1 = profile.AddressLine1;
+                    dbUser.AddressLine2 = profile.AddressLine2;
+                    dbUser.AddressCity = profile.AddressCity;
+                    dbUser.AddressState = profile.AddressState;
+                    dbUser.AddressZip = profile.AddressZip;
+                    dbUser.PhoneNumber = profile.PhoneNumber;
+                    dbUser.AboutMe = profile.AboutMe;
+                    if (ImageUploadValidator.IsWebFriendlyImage(image))
+                    {
+                        var fileName = $"avatar-{DateTime.Now.Ticks}{Path.GetExtension(image.FileName)}";
+                        image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/Avatars/"), fileName));
+                        dbUser.AvatarPath = $"Uploads/Avatars/{ fileName }";
+                    } else
+                    {
+                        dbUser.AvatarPath = profile.AvatarPath;
+                    }
 
+                    db.Entry(dbUser).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("UserProfile", "Manage", new { Message = ManageMessage.UpdateProfileSuccess });
+                }
+                catch(Exception ex)
+                {
+                    return RedirectToAction("UserProfile", "Manage", new { Message = ManageMessage.UpdateProfileError });
+                }
+            }
 
-
-            return RedirectToAction("UserProfile");
+            return RedirectToAction("UserProfile", "Manage", new { Message = ManageMessage.UpdateProfileError });
         }
 
         //
@@ -157,13 +186,6 @@ namespace KillBug.Controllers
 
                 return RedirectToAction("UserProfile", new { message = ManageMessage.ChangeEmailSuccess });
             }
-        }
-
-        //
-        // GET: /Manage/ChangePassword
-        public ActionResult ChangePassword()
-        {
-            return View();
         }
 
         //
@@ -247,8 +269,7 @@ namespace KillBug.Controllers
 
         //
         // POST: /Manage/LinkLogin
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult LinkLogin(string provider)
         {
             // Request a redirect to the external login provider to link a login for the current user
@@ -323,11 +344,13 @@ namespace KillBug.Controllers
         {
             ChangeEmailSuccess,
             ChangePasswordSuccess,
+            UpdateProfileSuccess,
             SetTwoFactorSuccess,
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error
+            Error,
+            UpdateProfileError
         }
 
         #endregion

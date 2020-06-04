@@ -116,5 +116,89 @@ input[type="file"] {
 }
 
 nav#sidebar .sidebar-header {
+    padding: 25px 20px;
+    margin-bottom: 10px;
     width: 100%;
+}
+
+.avatar {
+    border: 3px solid #FF3F42 !important;
+}
+
+.btn-block-minimize {
+    color: #6c757d !important;
+}
+
+.collapsable {
+    margin-top: 1.4rem;
+}
+
+.btn-block-close {
+    color: #6c757d !important;
+}
+
+.shortcut-bar {
+    margin-top: -15px;
+    margin-bottom: 30px;
+}
+
+.shortcut {
+    font-size: 1.25rem;
+    padding: 10px;
+    background: #2d3035;
+    color: #8a8d93;
+    border-radius: 10px;
+}
+
+    .shortcut.btn:hover {
+        color: #FF3F42;
+    }
+
+#imageUpload {
+    display: none;
+}
+
+#profileImage {
+    cursor: pointer;
+}
+
+#profile-container {
+    overflow: hidden;
+    position: relative;
+}
+
+#profile-container:hover .image {
+    opacity: 0.3;
+}
+
+#profile-container:hover .centered {
+    opacity: 1;
+}
+
+.centered {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #FF3F42;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: .5s ease;
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+    cursor:pointer;
+}
+
+.image {
+    opacity: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: .5s ease;
+    backface-visibility: hidden;
+    border: 5px dashed #FF3F42;
 }
