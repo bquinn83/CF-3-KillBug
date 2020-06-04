@@ -183,14 +183,10 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ChartsController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
-    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\TicketAttachmentsController.cs" />
     <Compile Include="Controllers\TicketCommentsController.cs" />
-    <Compile Include="Controllers\TicketPrioritiesController.cs" />
-    <Compile Include="Controllers\TicketStatusController.cs" />
-    <Compile Include="Controllers\TicketTypesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -222,10 +218,8 @@
   <ItemGroup>
     <Content Include="Content\css\all.css" />
     <Content Include="Content\css\bootstrap.css" />
-    <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\Chart.css" />
     <Content Include="Content\css\datatables.css" />
-    <Content Include="Content\css\datatables.min.css" />
     <Content Include="Content\favicon_io\android-chrome-192x192.png" />
     <Content Include="Content\favicon_io\android-chrome-512x512.png" />
     <Content Include="Content\favicon_io\apple-touch-icon.png" />
@@ -312,8 +306,6 @@
     <Content Include="Content\Images\Stock\dev.png" />
     <Content Include="Content\Images\Stock\odin.jpg" />
     <Content Include="Content\css\custom.css" />
-    <Content Include="Content\css\font-awesome.css" />
-    <Content Include="Content\css\font-awesome.min.css" />
     <Content Include="Content\css\font.css" />
     <Content Include="Content\fonts\dark-dashboard.svg" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
@@ -335,7 +327,6 @@
     <Content Include="Content\fonts\fontawesome-webfont.woff2" />
     <Content Include="Content\fonts\FontAwesome.otf" />
     <Content Include="private.config" />
-    <Content Include="Content\favicon_io\site.webmanifest" />
     <Content Include="Content\webfonts\fa-brands-400.eot" />
     <Content Include="Content\webfonts\fa-brands-400.ttf" />
     <Content Include="Content\webfonts\fa-brands-400.woff" />
@@ -382,7 +373,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Test\Dashboard.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
@@ -412,21 +402,6 @@
     <Content Include="Views\Admin\ManageRoles.cshtml" />
     <Content Include="Views\Shared\_SideMenu.cshtml" />
     <Content Include="Views\Projects\AssignProjectUsers.cshtml" />
-    <Content Include="Views\Admin\TicketTypes\Create.cshtml" />
-    <Content Include="Views\Admin\TicketTypes\Delete.cshtml" />
-    <Content Include="Views\Admin\TicketTypes\Details.cshtml" />
-    <Content Include="Views\Admin\TicketTypes\Edit.cshtml" />
-    <Content Include="Views\Admin\TicketTypes\Index.cshtml" />
-    <Content Include="Views\Admin\TicketPriorities\Create.cshtml" />
-    <Content Include="Views\Admin\TicketPriorities\Delete.cshtml" />
-    <Content Include="Views\Admin\TicketPriorities\Details.cshtml" />
-    <Content Include="Views\Admin\TicketPriorities\Edit.cshtml" />
-    <Content Include="Views\Admin\TicketPriorities\Index.cshtml" />
-    <Content Include="Views\Admin\TicketStatus\Create.cshtml" />
-    <Content Include="Views\Admin\TicketStatus\Delete.cshtml" />
-    <Content Include="Views\Admin\TicketStatus\Details.cshtml" />
-    <Content Include="Views\Admin\TicketStatus\Edit.cshtml" />
-    <Content Include="Views\Admin\TicketStatus\Index.cshtml" />
     <Content Include="Views\Projects\ReAssignManager.cshtml" />
     <Content Include="Views\Projects\MyProjects.cshtml" />
     <Content Include="Views\Tickets\MyTickets.cshtml" />
@@ -440,7 +415,7 @@
     <Content Include="Views\Dashboard\Projects.cshtml" />
     <Content Include="Views\Dashboard\Tickets.cshtml" />
     <Content Include="Views\Dashboard\Main.cshtml" />
-    <Content Include="Views\Admin\Dashboard.cshtml" />
+    <Content Include="Views\Admin\TicketSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
