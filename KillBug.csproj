@@ -173,6 +173,7 @@
     <Compile Include="Classes\AttachmentsHelper.cs" />
     <Compile Include="Classes\FileTypeIcons.cs" />
     <Compile Include="Classes\HistoryHelper.cs" />
+    <Compile Include="Classes\ImageUploadValidator.cs" />
     <Compile Include="Classes\NotificationHelper.cs" />
     <Compile Include="Classes\ProjectsHelper.cs" />
     <Compile Include="Classes\StringUtilities.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ChartsController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\TicketAttachmentsController.cs" />
@@ -257,6 +259,7 @@
     <Content Include="Content\Images\FileTypeIcons\ics.png" />
     <Content Include="Content\Images\FileTypeIcons\iso.png" />
     <Content Include="Content\Images\FileTypeIcons\java.png" />
+    <Content Include="Content\Images\FileTypeIcons\jpeg.png" />
     <Content Include="Content\Images\FileTypeIcons\jpg.png" />
     <Content Include="Content\Images\FileTypeIcons\key.png" />
     <Content Include="Content\Images\FileTypeIcons\m4v.png" />
@@ -379,7 +382,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Dashboard.cshtml" />
+    <Content Include="Views\Test\Dashboard.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
@@ -396,7 +399,6 @@
     <Content Include="Views\Manage\ManageLogins.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
-    <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Tickets\Create.cshtml" />
     <Content Include="Views\Tickets\AllTickets.cshtml" />
     <Content Include="Views\Projects\Create.cshtml" />
@@ -438,10 +440,11 @@
     <Content Include="Views\Dashboard\Projects.cshtml" />
     <Content Include="Views\Dashboard\Tickets.cshtml" />
     <Content Include="Views\Dashboard\Main.cshtml" />
+    <Content Include="Views\Admin\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Chart\" />
+    <Folder Include="Uploads\Avatars\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

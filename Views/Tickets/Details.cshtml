@@ -16,7 +16,7 @@
                                 <strong class="d-block">Details</strong>
                                 <small class="d-block">(id: @Model.Id)</small>
                             </div>
-                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-details"></i></div>
+                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-details"></i></div>
                         </div>
                         <div class="block-body collapsable">
                             @using (Html.BeginForm("Edit", "Tickets", FormMethod.Post, new { id = "edit-form" }))
@@ -169,7 +169,7 @@
                     <div class="messages-block block">
                         <div class="title row no-gutters mb-0">
                             <div class="col-10"><strong>Comments</strong> <small>(@Model.Comments.Count)</small></div>
-                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-comments"></i></div>
+                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-comments"></i></div>
                         </div>
                         <div class="messages collapsable">
                             @foreach (var comment in Model.Comments)
@@ -205,7 +205,7 @@
                     <div class="block">
                         <div class="title row no-gutters mb-0">
                             <div class="col-10"><strong>History</strong> <small>(@Model.History.Count)</small></div>
-                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-history"></i></div>
+                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-history"></i></div>
                         </div>
                         <div class="block-body collapsable">
                             @foreach (var item in Model.History.OrderByDescending(h => h.ChangedOn))
@@ -271,7 +271,7 @@
                 <div class="block margin-bottom-sm">
                     <div class="title row no-gutters mb-0">
                         <div class="col-10"><strong>Upload Attachment</strong></div>
-                        <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-uploads"></i></div>
+                        <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-uploads"></i></div>
                     </div>
                     @using (Html.BeginForm("Upload", "TicketAttachments", FormMethod.Post, new { @class="collapsable",enctype = "multipart/form-data" }))
                     {
@@ -309,7 +309,7 @@
                     <div class="block messages-block margin-bottom-sm">
                         <div class="title row no-gutters mb-0">
                             <div class="col-10"><strong>Attachments</strong> <small>(@Model.Attachments.Count)</small></div>
-                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-controls" id="collapse-attachments"></i></div>
+                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-attachments"></i></div>
                         </div>
                         <div class="messages collapsable">
                             @foreach (var attachment in Model.Attachments.OrderByDescending(a => a.Created))
@@ -340,12 +340,21 @@
 
         $('.table').DataTable();
 
+        //BLOCK CONTROL BUTTONS
+        $('.btn-block-minimize').on("click", function (e) {
+            $(e.currentTarget).toggleClass(['fa-chevron-up', 'fa-chevron-down'])
+            $(e.currentTarget).closest('.block').children('.collapsable').slideToggle()
+        });
+
+        //UPLOAD LABEL BIND
         $('#file-upload').bind('change', function () {
             var fileName = '';
             fileName = $(this).val();
             fileName = fileName.substring(12)
             $('#file-selected').html(fileName);
         })
+
+        //EDIT & CANCEL BUTTONS
         $('#edit-details').on("click", () => {
             $('#edit-details').hide()
             $('#edit-cancel').removeClass("d-none")
@@ -360,26 +369,5 @@
             $('.ticket-details').show()
             $('.ticket-input').addClass("d-none")
         })
-
-        $('#collapse-details').on("click", function (e) {
-            $('#collapse-details').parent().parent().siblings('.collapsable').slideToggle();
-            $('#collapse-details').toggleClass(['fa-chevron-up', 'fa-chevron-down'])
-        });
-        $('#collapse-comments').on("click", function (e) {
-            $('#collapse-comments').parent().parent().siblings('.collapsable').slideToggle();
-            $('#collapse-comments').toggleClass(['fa-chevron-up', 'fa-chevron-down'])
-        });
-        $('#collapse-history').on("click", function (e) {
-            $('#collapse-history').parent().parent().siblings('.collapsable').slideToggle();
-            $('#collapse-history').toggleClass(['fa-chevron-up', 'fa-chevron-down'])
-        });
-        $('#collapse-uploads').on("click", function (e) {
-            $('#collapse-uploads').parent().parent().siblings('.collapsable').slideToggle();
-            $('#collapse-uploads').toggleClass(['fa-chevron-up', 'fa-chevron-down'])
-        });
-        $('#collapse-attachments').on("click", function (e) {
-            $('#collapse-attachments').parent().parent().siblings('.collapsable').slideToggle();
-            $('#collapse-attachments').toggleClass(['fa-chevron-up', 'fa-chevron-down'])
-        });
     </script>
 }
