@@ -22,6 +22,14 @@ namespace KillBug.Controllers
         private HistoryHelper historyHelper = new HistoryHelper();
         private NotificationHelper notificationHelper = new NotificationHelper();
 
+        [Authorize]
+        // GET: Dashboard
+        public ActionResult Dashboard()
+        {
+
+            return View();
+        }
+
         // GET: Tickets
         public ActionResult AllTickets()
         {
@@ -47,7 +55,7 @@ namespace KillBug.Controllers
             return View(ticketHelper.ListMyTickets());
         }
 
-        // GET: Tickets/Dashboard
+        // GET: Tickets/Details
         [Authorize]
         public ActionResult Details(int? id)
         {
