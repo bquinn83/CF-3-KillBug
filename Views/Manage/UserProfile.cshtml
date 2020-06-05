@@ -110,7 +110,7 @@
                                 <img id="profileImage" class="image img-fluid rounded-circle" src="~/@Model.AvatarPath" />
                                 <div class="centered"><strong>EDIT</strong></div>
                             </div>
-                            <input id="imageUpload" type="file" name="image" placeholder="Photo" required="" capture>
+                            <input id="imageUpload" type="file" name="image" value="~/@Model.AvatarPath">
                         </div>
                     </div>
                 </div>
@@ -240,6 +240,7 @@
             $('#user-details').show()
             $('#user-edit').addClass("d-none")
         })
+
         //BLOCK CONTROLS
         $('.btn-block-close').on("click", function (e) {
             $(e.currentTarget).closest('.card').parent().addClass('d-none')
