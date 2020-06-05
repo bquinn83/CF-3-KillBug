@@ -314,6 +314,9 @@
     <Content Include="Content\css\style.red.css" />
     <Content Include="Content\Images\Stock\pm.png" />
     <Content Include="Content\Images\Stock\sub.png" />
+    <Content Include="Content\css\toastr.css" />
+    <Content Include="Content\css\toastr.min.css" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Content\webfonts\fa-brands-400.svg" />
     <Content Include="Content\webfonts\fa-regular-400.svg" />
     <Content Include="Content\webfonts\fa-solid-900.svg" />
@@ -339,6 +342,7 @@
     <Content Include="Content\webfonts\fa-solid-900.ttf" />
     <Content Include="Content\webfonts\fa-solid-900.woff" />
     <Content Include="Content\webfonts\fa-solid-900.woff2" />
+    <Content Include="Scripts\toastr.js.map" />
     <None Include="Properties\PublishProfiles\KillBug - Web Deploy.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\Chart.js" />

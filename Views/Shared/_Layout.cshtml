@@ -2,11 +2,13 @@
 @using KillBug.ViewModels
 @using Microsoft.AspNet.Identity
 @using KillBug.Classes
-
+@{
+    var notifications = NotificationHelper.GetUnreadNotifications();
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>@ViewBag.Title - BugSwat</title>
+    <title>@ViewBag.Title - KillBug</title>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,6 +19,7 @@
     <link href="~/Content/css/bootstrap.css" rel="stylesheet" />
     <link href="~/Content/css/datatables.css" rel="stylesheet" />
     <link href="~/Content/css/Chart.css" rel="stylesheet" />
+    <link href="~/Content/css/toastr.css" rel="stylesheet" />
     <link href="~/Content/css/font.css" rel="stylesheet" />
     <link href="~/Content/css/all.css" rel="stylesheet" />
     <link href="~/Content/css/style.red.css" rel="stylesheet" />
@@ -48,6 +51,7 @@
                     <div class="list-inline-item dropdown">
                         <a id="navbarDropdownMenuLink2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link tasks-toggle"><i class="fab fa-lg fa-stack-exchange"></i><span class="badge dashbg-3" id="notifications-count">@notifications.Count</span></a>
                         <div aria-labelledby="navbarDropdownMenuLink2" class="dropdown-menu tasks-list">
+                            @foreach (var note in notifications.Take(4))
                             {
                                 using (Html.BeginForm("HasBeenRead", "Notifications", new { notificationID = note.Id }, FormMethod.Post, new { id = note.Id }))
                                 {
@@ -63,19 +67,10 @@
                                             <small class="date d-block">@Html.DisplayFor(model => note.Created)</small>
                                         </div>
                                     </a>
-                                    //
                                 }
-                                <script>
-                                    $(document).ready(() => {
-                                        $('#link-@note.Id').on("click", function () {
-                                            $('#link-@note.Id').hide()
-                                            //$('#@note.Id').submit()
-                                        })
-                                    })
-                                </script>
                             }
                             <a href="#" class="dropdown-item text-center">
-                                <strong>See All Notifications <i class="fa fa-angle-right"></i></strong>
+                                <strong>See All Notifications <i class="fas fa-angle-right"></i></strong>
                             </a>
                         </div>
                     </div>
@@ -125,6 +120,7 @@
     @Scripts.Render("~/bundles/bootstrap")
     <script src="~/Scripts/front.js"></script>
     <script src="~/Scripts/Chart.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
