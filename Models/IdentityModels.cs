@@ -14,7 +14,6 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace KillBug.Models
 {
-    // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
         [DisplayName("First Name")]
@@ -30,9 +29,13 @@ namespace KillBug.Models
         public int AddressZip { get; set; }
         #endregion
 
+        #region PERSONAL
         [DisplayName("About Me")]
         public string AboutMe { get; set; }
         public string AvatarPath { get; set; }
+        #endregion
+
+        //public bool Disabled { get; set; }
 
         [NotMapped]
         [DisplayName("Name")]
@@ -51,7 +54,6 @@ namespace KillBug.Models
                 return $"{LastName}, {FirstName} ({UserRole()})";
             }
         }
-        
         public string UserRole()
         {
             var rolesHelper = new UserRolesHelper();
@@ -66,8 +68,6 @@ namespace KillBug.Models
         public ApplicationUser()
         {
             Projects = new HashSet<Project>();
-            //AssignedTickets = new HashSet<Ticket>();
-            //CreatedTickets = new HashSet<Ticket>();
             Comments = new HashSet<TicketComment>();
             Attachments = new HashSet<TicketAttachment>();
             Histories = new HashSet<TicketHistory>();
@@ -84,15 +84,6 @@ namespace KillBug.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
-        {
-
-        }
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<TicketAttachment> TicketAttachments { get; set; }
@@ -102,5 +93,13 @@ namespace KillBug.Models
         public DbSet<TicketStatus> TicketStatus { get; set; }
         public DbSet<TicketHistory> TicketHistories { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public ApplicationDbContext(): base("DefaultConnection", throwIfV1Schema: false)
+        {
+
+        }
+        public static ApplicationDbContext Create()
+        {
+            return new ApplicationDbContext();
+        }
     }
 }

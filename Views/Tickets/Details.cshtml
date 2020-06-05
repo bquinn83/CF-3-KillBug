@@ -2,343 +2,337 @@
 @model KillBug.Models.Ticket
 
 @{
-    ViewBag.Title = "Dashboard: " + @Model.Title.ToString();
+    ViewBag.Title = "Dashboard: " + Model.Title;
 }
 
-<section class="no-padding-bottom">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-8">
-                <!--DETAILS-->
-                    <div class="block">
-                        <div class="title row no-gutters mb-0">
-                            <div class="col-10">
-                                <strong class="d-block">Details</strong>
-                                <small class="d-block">(id: @Model.Id)</small>
-                            </div>
-                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-details"></i></div>
-                        </div>
-                        <div class="block-body collapsable">
-                            @using (Html.BeginForm("Edit", "Tickets", FormMethod.Post, new { id = "edit-form" }))
-                            {
-                                @Html.AntiForgeryToken()
-                                @Html.HiddenFor(model => model.Id)
-                                @Html.HiddenFor(model => model.Created)
-                                @Html.HiddenFor(model => model.ProjectId)
-                                @Html.HiddenFor(model => model.SubmitterId)
-                                <div class="form-horizontal">
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                        <div class="col-md-10 font-weight-bold ticket-details">
-                                            @Html.DisplayFor(model => model.Title)
-                                        </div>
-                                        <div class="col-md-10 ticket-input d-none">
-                                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                        <div class="col-md-10 font-weight-bold ticket-details">
-                                            @Html.DisplayFor(model => model.Description)
-                                        </div>
-                                        <div class="col-md-10 ticket-input d-none">
-                                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.Project.Name, htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                        <div class="col-md-4 font-weight-bold">
-                                            @Html.DisplayFor(model => model.Project.Name)
-                                        </div>
-                                        @Html.Label("Manager", htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                        <div class="col-md-4 font-weight-bold">
-                                            @Html.DisplayFor(model => model.Project.ProjectManager.FullName)
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.TicketTypeId, htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                        <div class="col-md-4 font-weight-bold ticket-details">
-                                            @Html.DisplayFor(model => model.TicketType.Name)
-                                        </div>
-                                        <div class="col-md-4 ticket-input d-none">
-                                            @Html.DropDownList("TicketTypeId", null, htmlAttributes: new { @class = "form-control" })
-                                        </div>
-
-                                        @Html.LabelFor(model => model.TicketPriorityId, htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                        <div class="col-md-4 font-weight-bold ticket-details">
-                                            @Html.DisplayFor(model => model.TicketPriority.Name)
-                                        </div>
-                                        <div class="col-md-4 ticket-input d-none">
-                                            @Html.DropDownList("TicketPriorityId", null, htmlAttributes: new { @class = "form-control" })
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.TicketStatusId, htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("Developer"))
-                                        {
-                                            <div class="col-md-4 font-weight-bold ticket-details ">
-                                                @Html.DisplayFor(model => model.TicketStatus.Name)
-                                            </div>
-                                            <div class="col-md-4 ticket-input d-none">
-                                                @Html.DropDownList("TicketStatusId", null, htmlAttributes: new { @class = "form-control" })
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            @Html.HiddenFor(model => model.TicketStatusId)
-                                            <div class="col-md-4 font-weight-bold">
-                                                @Html.DisplayFor(model => model.TicketStatus.Name)
-                                            </div>
-                                        }
-                                        @Html.LabelFor(model => model.Developer, htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
-                                        {
-                                            <div class="col-md-4 font-weight-bold ticket-details">
-                                                @if (@Model.DeveloperId != null)
-                                                {
-                                                    @Html.DisplayFor(model => model.Developer.FullName)
-                                                }
-                                                else
-                                                {
-                                                    @Html.DisplayName("- UnAssigned -")
-                                                }
-                                            </div>
-                                            <div class="col-md-4 ticket-input d-none">
-                                                @Html.DropDownList("DeveloperId", null, "- Select Developer -", htmlAttributes: new { @class = "form-control" })
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="col-md-4 font-weight-bold">
-                                                @if (@Model.DeveloperId != null)
-                                                {
-                                                    @Html.DisplayFor(model => model.Developer.FullName)
-                                                }
-                                                else
-                                                {
-                                                    @Html.DisplayName("- UnAssigned -")
-                                                }
-                                            </div>
-                                        }
-                                    </div>
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                        <div class="col-md-4 font-weight-bold">
-                                            @Html.DisplayFor(model => model.Created)
-                                        </div>
-
-                                        @Html.LabelFor(model => model.Submitter, htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                        <div class="col-md-4 font-weight-bold">
-                                            @Html.DisplayFor(model => model.Submitter.FullName)
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.IsArchived, htmlAttributes: new { @class = "form-control-label col-md-2 ticket-details" })
-                                        <div class="col-md-10 ticket-details">
-                                            <div class="checkbox">
-                                                @Html.DisplayFor(model => model.IsArchived)
-                                            </div>
-                                        </div>
-                                        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
-                                        {
-                                            @Html.LabelFor(model => model.IsArchived, htmlAttributes: new { @class = "form-control-label col-md-2 ticket-input d-none" })
-                                            <div class="col-md-10 ticket-input d-none">
-                                                <div class="checkbox">
-                                                    @Html.EditorFor(model => model.IsArchived, new { @class = "form-control" })
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-md-2">
-                                            <input type="button" value="Edit" class="btn btn-primary" id="edit-details" />
-                                            <input type="button" value="Cancel" class="btn btn-secondary d-none" id="edit-cancel" />
-                                        </div>
-                                        <div class="col-md-2 ml-auto">
-                                            <input type="submit" value="Save" class="btn btn-primary d-none" id="edit-save" />
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                <!--COMMENTS-->
-                    <div class="messages-block block">
-                        <div class="title row no-gutters mb-0">
-                            <div class="col-10"><strong>Comments</strong> <small>(@Model.Comments.Count)</small></div>
-                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-comments"></i></div>
-                        </div>
-                        <div class="messages collapsable">
-                            @foreach (var comment in Model.Comments)
-                            {
-                                <a href="" class="message d-flex align-items-center">
-                                    <div class="profile">
-                                        <img src="~/@comment.User.AvatarPath" alt="..." class="img-fluid">
-                                        @*<div class="status online"></div>*@
-                                    </div>
-                                    <div class="content">
-                                        <strong class="d-block">@comment.User.FullName</strong>
-                                        <span class="d-block">@comment.Comment</span>
-                                        <small class="date d-block">@comment.Created.ToString("MM/dd hh:mm tt")</small>
-                                    </div>
-                                </a>
-                            }
-                        </div>
-                        <hr />
-                        @using (Html.BeginForm("Create", "TicketComments", FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
-                            @Html.Hidden("TicketId", Model.Id)
-
-                            <div class="input-group">
-                                <input type="text" placeholder="Leave a Comment" class="form-control" name="Comment">
-                                <div class="input-group-append">
-                                    <input type="submit" value="Submit" class="btn btn-primary">
-                                </div>
-                            </div>
-                        }
-                    </div>
-                <!--HISTORY-->
-                    <div class="block">
-                        <div class="title row no-gutters mb-0">
-                            <div class="col-10"><strong>History</strong> <small>(@Model.History.Count)</small></div>
-                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-history"></i></div>
-                        </div>
-                        <div class="block-body collapsable">
-                            @foreach (var item in Model.History.OrderByDescending(h => h.ChangedOn))
-                            {
-                                <div class="history-item">
-                                    <strong>@Html.DisplayFor(model => item.Property)</strong>
-                                    <div class="row">
-                                        <div class="col-md-2">Old Data</div>
-                                        <div class="col-md-10">@HistoryHelper.Display(item.Property, item.OldValue)</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-2">New Data</div>
-                                        <div class="col-md-10">@HistoryHelper.Display(item.Property, item.NewValue)</div>
-                                    </div>
-                                    <small>@Html.DisplayFor(model => item.ChangedOn) by: @Html.DisplayFor(model => item.User.FullNamePosition)</small>
-                                </div>
-                            }
-                            @*
-                                    <div class="table-responsive">
-                                    <table class="table table-striped table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>Property</th>
-                                                <th>Old Value</th>
-                                                <th>New Value</th>
-                                                <th>Date</th>
-                                                <th>Edited By</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.History)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.Property)
-                                                    </td>
-                                                    <td>
-                                                        @HistoryHelper.Display(item.Property, item.OldValue)
-                                                    </td>
-                                                    <td>
-                                                        @HistoryHelper.Display(item.Property, item.NewValue)
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.ChangedOn)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.User.FullNamePosition)
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            *@
-                        </div>
-                    </div>
-            </div>
-
-            <div class="col-md-4">
-                <!--UPLOAD-->
-                <div class="block margin-bottom-sm">
-                    <div class="title row no-gutters mb-0">
-                        <div class="col-10"><strong>Upload Attachment</strong></div>
-                        <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-uploads"></i></div>
-                    </div>
-                    @using (Html.BeginForm("Upload", "TicketAttachments", FormMethod.Post, new { @class="collapsable",enctype = "multipart/form-data" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        @Html.Hidden("TicketId", Model.Id)
-                        <div class="form-horizontal">
-                            <div class="form-group">
-                                <div class="col">
-                                    <label class="custom-file-upload">
-                                        <i class="fa fa-cloud-upload"></i>
-                                        &nbsp;Choose a File
-                                        <input type="file" name="Attachment" id="file-upload" />
-                                    </label>
-                                    &nbsp;
-                                    <span id="file-selected"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col">
-                                    @Html.Label("Description", htmlAttributes: new { @class = "form-control-label col-md-2" })
-                                    <input type="text" name="Description" id="file-upload-description" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Upload" class="btn btn-primary" />
-                                </div>
-                            </div>
-                        </div>
-                    }
+<div class="row">
+    <div class="col-md-8">
+        <!--DETAILS-->
+        <div class="block">
+            <div class="title row no-gutters mb-0">
+                <div class="col-10">
+                    <strong class="d-block">Details</strong>
+                    <small class="d-block">(id: @Model.Id)</small>
                 </div>
-                <!--ATTACHMENTS-->
-                @if (Model.Attachments.Count > 0)
+                <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize"></i></div>
+            </div>
+            <div class="block-body collapsable">
+                @using (Html.BeginForm("Edit", "Tickets", FormMethod.Post, new { id = "edit-form" }))
                 {
-                    <div class="block messages-block margin-bottom-sm">
-                        <div class="title row no-gutters mb-0">
-                            <div class="col-10"><strong>Attachments</strong> <small>(@Model.Attachments.Count)</small></div>
-                            <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-attachments"></i></div>
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.Created)
+                    @Html.HiddenFor(model => model.ProjectId)
+                    @Html.HiddenFor(model => model.SubmitterId)
+                    <div class="form-horizontal">
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                            <div class="col-md-10 font-weight-bold ticket-details">
+                                @Html.DisplayFor(model => model.Title)
+                            </div>
+                            <div class="col-md-10 ticket-input d-none">
+                                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
                         </div>
-                        <div class="messages collapsable">
-                            @foreach (var attachment in Model.Attachments.OrderByDescending(a => a.Created))
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                            <div class="col-md-10 font-weight-bold ticket-details">
+                                @Html.DisplayFor(model => model.Description)
+                            </div>
+                            <div class="col-md-10 ticket-input d-none">
+                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows="4"})
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.Project.Name, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                            <div class="col-md-4 font-weight-bold">
+                                @Html.DisplayFor(model => model.Project.Name)
+                            </div>
+                            @Html.Label("Manager", htmlAttributes: new { @class = "form-control-label col-md-2" })
+                            <div class="col-md-4 font-weight-bold">
+                                @Html.DisplayFor(model => model.Project.ProjectManager.FullName)
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.TicketTypeId, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                            <div class="col-md-4 font-weight-bold ticket-details">
+                                @Html.DisplayFor(model => model.TicketType.Name)
+                            </div>
+                            <div class="col-md-4 ticket-input d-none">
+                                @Html.DropDownList("TicketTypeId", null, htmlAttributes: new { @class = "form-control" })
+                            </div>
+
+                            @Html.LabelFor(model => model.TicketPriorityId, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                            <div class="col-md-4 font-weight-bold ticket-details">
+                                @Html.DisplayFor(model => model.TicketPriority.Name)
+                            </div>
+                            <div class="col-md-4 ticket-input d-none">
+                                @Html.DropDownList("TicketPriorityId", null, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.TicketStatusId, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("Developer"))
                             {
-                                <a href="@Url.Content(attachment.FilePath)" class="message d-flex align-items-center" target="_blank">
-                                    <div class="">
-                                        <img src="@FileTypeIcons.IconPathV2(attachment.FileName)" alt="..." class="filetype-icon">
-                                    </div>
-                                    <div class="content">
-                                        <strong class="d-block">@attachment.FileName</strong>
-                                        <span class="d-block">@attachment.Description</span>
-                                        <small class="d-block">@Html.DisplayFor(modelItem => attachment.Created) by @attachment.User.FullName</small>
-                                    </div>
-                                </a>
+                                <div class="col-md-4 font-weight-bold ticket-details ">
+                                    @Html.DisplayFor(model => model.TicketStatus.Name)
+                                </div>
+                                <div class="col-md-4 ticket-input d-none">
+                                    @Html.DropDownList("TicketStatusId", null, htmlAttributes: new { @class = "form-control" })
+                                </div>
                             }
-                            @*<a href="#" class="text-center message"> <strong>See All Attachments <i class="fa fa-angle-right"></i></strong></a>*@
+                            else
+                            {
+                                @Html.HiddenFor(model => model.TicketStatusId)
+                                <div class="col-md-4 font-weight-bold">
+                                    @Html.DisplayFor(model => model.TicketStatus.Name)
+                                </div>
+                            }
+                            @Html.LabelFor(model => model.Developer, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                            {
+                                <div class="col-md-4 font-weight-bold ticket-details">
+                                    @if (@Model.DeveloperId != null)
+                                    {
+                                        @Html.DisplayFor(model => model.Developer.FullName)
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayName("- UnAssigned -")
+                                    }
+                                </div>
+                                <div class="col-md-4 ticket-input d-none">
+                                    @Html.DropDownList("DeveloperId", null, "- Select Developer -", htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-4 font-weight-bold">
+                                    @if (@Model.DeveloperId != null)
+                                    {
+                                        @Html.DisplayFor(model => model.Developer.FullName)
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayName("- UnAssigned -")
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                            <div class="col-md-4 font-weight-bold">
+                                @Html.DisplayFor(model => model.Created)
+                            </div>
+
+                            @Html.LabelFor(model => model.Submitter, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                            <div class="col-md-4 font-weight-bold">
+                                @Html.DisplayFor(model => model.Submitter.FullName)
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.IsArchived, htmlAttributes: new { @class = "form-control-label col-md-2 ticket-details" })
+                            <div class="col-md-10 ticket-details">
+                                <div class="checkbox">
+                                    @Html.DisplayFor(model => model.IsArchived)
+                                </div>
+                            </div>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                            {
+                                @Html.LabelFor(model => model.IsArchived, htmlAttributes: new { @class = "form-control-label col-md-2 ticket-input d-none" })
+                                <div class="col-md-10 ticket-input d-none">
+                                    <div class="checkbox">
+                                        @Html.EditorFor(model => model.IsArchived, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <input type="button" value="Edit" class="btn btn-primary" id="edit-details" />
+                                <input type="button" value="Cancel" class="btn btn-secondary d-none" id="edit-cancel" />
+                            </div>
+                            <div class="col-md-2 ml-auto">
+                                <input type="submit" value="Save" class="btn btn-primary d-none" id="edit-save" />
+                            </div>
                         </div>
                     </div>
                 }
             </div>
         </div>
+        <!--COMMENTS-->
+        <div class="messages-block block">
+            <div class="title row no-gutters mb-0">
+                <div class="col-10"><strong>Comments</strong> <small>(@Model.Comments.Count)</small></div>
+                <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-comments"></i></div>
+            </div>
+            <div class="messages collapsable">
+                @foreach (var comment in Model.Comments)
+                {
+                    <a href="" class="message d-flex align-items-center">
+                        <div class="profile">
+                            <img src="~/@comment.User.AvatarPath" alt="..." class="img-fluid">
+                            @*<div class="status online"></div>*@
+                        </div>
+                        <div class="content">
+                            <strong class="d-block">@comment.User.FullName</strong>
+                            <span class="d-block">@comment.Comment</span>
+                            <small class="date d-block">@comment.Created.ToString("MM/dd hh:mm tt")</small>
+                        </div>
+                    </a>
+                }
+            </div>
+            <hr />
+            @using (Html.BeginForm("Create", "TicketComments", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("TicketId", Model.Id)
+
+                <div class="input-group">
+                    <input type="text" placeholder="Leave a Comment" class="form-control" name="Comment">
+                    <div class="input-group-append">
+                        <input type="submit" value="Submit" class="btn btn-primary">
+                    </div>
+                </div>
+            }
+        </div>
+        <!--HISTORY-->
+        <div class="block">
+            <div class="title row no-gutters mb-0">
+                <div class="col-10"><strong>History</strong> <small>(@Model.History.Count)</small></div>
+                <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-history"></i></div>
+            </div>
+            <div class="block-body collapsable">
+                @foreach (var item in Model.History.OrderByDescending(h => h.ChangedOn))
+                {
+                    <div class="history-item">
+                        <strong>@Html.DisplayFor(model => item.Property)</strong>
+                        <div class="row">
+                            <div class="col-md-2">Old Data</div>
+                            <div class="col-md-10">@HistoryHelper.Display(item.Property, item.OldValue)</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">New Data</div>
+                            <div class="col-md-10">@HistoryHelper.Display(item.Property, item.NewValue)</div>
+                        </div>
+                        <small>@Html.DisplayFor(model => item.ChangedOn) by: @Html.DisplayFor(model => item.User.FullNamePosition)</small>
+                    </div>
+                }
+                @*
+                        <div class="table-responsive">
+                        <table class="table table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Old Value</th>
+                                    <th>New Value</th>
+                                    <th>Date</th>
+                                    <th>Edited By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.History)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Property)
+                                        </td>
+                                        <td>
+                                            @HistoryHelper.Display(item.Property, item.OldValue)
+                                        </td>
+                                        <td>
+                                            @HistoryHelper.Display(item.Property, item.NewValue)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ChangedOn)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.User.FullNamePosition)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                *@
+            </div>
+        </div>
     </div>
-</section>
+    <div class="col-md-4">
+        <!--UPLOAD-->
+        <div class="block margin-bottom-sm">
+            <div class="title row no-gutters mb-0">
+                <div class="col-10"><strong>Upload Attachment</strong></div>
+                <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-uploads"></i></div>
+            </div>
+            @using (Html.BeginForm("Upload", "TicketAttachments", FormMethod.Post, new { @class = "collapsable", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("TicketId", Model.Id)
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col">
+                            <label class="custom-file-upload">
+                                <i class="fa fa-cloud-upload"></i>
+                                &nbsp;Choose a File
+                                <input type="file" name="Attachment" id="file-upload" />
+                            </label>
+                            &nbsp;
+                            <span id="file-selected"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col">
+                            @Html.Label("Description", htmlAttributes: new { @class = "form-control-label col-md-2" })
+                            <input type="text" name="Description" id="file-upload-description" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Upload" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <!--ATTACHMENTS-->
+        @if (Model.Attachments.Count > 0)
+        {
+            <div class="block messages-block margin-bottom-sm">
+                <div class="title row no-gutters mb-0">
+                    <div class="col-10"><strong>Attachments</strong> <small>(@Model.Attachments.Count)</small></div>
+                    <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-attachments"></i></div>
+                </div>
+                <div class="messages collapsable">
+                    @foreach (var attachment in Model.Attachments.OrderByDescending(a => a.Created))
+                    {
+                        <a href="@Url.Content(attachment.FilePath)" class="message d-flex align-items-center" target="_blank">
+                            <div class="">
+                                <img src="@FileTypeIcons.IconPathV2(attachment.FileName)" alt="..." class="filetype-icon">
+                            </div>
+                            <div class="content">
+                                <strong class="d-block">@attachment.FileName</strong>
+                                <span class="d-block">@attachment.Description</span>
+                                <small class="d-block">@Html.DisplayFor(modelItem => attachment.Created) by @attachment.User.FullName</small>
+                            </div>
+                        </a>
+                    }
+                    @*<a href="#" class="text-center message"> <strong>See All Attachments <i class="fa fa-angle-right"></i></strong></a>*@
+                </div>
+            </div>
+        }
+    </div>
+</div>
 
 @section Scripts{
     <script>
+        //SIDE NAV ACTIVE BUTTON
         $('#TicketsMenu').click()
-
-        $('.table').DataTable();
 
         //BLOCK CONTROL BUTTONS
         $('.btn-block-minimize').on("click", function (e) {
@@ -369,5 +363,8 @@
             $('.ticket-details').show()
             $('.ticket-input').addClass("d-none")
         })
+
+        //DATATABLE SETUP
+        $('.table').DataTable();
     </script>
 }

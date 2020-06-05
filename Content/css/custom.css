@@ -204,16 +204,6 @@ nav#sidebar .sidebar-header {
     border: 5px dashed #FF3F42;
 }
 
-nav#sidebar a[data-toggle="collapse"]::after {
-    content: '\f053';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-}
-
-nav #sidebar a[aria-expanded="true"]::after {
-    content: '\f078';
-}
-
 .fas.btn {
     font-weight: 900;
 }
