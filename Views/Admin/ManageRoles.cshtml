@@ -1,57 +1,135 @@
 ﻿@using KillBug.ViewModels
-@model IEnumerable<UserRoleViewModel>
+@model IEnumerable<UserRoleVM>
 @{
     ViewBag.Title = "Manage Roles";
 }
 
-@using (Html.BeginForm("ManageRoles", "Admin"))
-{
-    @Html.AntiForgeryToken()
-    <div class="form-horizontal">
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-6 col-lg-4">
-                    @Html.ListBox("UserIds", null, new { @class = "form-control" })
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    @Html.DropDownList("RoleName", null, new { @class = "form-control" })
-                </div>
+<div class="row shortcut-bar">
+    <div class="col-auto">
+        <div class="shortcut btn" id="shc-multi-edit">Multi Edit <i class="fas fa-users"></i></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="block">
+            <div class="title row no-gutters mb-0">
+                <div class="col-10"><strong>System Users</strong></div>
+                <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize"></i></div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-primary" value="Modify Roles" />
+            <div class="block-body collapsable">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.LastName)</th>
+                            <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+                            <th>@Html.DisplayNameFor(model => model.Email)</th>
+                            <th>@Html.DisplayNameFor(model => model.Roles)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(model => user.LastName) </td>
+                                <td>@Html.DisplayFor(model => user.FirstName) </td>
+                                <td>@Html.DisplayFor(model => user.Email) </td>
+                                <td>@Html.DropDownList("Roles", user.Roles, new { @class = "form-control roles-select", id = user.Email }) </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-}
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.LastName)</th>
-            <th>@Html.DisplayNameFor(model => model.FirstName)</th>
-            <th>@Html.DisplayNameFor(model => model.Email)</th>
-            <th>@Html.DisplayNameFor(model => model.Role)</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(model => user.LastName) </td>
-                <td>@Html.DisplayFor(model => user.FirstName) </td>
-                <td>@Html.DisplayFor(model => user.Email) </td>
-                <td>@Html.DisplayFor(model => user.Role) </td>
-            </tr>
-        }
-    </tbody>
-
-</table>
-
+    <div class="col-md-4 d-none" id="multi-edit">
+        <div class="block">
+            <div class="title row no-gutters mb-0">
+                <div class="col-10"><strong>Multi Edit</strong></div>
+                <div class="ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize"></i></div>
+                <div class="col-auto"><i class="fas fa-lg fa-times btn btn-block-close"></i></div>
+            </div>
+            <div class="block-body collapsable">
+                @using (Html.BeginForm("ManageRoles", "Admin"))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        @Html.Label("Users", new { @class = "form-control-label" })
+                        <div class="col-12">
+                            @Html.ListBox("UserIds", null, new { @class = "form-control", size = "10" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("New Role", new { @class = "form-control-label" })
+                        <div class="col-12">
+                            @Html.DropDownList("RoleName", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" class="btn btn-primary" value="Update Roles" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts{
     <script>
+        //SIDE NAV ACTIVE BUTTON
         $('#AdminManageRoles').addClass("active")
+
+        //BLOCK CONTROL BUTTONS
+        $('.btn-block-minimize').on("click", function (e) {
+            $(e.currentTarget).toggleClass(['fa-chevron-up', 'fa-chevron-down'])
+            $(e.currentTarget).closest('.block').children('.collapsable').slideToggle()
+        });
+        $('.btn-block-close').on("click", function (e) {
+            $(e.currentTarget).closest('.block').parent().toggleClass('d-none')
+        });
+
+        //SHORTCUT BUTTONS
+        $('#shc-multi-edit').on("click", () => {
+            $('#multi-edit').removeClass('d-none')
+        })
+
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+
+        $('.roles-select').change(function (e) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateUserRole", "Admin")",
+                data: { email: $(e.currentTarget).attr("id"), roleName: $(e.currentTarget).val() },
+                dataType: "json",
+                success: function (result) {
+                    if (result == true) {
+                        toastr["success"]("The users Role has been updated.", "Success!")
+                    } else {
+                        toastr["error"]("There was an error updating the users Role.", "Error!")
+                    }
+                },
+                error: function (result) {
+                    toastr["error"]("There was an error updating the users Role.", "Error!")
+                }
+            });
+        });
 
         $('.table').DataTable();
     </script>

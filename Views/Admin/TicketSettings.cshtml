@@ -1,4 +1,4 @@
-﻿@using KillBug.Controllers
+﻿@using KillBug.ViewModels
 @model TicketSettingsVM
 @{
     ViewBag.Title = "Ticket Settings";
@@ -121,7 +121,7 @@
     <div class="col-4">
         <div class="block">
             <div class="title row no-gutters mb-0">
-                <div class="col-auto"><strong>Ticket Types</strong> <small>(@Model.Status.Count)</small></div>
+                <div class="col-auto"><strong>Ticket Types</strong> <small>(<span id="type-count">@Model.Types.Count</span>)</small></div>
                 <div class="col-auto ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize" id="collapse-household"></i></div>
                 @*<div class="col-auto"><i class="fas fa-lg fa-times btn btn-block-close"></i></div>*@
             </div>
@@ -141,7 +141,7 @@
     <div class="col-4">
         <div class="block">
             <div class="title row no-gutters mb-0">
-                <div class="col-auto"><strong>Ticket Status</strong> <small>(@Model.Status.Count)</small></div>
+                <div class="col-auto"><strong>Ticket Status</strong> <small id="status-count">(@Model.Status.Count)</small></div>
                 <div class="col-auto ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize"></i></div>
             </div>
             <div class="block-body collapsable" id="show-status">
@@ -159,7 +159,7 @@
     <div class="col-4">
         <div class="block">
             <div class="title row no-gutters mb-0">
-                <div class="col-auto"><strong>Ticket Priorities</strong> <small>(@Model.Status.Count)</small></div>
+                <div class="col-auto"><strong>Ticket Priorities</strong> <small id="priority-count">(@Model.Priorities.Count)</small></div>
                 <div class="col-auto ml-auto"><i class="fas fa-lg fa-chevron-up btn btn-block-minimize"></i></div>
             </div>
             <div class="block-body collapsable" id="show-priorities">
@@ -203,6 +203,25 @@
             $('#play-row').prepend($('#add-priority'))
         })
 
+        //TOASTR ALERTS SETUP
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+
         //ADD TICKET SETTINGS AJAX
         $('#Add-TicketType').on("click", function () {
             $.ajax({
@@ -211,16 +230,22 @@
                 data: { type: $('#type').val(), description: $('#type-description').val() },
                 dataType: "json",
                 success: function (result) {
-                    var txt1 = '<hr/><div class="content">';
-                    var txt2 = $('<strong class="d-block"></strong>').text(result.Name);
-                    var txt3 = $('<span class="d-block"></span>').text(result.Description);
-                    var txt4 = '</div>';
-                    $('#show-types').append(txt1, txt2, txt3, txt4);
-                    $('#type').val("")
-                    $('#type-description').val("")
+                    if (result != false) {
+                        var txt1 = '<hr/><div class="content">';
+                        var txt2 = $('<strong class="d-block"></strong>').text(result.Name);
+                        var txt3 = $('<span class="d-block"></span>').text(result.Description);
+                        var txt4 = '</div>';
+                        $('#show-types').append(txt1, txt2, txt3, txt4);
+                        $('#type-count').text(parseInt($('#type-count').text()) + 1)
+                        $('#type').val("")
+                        $('#type-description').val("")
+                        toastr["success"]("The Ticket Type has been added successfully.", "Success!")
+                    } else {
+                        toastr["error"]("There was an error adding the Ticket Type.", "Error!")
+                    }
                 },
                 error: function () {
-                    alert('There was an error adding your Ticket Type. Please try again.');
+                        toastr["error"]("There was an error adding the Ticket Type.", "Error!")
                 }
             });
         });
@@ -231,14 +256,21 @@
                 data: { name: $('#ticket-status').val() },
                 dataType: "json",
                 success: function (result) {
-                    var txt1 = '<hr/><div class="content">';
-                    var txt2 = $('<strong class="d-block"></strong>').text(result.Name);
-                    var txt3 = '</div>';
-                    $('#show-status').append(txt1, txt2, txt3);
-                    $('#ticket-status').val("")
+                    if (result != false) {
+                        var txt1 = '<hr/><div class="content">';
+                        var txt2 = $('<strong class="d-block"></strong>').text(result.Name);
+                        var txt3 = '</div>';
+                        $('#show-status').append(txt1, txt2, txt3);
+                        $('#status-count').text(parseInt($('#type-count').text()) + 1)
+                        $('#ticket-status').val("")
+                        toastr["success"]("The Ticket Status has been added successfully.", "Success!")
+
+                    } else {
+                        toastr["error"]("There was an error adding the Ticket Status.", "Error!")
+                    }
                 },
                 error: function () {
-                    alert('There was an error adding your Ticket Status. Please try again.');
+                    toastr["error"]("There was an error adding the Ticket Status.", "Error!")
                 }
             });
         });
@@ -249,14 +281,20 @@
                 data: { name: $('#ticket-priority').val() },
                 dataType: "json",
                 success: function (result) {
-                    var txt1 = '<hr/><div class="content">';
-                    var txt2 = $('<strong class="d-block"></strong>').text(result.Name);
-                    var txt3 = '</div>';
-                    $('#show-priorities').append(txt1, txt2, txt3);
-                    $('#ticket-priority').val("")
+                    if (result != false) {
+                        var txt1 = '<hr/><div class="content">';
+                        var txt2 = $('<strong class="d-block"></strong>').text(result.Name);
+                        var txt3 = '</div>';
+                        $('#show-priorities').append(txt1, txt2, txt3);
+                        $('#priority-count').text(parseInt($('#type-count').text()) + 1)
+                        $('#ticket-priority').val("")
+                        toastr["success"]("The Ticket Priority has been added successfully.", "Success!")
+                    } else {
+                        toastr["error"]("There was an error adding the Ticket Priority.", "Error!")
+                    }
                 },
                 error: function () {
-                    alert('There was an error adding your Ticket Priority. Please try again.');
+                    toastr["error"]("There was an error adding the Ticket Priority.", "Error!")
                 }
             });
         });
