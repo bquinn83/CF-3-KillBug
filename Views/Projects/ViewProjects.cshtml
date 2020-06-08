@@ -1,9 +1,5 @@
 ﻿@model IEnumerable<KillBug.Models.Project>
 
-@{
-    ViewBag.Title = "Projects";
-}
-
 <table class="table table-striped">
     <thead>
         <tr>
@@ -25,7 +21,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr class="align-items-center">
+            <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
@@ -42,14 +38,18 @@
                     @Html.ActionLink("Details", "Details", new { id = item.Id })
                 </td>
             </tr>
-}
+        }
     </tbody>
 </table>
 
 @section Scripts{
     <script>
         $('#ProjectsMenu').click()
-        $('#AllProjects').addClass("active")
+        if ("@ViewBag.Title" == "My Projects") {
+            $('#MyProjects').addClass("active")
+        } else {
+            $('#AllProjects').addClass("active")
+        }
 
         $('.table').DataTable();
     </script>

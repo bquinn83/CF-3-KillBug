@@ -52,9 +52,7 @@ namespace KillBug.Controllers
             return View(viewData);
         }
 
-        [Authorize(Roles = "Admin, Project Manager")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin, Project Manager")]
         public ActionResult AssignProjectUsers(List<string> userIds, List<int> projectIds)
         {
             if (userIds != null && projectIds != null)
@@ -71,9 +69,7 @@ namespace KillBug.Controllers
             return RedirectToAction("AssignProjectUsers");
         }
 
-        [Authorize(Roles = "Admin, Project Manager")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin, Project Manager")]
         public ActionResult RemoveProjectUsers(List<string> userIds, List<int> projectIds)
         {
             if (userIds != null && projectIds != null)
@@ -89,6 +85,7 @@ namespace KillBug.Controllers
             }
             return RedirectToAction("AssignProjectUsers");
         }
+
         [Authorize(Roles = "Admin")]
         public ActionResult ReAssignManager()
         {
@@ -96,9 +93,9 @@ namespace KillBug.Controllers
             ViewBag.ProjectManagers = new SelectList(rolesHelper.UsersInRole("Project Manager"), "Id", "FullName");
             return View();
         }
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+
+        // POST: Re-Assign Manager
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
         public ActionResult ReAssignManager(List<int> projects, string projectManagers)
         {
             if (projects != null)
@@ -114,32 +111,42 @@ namespace KillBug.Controllers
             return View();
         }
 
-        // GET: Projects
-        [Authorize(Roles = "Admin, Project Manager")]
-        public ActionResult AllProjects()
-        {
-            return View(db.Projects.ToList());
-        }
-
-        [Authorize(Roles = "Admin, Project Manager, Submitter, Developer")]
-        // GET: Projects
-        public ActionResult MyProjects()
+        // GET: ViewProjects
+        [Authorize]
+        public ActionResult ViewProjects(bool? AllProjects)
         {
             var userId = User.Identity.GetUserId();
-            if (User.IsInRole("Project Manager"))
+            var userRole = rolesHelper.ListUserRoles(userId).FirstOrDefault();
+
+            switch (userRole)
             {
-                return View(db.Projects.Where(p => p.ProjectManagerId == userId).ToList());
+                case "Admin":
+                    ViewBag.Title = "All Projects";
+                    return View(db.Projects.ToList());
+                case "Project Manager":
+                    if (AllProjects == true)
+                    {
+                        ViewBag.Title = "All Projects";
+                        return View(db.Projects.ToList());
+                    } else
+                    {
+                        ViewBag.Title = "My Projects";
+                        return View(db.Projects.Where(p => p.ProjectManagerId == userId));
+                    }
+                case "Developer":
+                case "Submitter":
+                    ViewBag.Title = "My Projects";
+                    return View(db.Users.Find(userId).Projects.ToList());
             }
-            else
-            {
-                return View(db.Users.Find(userId).Projects.ToList());
-            }
+            return Error(ProjectError.CannotRetrieveProjects);
         }
 
         // GET: Projects/Details/5
         [Authorize(Roles = "Admin, Project Manager, Submitter, Developer")]
         public ActionResult Details(int? id)
         {
+            var userId = db.Users.Find(User.Identity.GetUserId()).Id;
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -147,9 +154,22 @@ namespace KillBug.Controllers
             Project project = db.Projects.Find(id);
             if (project == null)
             {
-                return HttpNotFound();
+                return RedirectToAction("Error", new { message = ProjectError.NullProject });
             }
-            return View(project);
+            if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || project.Users.Any(u => u.Id == userId))
+            {
+                ViewBag.ProjectManagerId = new SelectList(rolesHelper.UsersInRole("Project Manager"), "Id", "FullName", project.ProjectManagerId);
+                var devIds = projHelper.UsersNotOnProject(project.Id).Where(u => u.UserRole() == "Developer");
+                ViewBag.DeveloperIds = new MultiSelectList(devIds.OrderBy(u => u.LastName), "Id", "FullName");
+                var subIds = projHelper.UsersNotOnProject(project.Id).Where(u => u.UserRole() == "Submitter");
+                ViewBag.SubmitterIds = new MultiSelectList(subIds.OrderBy(u => u.LastName), "Id", "FullName");
+                ViewBag.ProjectTeam = new MultiSelectList(project.Users.OrderBy(u => u.LastName), "Id", "FullNamePosition");
+                return View(project);
+            } 
+            else
+            {
+                return RedirectToAction("Error", new { message = ProjectError.NotAuthorizedToView });
+            }
         }
 
         // GET: Projects/Create
@@ -164,11 +184,7 @@ namespace KillBug.Controllers
         }
 
         // POST: Projects/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Admin, Project Manager")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Create([Bind(Include = "Id,Name,Description,ProjectManagerId,")] Project project)
         {
             if (ModelState.IsValid)
@@ -184,35 +200,14 @@ namespace KillBug.Controllers
                     notificationHelper.NewProjectNotification(project);
                 }
 
-                return RedirectToAction("MyProjects", "Projects");
+                return RedirectToAction("Details", "Projects", new { id = project.Id });
             }
 
-            return View(project);
-        }
-
-        // GET: Projects/Edit/5
-        [Authorize(Roles = "Admin, Project Manager")]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Project project = db.Projects.Find(id);
-            if (project == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.ProjectManagerId = new SelectList(rolesHelper.UsersInRole("Project Manager"), "Id", "FullName", project.ProjectManagerId);
             return View(project);
         }
 
         // POST: Projects/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Admin, Project Manager")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Edit([Bind(Include = "Id,Name,Description,Created,ProjectManagerId,IsArchived")] Project project)
         {
             var userId = User.Identity.GetUserId();
@@ -257,26 +252,13 @@ namespace KillBug.Controllers
         }
 
         // POST: Projects/Delete/5
-        [Authorize(Roles = "Admin, Project Manager")]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Authorize(Roles = "Admin, Project Manager")]
         public ActionResult DeleteConfirmed(int id)
         {
             Project project = db.Projects.Find(id);
             db.Projects.Remove(project);
             db.SaveChanges();
             return RedirectToAction("Index");
-        }
-        private ActionResult Testing()
-        {
-            return View();
-        }
-        protected ActionResult Error(ProjectError? message)
-        {
-            ViewBag.ErrorMessage = message == ProjectError.NotAuthorizedToEdit ? "You are not authorized to edit this Project."
-                : message == ProjectError.NullProject ? "There has been an error retrieving the project. Please alert your superior."
-                : "There has been an error. Please alert your superior if it persists.";
-            return View();
         }
 
         protected override void Dispose(bool disposing)
@@ -287,11 +269,22 @@ namespace KillBug.Controllers
             }
             base.Dispose(disposing);
         }
+        protected ActionResult Error(ProjectError? message)
+        {
+            ViewBag.ErrorMessage = message == ProjectError.NotAuthorizedToEdit ? "You are not authorized to edit this Project."
+                : message == ProjectError.NotAuthorizedToView ? "You are not authorized to view this Project."
+                : message == ProjectError.NullProject ? "There has been an error retrieving the project. Please alert your superior."
+                : message == ProjectError.CannotRetrieveProjects ? "There has been an error retrieving your projects."
+                : "There has been an error. Please alert your superior if it persists.";
+            return View();
+        }
 
         protected enum ProjectError
         {
+            NotAuthorizedToView,
             NotAuthorizedToEdit,
-            NullProject
+            NullProject,
+            CannotRetrieveProjects
         }
     }
 }

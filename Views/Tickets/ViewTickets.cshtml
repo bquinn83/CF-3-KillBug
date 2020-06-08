@@ -1,10 +1,7 @@
-﻿@model IEnumerable<KillBug.Models.Ticket>
+﻿@using KillBug.Models
+@model IEnumerable<Ticket>
 
-@{
-    ViewBag.Title = "My Tickets";
-}
-
-<table class="table table-striped">
+<table class="table table-striped" id="tickTable">
     <thead>
         <tr>
             <th>
@@ -14,7 +11,7 @@
                 @Html.DisplayName("Project")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayName("Title")
             </th>
             <th>
                 @Html.DisplayName("Developer")
@@ -26,7 +23,10 @@
                 @Html.DisplayName("Status")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Created)
+                @Html.DisplayName("Created")
+            </th>
+            <th>
+                @Html.DisplayName("Submitter")
             </th>
             <th></th>
         </tr>
@@ -39,7 +39,7 @@
                     @Html.DisplayFor(modelItem => item.TicketPriority.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Project.Name, new { data_order = item.Id })
+                    @Html.DisplayFor(modelItem => item.Project.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Title)
@@ -57,6 +57,9 @@
                     @Html.DisplayFor(modelItem => item.Created)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Submitter.FullName)
+                </td>
+                <td>
                     @Html.ActionLink("Details", "Details", "Tickets", new { id = item.Id }, null)
                 </td>
             </tr>
@@ -66,8 +69,13 @@
 
 @section Scripts{
     <script>
+        //ACTIVATE SIDE MENU BUTTON
         $('#TicketsMenu').click()
-        $('#MyTickets').addClass("active")
+        if ("@ViewBag.Title" == "My Tickets") {
+            $('#MyTickets').addClass("active")
+        } else {
+            $('#AllTickets').addClass("active")
+        }
 
         $('.table').DataTable();
     </script>

@@ -22,31 +22,18 @@ namespace KillBug.Controllers
         private HistoryHelper historyHelper = new HistoryHelper();
         private NotificationHelper notificationHelper = new NotificationHelper();
 
-        // GET: Tickets
-        public ActionResult AllTickets()
-        {
-            var ticketIndexVMs = new List<TicketsIndexViewModel>();
-            var allTickets = db.Tickets.ToList();
-            foreach (var ticket in allTickets)
-            {
-                ticketIndexVMs.Add(new TicketsIndexViewModel
-                {
-                    Ticket = ticket,
-                    TicketStatus = new SelectList(db.TicketStatus, "Id", "Name", ticket.TicketStatusId),
-
-                });
-            }
-
-            return View(ticketIndexVMs);
-        }
-
-        // GET :Tickets/MyTickets
+        // GET: View Tickets
         [Authorize]
-        public ActionResult MyTickets()
+        public ActionResult ViewTickets(bool? AllTickets)
         {
-            return View(ticketHelper.ListMyTickets());
+            if(User.IsInRole("Admin") && AllTickets == true)
+            {
+                return View(db.Tickets.ToList());
+            } else
+            {
+                return View(ticketHelper.ListMyTickets());
+            }
         }
-
         // GET: Tickets/Details
         [Authorize]
         public ActionResult Details(int? id)
@@ -94,8 +81,8 @@ namespace KillBug.Controllers
             return View(HistoryHelper.ListMyHistory());
         }
 
-        [Authorize(Roles = "Submitter")]
         // GET: Tickets/Create
+        [Authorize(Roles = "Submitter")]
         public ActionResult Create()
         {
             var myProjects = projHelper.ListUserProjects(User.Identity.GetUserId());
@@ -111,9 +98,7 @@ namespace KillBug.Controllers
         }
 
         // POST: Tickets/Create
-        [Authorize(Roles = "Submitter")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Submitter")]
         public ActionResult Create([Bind(Include = "Id,ProjectId,TicketTypeId,TicketPriorityId,Title,Description")] Ticket ticket)
         {
             if (ModelState.IsValid)
@@ -151,9 +136,7 @@ namespace KillBug.Controllers
         }
 
         // POST: Tickets/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
+        [HttpPost, ValidateAntiForgeryToken, Authorize]
         public ActionResult Edit([Bind(Include = "Id,ProjectId,TicketTypeId,TicketStatusId,TicketPriorityId,DeveloperId,SubmitterId,Title,Description,Created,IsArchived")] Ticket ticket)
         {
             var userId = User.Identity.GetUserId();
