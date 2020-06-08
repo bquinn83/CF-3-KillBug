@@ -1,7 +1,6 @@
-﻿@using KillBug.Controllers
+﻿@using KillBug.Classes
 @using KillBug.ViewModels
 @using Microsoft.AspNet.Identity
-@using KillBug.Classes
 @{
     var notifications = NotificationHelper.GetUnreadNotifications();
 }
@@ -100,7 +99,9 @@
             </div>
 
             <section>
-                @RenderBody()
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
             </section>
 
             <footer class="footer">

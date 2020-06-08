@@ -4,55 +4,70 @@
     ViewBag.Title = "Create Ticket";
 }
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-    <div class="form-horizontal">
-        <div class="form-group row">
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.ProjectId, "ProjectId", htmlAttributes: new { @class = "form-control-label" })
-                @Html.DropDownList("ProjectId", null, htmlAttributes: new { @class = "form-control" })
-            </div>
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.TicketTypeId, htmlAttributes: new { @class = "form-control-label" })
-                @Html.DropDownList("TicketTypeId", null, htmlAttributes: new { @class = "form-control" })
-            </div>
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.TicketPriorityId, htmlAttributes: new { @class = "form-control-label" })
-                @Html.DropDownListFor(model => model.TicketPriorityId, null, htmlAttributes: new { @class = "form-control" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "form-control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "form-control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </div>
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="block" id="add-ticket">
+    <div class="title row no-gutters mb-0">
+        <div class="col-auto"><strong>Create Ticket</strong></div>
     </div>
-}
+    <div class="block-body collapsable">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.ProjectId, "ProjectId", htmlAttributes: new { @class = "form-control-label" })
+                        @Html.DropDownList("ProjectId", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.TicketTypeId, htmlAttributes: new { @class = "form-control-label" })
+                        @Html.DropDownList("TicketTypeId", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.TicketPriorityId, htmlAttributes: new { @class = "form-control-label" })
+                        @Html.DropDownListFor(model => model.TicketPriorityId, null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "form-control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows="4" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        }
+    </div>
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
+        //ACTIVE SIDE MENU BUTTON
         $('#TicketsMenu').click()
         $('#TicketCreate').addClass("active")
+
+        //BLOCK CONTROL BUTTONS
+        $('.btn-block-minimize').on("click", function (e) {
+            $(e.currentTarget).toggleClass(['fa-chevron-up', 'fa-chevron-down'])
+            $(e.currentTarget).closest('.block').children('.collapsable').slideToggle()
+        });
+        $('.btn-block-close').on("click", function (e) {
+            $(e.currentTarget).closest('.block').parent().toggleClass('d-none')
+        });
     </script>
 }

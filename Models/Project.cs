@@ -27,6 +27,7 @@ namespace KillBug.Models
 
         [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}")]
         public DateTime? Updated { get; set; }
+        [DisplayName("Archived?")]
         public bool IsArchived { get; set; }
 
         public virtual ICollection<ApplicationUser> Users { get; set; }
