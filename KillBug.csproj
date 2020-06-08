@@ -219,6 +219,11 @@
     <Content Include="Content\css\all.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\Chart.css" />
+    <Content Include="Content\css\DataTables-1.10.21\images\sort_asc.png" />
+    <Content Include="Content\css\DataTables-1.10.21\images\sort_asc_disabled.png" />
+    <Content Include="Content\css\DataTables-1.10.21\images\sort_both.png" />
+    <Content Include="Content\css\DataTables-1.10.21\images\sort_desc.png" />
+    <Content Include="Content\css\DataTables-1.10.21\images\sort_desc_disabled.png" />
     <Content Include="Content\css\datatables.css" />
     <Content Include="Content\favicon_io\android-chrome-192x192.png" />
     <Content Include="Content\favicon_io\android-chrome-512x512.png" />
@@ -394,12 +399,10 @@
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Tickets\Create.cshtml" />
-    <Content Include="Views\Tickets\AllTickets.cshtml" />
     <Content Include="Views\Projects\Create.cshtml" />
     <Content Include="Views\Projects\Delete.cshtml" />
     <Content Include="Views\Projects\Details.cshtml" />
     <Content Include="Views\Projects\Edit.cshtml" />
-    <Content Include="Views\Projects\AllProjects.cshtml" />
     <Content Include="Views\Shared\_Account.cshtml" />
     <Content Include="Views\Account\ConfirmationSent.cshtml" />
     <Content Include="Views\Account\ResendEmailConfirmation.cshtml" />
@@ -407,8 +410,6 @@
     <Content Include="Views\Shared\_SideMenu.cshtml" />
     <Content Include="Views\Projects\AssignProjectUsers.cshtml" />
     <Content Include="Views\Projects\ReAssignManager.cshtml" />
-    <Content Include="Views\Projects\MyProjects.cshtml" />
-    <Content Include="Views\Tickets\MyTickets.cshtml" />
     <Content Include="Views\Manage\UserProfile.cshtml" />
     <Content Include="Views\Tickets\History.cshtml" />
     <Content Include="Views\Tickets\Details.cshtml" />
@@ -420,6 +421,8 @@
     <Content Include="Views\Dashboard\Tickets.cshtml" />
     <Content Include="Views\Dashboard\Main.cshtml" />
     <Content Include="Views\Admin\TicketSettings.cshtml" />
+    <Content Include="Views\Projects\ViewProjects.cshtml" />
+    <Content Include="Views\Tickets\ViewTickets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
