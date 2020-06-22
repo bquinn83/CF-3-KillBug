@@ -207,3 +207,12 @@ nav#sidebar .sidebar-header {
 .fas.btn {
     font-weight: 900;
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    caret-color: #8a8d93;
+    -webkit-text-fill-color: #8a8d93;
+    transition: background-color 5000s ease-in-out 0s;
+}

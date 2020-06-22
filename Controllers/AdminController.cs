@@ -41,7 +41,6 @@ namespace KillBug.Controllers
         [Authorize(Roles="Admin")]
         public ActionResult ManageRoles()
         {
-
             var users = db.Users.ToList();
             var viewData = new List<UserRoleVM>();
 

@@ -1,7 +1,10 @@
-﻿using System;
+﻿using KillBug.Models;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace KillBug.ViewModels
 {
@@ -24,10 +27,38 @@ namespace KillBug.ViewModels
     }
     public class ProjectsDashViewModel
     {
+        [DisplayName("Project Name")]
+        public string Name { get; set; }
 
+        [DisplayName("Description")]
+        public string Description { get; set; }
+
+        [DisplayName("Project Manager")]
+        public SelectList ProjectManagerId { get; set; }
+
+        public List<Project> MyProjects { get; set; }
     }
+
     public class TicketsDashViewModel
     {
+        [DisplayName("Projects")]
+        public SelectList ProjectId {get; set;}
+        
+        [DisplayName("Ticket Types")]
+        public SelectList TicketTypeId {get; set;}
+        
+        [DisplayName("Ticket Priority")]
+        public SelectList TicketPriorityId {get; set;}
+        
+        [DisplayName("Title")]
+        public string Title { get; set; }
 
+        [DisplayName("Description")]
+        public string Description { get; set; }
+
+        public List<Ticket> MyTickets { get; set; }
+
+        public JsonResult PriorityData { get; set; }
+        public object JsonData { get; internal set; }
     }
 }
