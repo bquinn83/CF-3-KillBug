@@ -64,7 +64,7 @@ namespace KillBug.Controllers
                 : message == ManageMessage.ChangeEmailSuccess ? "Your email has been changed."
                 : message == ManageMessage.Error ? "There has been an error."
                 : message == ManageMessage.UpdateProfileSuccess ? "You have successfully updated your profile."
-                : message == ManageMessage.UpdateProfileError ? "There has been an error updateing your profile."
+                : message == ManageMessage.UpdateProfileError ? "There has been an error updating your profile."
                 : "";
 
             var user = db.Users.Find(User.Identity.GetUserId());

@@ -53,6 +53,5 @@ namespace KillBug.Controllers
             }
             return Json(data);
         }
-
     }
 }

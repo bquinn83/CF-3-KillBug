@@ -358,19 +358,27 @@
     <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\popper.js" />
+    <Content Include="Uploads\Attachments\1\1\9-637257595162837696.jpg" />
+    <Content Include="Uploads\Attachments\1\1\datatables-637258500655649611.css" />
+    <Content Include="Uploads\Attachments\1\1\re4wwte-637257595355886507.jfif" />
     <Content Include="Uploads\Attachments\1\3\9-637257372448338976.jpg" />
     <Content Include="Uploads\Attachments\1\3\apple-touch-icon-637256849598142520.png" />
+    <Content Include="Uploads\Attachments\1\3\bootstrap-4-4-1-dist-637257100535600120.zip" />
     <Content Include="Uploads\Attachments\1\3\datatables-637257363894560958.css" />
     <Content Include="Uploads\Attachments\1\3\datatables-637257370276638647.js" />
     <Content Include="Uploads\Attachments\1\3\funk-headshot-637256839481955497.jpg" />
     <Content Include="Uploads\Attachments\1\3\header-m-3-637256849451936957.jpg" />
     <Content Include="Uploads\Attachments\1\3\microsoftedgesetup-637257375446108966.exe" />
+    <Content Include="Uploads\Attachments\1\3\srs-mvc-bugtracker-637256849811770373.pdf" />
     <Content Include="Uploads\Attachments\1\3\tour-img-1348835-148-637257341281495762.jpg" />
     <Content Include="Uploads\Attachments\1\3\tour-img-1348835-148-637257367625134289.jpg" />
     <Content Include="Uploads\Attachments\1\6\big-img-1-old-637256786050609823.jpg" />
     <Content Include="Uploads\Attachments\1\6\big-img-1-old-637256786698545575.jpg" />
     <Content Include="Uploads\Attachments\2\12\header-m-3-637256798368901776.jpg" />
     <Content Include="Uploads\Attachments\2\12\header-s-1-637256788613789079.jpg" />
+    <Content Include="Uploads\Avatars\avatar-637286427353626051.jpg" />
+    <Content Include="Uploads\Avatars\avatar-637286427972249188.jpg" />
+    <Content Include="Uploads\Avatars\avatar-637286429236365075.jpg" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -413,8 +421,6 @@
     <Content Include="Views\Manage\UserProfile.cshtml" />
     <Content Include="Views\Tickets\History.cshtml" />
     <Content Include="Views\Tickets\Details.cshtml" />
-    <Content Include="Uploads\Attachments\1\3\bootstrap-4-4-1-dist-637257100535600120.zip" />
-    <Content Include="Uploads\Attachments\1\3\srs-mvc-bugtracker-637256849811770373.pdf" />
     <Content Include="Views\Tickets\Error.cshtml" />
     <Content Include="Views\Projects\Error.cshtml" />
     <Content Include="Views\Dashboard\Projects.cshtml" />
@@ -423,10 +429,20 @@
     <Content Include="Views\Admin\TicketSettings.cshtml" />
     <Content Include="Views\Projects\ViewProjects.cshtml" />
     <Content Include="Views\Tickets\ViewTickets.cshtml" />
+    <Content Include="Uploads\Attachments\1\10\bar-resume-2020-637263469682332432.docx" />
+    <Content Include="Uploads\Attachments\1\1\asp-net-razor-cheat-sheet-637257631103666717.pdf" />
+    <Content Include="Uploads\Attachments\1\1\bar-resume-2020-637261044653485272.docx" />
+    <Content Include="Uploads\Attachments\1\1\bootstrap-4-4-1-dist-637258499225472933.zip" />
+    <Content Include="Uploads\Attachments\1\1\filetypeicons-637268226571302038.zip" />
+    <Content Include="Uploads\Attachments\1\2\bar-resume-2020-637260945625602397.docx" />
+    <Content Include="Uploads\Attachments\1\2\ffxiv-relic-weapons-637260952590193689.xlsx" />
+    <Content Include="Uploads\Attachments\1\3\reddragon-m908-impact-mmo-637260950090949007.pdf" />
+    <Content Include="Uploads\Attachments\1\3\software-development-637260939248593309.xlsx" />
+    <Content Include="Uploads\Attachments\2\11\reddragon-m908-impact-mmo-637262533154676613.pdf" />
+    <Content Include="Uploads\Attachments\4\38\-637266960607054094.gitconfig" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Uploads\Avatars\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
