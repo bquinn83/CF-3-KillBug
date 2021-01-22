@@ -45,7 +45,12 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Developer.FullName)
+                    @{ 
+                        if(item.Developer != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Developer.FullName)
+                        }
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.TicketType.Name)
