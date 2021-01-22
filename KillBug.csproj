@@ -380,9 +380,6 @@
     <Content Include="Uploads\Attachments\1\6\big-img-1-old-637256786698545575.jpg" />
     <Content Include="Uploads\Attachments\2\12\header-m-3-637256798368901776.jpg" />
     <Content Include="Uploads\Attachments\2\12\header-s-1-637256788613789079.jpg" />
-    <Content Include="Uploads\Avatars\avatar-637286427353626051.jpg" />
-    <Content Include="Uploads\Avatars\avatar-637286427972249188.jpg" />
-    <Content Include="Uploads\Avatars\avatar-637286429236365075.jpg" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -447,6 +444,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Uploads\Avatars\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
