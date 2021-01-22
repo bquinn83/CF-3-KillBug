@@ -348,7 +348,7 @@
     <Content Include="Content\webfonts\fa-solid-900.woff" />
     <Content Include="Content\webfonts\fa-solid-900.woff2" />
     <Content Include="Scripts\toastr.js.map" />
-    <None Include="Properties\PublishProfiles\KillBug - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\demo-bugtracker - Web Deploy.pubxml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\datatables.js" />

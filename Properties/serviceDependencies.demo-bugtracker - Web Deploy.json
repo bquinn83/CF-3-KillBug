@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/brianquinn/databases/blog-brianquinn-db",
+      "type": "mssql.azure",
+      "connectionId": "demo-bugtracker-secret",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}
