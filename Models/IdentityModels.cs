@@ -93,7 +93,9 @@ namespace KillBug.Models
         public DbSet<TicketStatus> TicketStatus { get; set; }
         public DbSet<TicketHistory> TicketHistories { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-        public ApplicationDbContext(): base("DefaultConnection", throwIfV1Schema: false)
+        public ApplicationDbContext()
+            : base("demo-bugtracker-secret", throwIfV1Schema: false)
+            //: base("DefaultConnection", throwIfV1Schema: false)
         {
 
         }
