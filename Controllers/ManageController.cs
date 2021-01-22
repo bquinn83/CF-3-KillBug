@@ -1,19 +1,19 @@
 ﻿using System;
+using System.Configuration;
+using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+
 using KillBug.Models;
 using KillBug.ViewModels;
-using System.Configuration;
 using KillBug.Classes;
-using System.Web.Services.Description;
-using System.Data.Entity;
-using Blog.Classes;
-using System.IO;
 
 namespace KillBug.Controllers
 {
@@ -65,6 +65,7 @@ namespace KillBug.Controllers
                 : message == ManageMessage.Error ? "There has been an error."
                 : message == ManageMessage.UpdateProfileSuccess ? "You have successfully updated your profile."
                 : message == ManageMessage.UpdateProfileError ? "There has been an error updating your profile."
+                : message == ManageMessage.ChangePasswordError ? "There has been an error updating your password."
                 : "";
 
             var user = db.Users.Find(User.Identity.GetUserId());
@@ -196,7 +197,7 @@ namespace KillBug.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("UserProfile", "Manage", model);
+                return RedirectToAction("UserProfile", "Manage", new { Message = ManageMessage.ChangePasswordError });
             }
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
@@ -208,8 +209,7 @@ namespace KillBug.Controllers
                 }
                 return RedirectToAction("UserProfile", "Manage", new { Message = ManageMessage.ChangePasswordSuccess });
             }
-            AddErrors(result);
-            return View(model);
+            return RedirectToAction("UserProfile", "Manage", new { Message = ManageMessage.ChangePasswordError });
         }
 
         //
@@ -350,7 +350,9 @@ namespace KillBug.Controllers
             RemoveLoginSuccess,
             RemovePhoneSuccess,
             Error,
-            UpdateProfileError
+            UpdateProfileError,
+            ChangePasswordError
+
         }
 
         #endregion
