@@ -178,11 +178,13 @@ namespace KillBug.Controllers
                     Email = model.Email, 
                     FirstName = model.FirstName, 
                     LastName = model.LastName,
-                    AvatarPath = "Content/Images/blank-avatar.png"
+                    AvatarPath = "Content/Images/blank-avatar.png",
+                    EmailConfirmed = true
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    UserManager.AddToRole(user.Id, "Submitter");
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -208,8 +210,7 @@ namespace KillBug.Controllers
                         Console.WriteLine(ex.Message);
                         await Task.FromResult(0);
                     }
-
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("Main", "Dashboard");
                 }
                 AddErrors(result);
             }
