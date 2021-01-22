@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Web;
 
-namespace Blog.Classes
+namespace KillBug.Classes
 {
     public class ImageUploadValidator
     {
