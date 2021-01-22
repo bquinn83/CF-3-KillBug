@@ -149,7 +149,7 @@ namespace KillBug.Controllers
 
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Error", new { message = ProjectError.CannotFindProject });
             }
             Project project = db.Projects.Find(id);
             if (project == null)
@@ -275,6 +275,7 @@ namespace KillBug.Controllers
                 : message == ProjectError.NotAuthorizedToView ? "You are not authorized to view this Project."
                 : message == ProjectError.NullProject ? "There has been an error retrieving the project. Please alert your superior."
                 : message == ProjectError.CannotRetrieveProjects ? "There has been an error retrieving your projects."
+                : message == ProjectError.CannotFindProject ? "There has been an error retrieving your project details."
                 : "There has been an error. Please alert your superior if it persists.";
             return View();
         }
@@ -284,7 +285,8 @@ namespace KillBug.Controllers
             NotAuthorizedToView,
             NotAuthorizedToEdit,
             NullProject,
-            CannotRetrieveProjects
+            CannotRetrieveProjects,
+            CannotFindProject
         }
     }
 }
