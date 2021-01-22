@@ -92,7 +92,7 @@ namespace KillBug.Controllers
                 ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name");
                 ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
 
-                return View();
+                return View(new Ticket());
             }
             return RedirectToAction("Error", new { message = TicketError.NoProjects });
         }

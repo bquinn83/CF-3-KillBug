@@ -8,9 +8,11 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using KillBug.Models;
-using KillBug.ViewModels;
 using System.Web.Configuration;
+
+using KillBug.Models;
+using KillBug.Services;
+using KillBug.ViewModels;
 
 namespace KillBug.Controllers
 {
@@ -63,6 +65,7 @@ namespace KillBug.Controllers
                 return RedirectToAction("CustomLogOff");
             }
             ViewBag.ReturnUrl = returnUrl;
+            return View(new LoginViewModel());
         }
 
         // POST: /Account/Login
@@ -158,7 +161,7 @@ namespace KillBug.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            return View(new RegisterViewModel());
         }
 
         //
@@ -214,8 +217,6 @@ namespace KillBug.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
-        //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
@@ -232,7 +233,7 @@ namespace KillBug.Controllers
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
-            return View();
+            return View(new ForgotPasswordViewModel());
         }
 
         // POST: /Account/ForgotPassword
