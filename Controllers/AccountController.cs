@@ -63,7 +63,6 @@ namespace KillBug.Controllers
                 return RedirectToAction("CustomLogOff");
             }
             ViewBag.ReturnUrl = returnUrl;
-            return View();
         }
 
         // POST: /Account/Login
@@ -185,19 +184,21 @@ namespace KillBug.Controllers
 
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
+                    
                     try
                     {
-                        var mail = new EmailModel()
-                        {
-                            FromName = "Kill Bug",
-                            FromEmail = WebConfigurationManager.AppSettings["OutlookFrom"],
-                            ToEmail = user.Email,
-                            Subject = "Thanks for registering!",
-                            Body = $"Please confirm your email by clicking <a href=\"{callbackUrl}\">here</a>."
-                        };
-                        await mail.Launch();
+                        //var mail = new EmailModel()
+                        //{
+                        //    FromName = "Kill Bug",
+                        //    FromEmail = WebConfigurationManager.AppSettings["OutlookFrom"],
+                        //    ToEmail = user.Email,
+                        //    Subject = "Thanks for registering!",
+                        //    Body = $"Please confirm your email by clicking <a href=\"{callbackUrl}\">here</a>."
+                        //};
+                        //await mail.Launch();
+                        //new API mail method
+                        var sender = new EmailSender();
+                        await sender.Execute("Confirm Your Email", "killbug-confirmemail", user.Email, new ConfirmEmailTemplate(callbackUrl));
                     }
                     catch (Exception ex)
                     {
@@ -227,7 +228,6 @@ namespace KillBug.Controllers
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
-        //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]
         public ActionResult ForgotPassword()
@@ -235,7 +235,6 @@ namespace KillBug.Controllers
             return View();
         }
 
-        //
         // POST: /Account/ForgotPassword
         [HttpPost]
         [AllowAnonymous]
@@ -258,15 +257,19 @@ namespace KillBug.Controllers
 
                 try
                 {
-                    var mail = new EmailModel()
-                    {
-                        FromName = "Kill Bug",
-                        FromEmail = WebConfigurationManager.AppSettings["OutlookFrom"],
-                        ToEmail = user.Email,
-                        Subject = "Password Reset!",
-                        Body = $"Please reset your password by clicking <a href=\"{callbackUrl}\">here</a>."
-                    };
-                    await mail.Launch();
+                    //var mail = new EmailModel()
+                    //{
+                    //    FromName = "Kill Bug",
+                    //    FromEmail = WebConfigurationManager.AppSettings["OutlookFrom"],
+                    //    ToEmail = user.Email,
+                    //    Subject = "Password Reset!",
+                    //    Body = $"Please reset your password by clicking <a href=\"{callbackUrl}\">here</a>."
+                    //};
+                    //await mail.Launch();
+
+                    //new API mail method
+                    var sender = new EmailSender();
+                    await sender.Execute("Password Reset", "killbug-pwreset", user.Email, new PasswordResetTemplate(callbackUrl));
                 }
                 catch (Exception ex)
                 {
@@ -310,15 +313,18 @@ namespace KillBug.Controllers
 
                 try
                 {
-                    var mail = new EmailModel()
-                    {
-                        FromName = "Kill Bug",
-                        FromEmail = WebConfigurationManager.AppSettings["OutlookFrom"],
-                        ToEmail = user.Email,
-                        Subject = "Please confirm your email!",
-                        Body = $"Please confirm your email by clicking <a href=\"{callbackUrl}\">here</a>."
-                    };
-                    await mail.Launch();
+                    //var mail = new EmailModel()
+                    //{
+                    //    FromName = "Kill Bug",
+                    //    FromEmail = WebConfigurationManager.AppSettings["OutlookFrom"],
+                    //    ToEmail = user.Email,
+                    //    Subject = "Please confirm your email!",
+                    //    Body = $"Please confirm your email by clicking <a href=\"{callbackUrl}\">here</a>."
+                    //};
+                    //await mail.Launch();
+                    //new API mail method
+                    var sender = new EmailSender();
+                    await sender.Execute("Confirm Your Email", "killbug-confirmemail", user.Email, new ConfirmEmailTemplate(callbackUrl));
                 }
                 catch (Exception ex)
                 {

@@ -195,6 +195,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Services\ConfirmEmailTemplate.cs" />
+    <Compile Include="Services\EmailSender.cs" />
+    <Compile Include="Services\IMailTemplate.cs" />
+    <Compile Include="Services\PasswordResetTemplate.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\EmailModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -229,6 +233,8 @@
     <Content Include="Content\css\DataTables-1.10.21\images\sort_desc.png" />
     <Content Include="Content\css\DataTables-1.10.21\images\sort_desc_disabled.png" />
     <Content Include="Content\css\datatables.css" />
+    <Content Include="Content\emails\killbug-confirmemail.html" />
+    <Content Include="Content\emails\killbug-pwreset.html" />
     <Content Include="Content\favicon_io\android-chrome-192x192.png" />
     <Content Include="Content\favicon_io\android-chrome-512x512.png" />
     <Content Include="Content\favicon_io\apple-touch-icon.png" />
@@ -338,7 +344,6 @@
     <Content Include="Content\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\fonts\fontawesome-webfont.woff2" />
     <Content Include="Content\fonts\FontAwesome.otf" />
-    <Content Include="private.config" />
     <Content Include="Content\webfonts\fa-brands-400.eot" />
     <Content Include="Content\webfonts\fa-brands-400.ttf" />
     <Content Include="Content\webfonts\fa-brands-400.woff" />
